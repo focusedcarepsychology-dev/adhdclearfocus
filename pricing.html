@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="ADHDclearfocus Pro — pricing, what's included, and answers to common questions about our ADHD assessment and wellness platform."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>Pricing & FAQ — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--navy:#0A1628;--navyMid:#112240;--navyLight:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}.logo span{color:var(--teal)}
+    .nav a{color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px}
+    .hero{background:linear-gradient(135deg,#0F2847,#0A1628,#1A0A35);padding:40px 20px 30px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero h1{font-size:clamp(24px,5vw,38px);font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+    .hero h1 span{color:var(--teal)}
+    .hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:500px;margin:0 auto}
+    .main{max-width:720px;margin:0 auto;padding:24px 16px 80px}
+    /* SOCIAL PROOF */
+    .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+    .stat{background:var(--navyLight);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+    .stat-num{font-size:28px;font-weight:900;color:var(--teal);line-height:1}
+    .stat-label{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+    /* WAIT LIST CONTEXT */
+    .wait-context{background:linear-gradient(135deg,#1A0010,#0A1628);border:1px solid rgba(255,82,82,0.3);border-radius:14px;padding:18px;margin-bottom:24px}
+    /* PRICING */
+    .pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+    .price-card{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:20px;position:relative}
+    .price-card.featured{border-color:var(--teal);background:linear-gradient(135deg,#0A2535,#0A1628)}
+    .price-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--teal);color:var(--navy);border-radius:99px;padding:3px 14px;font-size:11px;font-weight:900;white-space:nowrap}
+    .price-title{font-weight:800;font-size:15px;margin-bottom:4px}
+    .price-amount{font-size:32px;font-weight:900;margin:10px 0 4px}
+    .price-sub{font-size:11px;color:var(--muted);margin-bottom:14px}
+    .price-features{list-style:none;margin-bottom:16px}
+    .price-features li{font-size:12px;color:var(--muted);padding:4px 0;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+    .price-features li::before{content:'✓';color:var(--teal);font-weight:900;flex-shrink:0}
+    .price-btn{display:block;text-align:center;border-radius:10px;padding:12px;font-weight:900;font-size:14px;text-decoration:none;transition:all 0.2s}
+    .price-btn.primary{background:linear-gradient(135deg,var(--teal),#4FC3F7);color:var(--navy)}
+    .price-btn.secondary{background:var(--navyMid);color:#fff;border:1px solid var(--border)}
+    /* FAQ */
+    .faq-item{background:var(--navyLight);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
+    .faq-q{padding:16px;font-weight:700;font-size:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.2s}
+    .faq-q:hover{background:var(--navyMid)}
+    .faq-chevron{color:var(--muted);transition:transform 0.25s;flex-shrink:0}
+    .faq-item.open .faq-chevron{transform:rotate(180deg)}
+    .faq-a{display:none;padding:0 16px 16px;font-size:13px;color:var(--muted);line-height:1.75}
+    .faq-item.open .faq-a{display:block}
+    .faq-a a{color:var(--teal)}
+    /* COMPARISON */
+    .comparison{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:24px;overflow-x:auto}
+    .comp-table{width:100%;border-collapse:collapse;min-width:460px}
+    .comp-table th{font-size:12px;font-weight:700;padding:8px 10px;text-align:center;border-bottom:1px solid var(--border);color:var(--muted)}
+    .comp-table th:first-child{text-align:left;color:#fff}
+    .comp-table td{font-size:12px;padding:8px 10px;border-bottom:1px solid var(--border)05;text-align:center;color:var(--muted)}
+    .comp-table td:first-child{text-align:left;font-weight:600;color:#fff}
+    .comp-table tr:last-child td{border-bottom:none}
+    .comp-table .ours{color:var(--teal);font-weight:700}
+    .comp-table .no{color:#FF5252}
+    /* TESTIMONIALS */
+    .testimonials{margin-bottom:24px}
+    .testimonial{background:var(--navyLight);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:10px}
+    .t-text{font-size:14px;color:#A8C4D8;line-height:1.75;font-style:italic;margin-bottom:10px}
+    .t-author{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px}
+    .t-stars{color:var(--amber)}
+    /* CTA */
+    .final-cta{background:linear-gradient(135deg,var(--navyMid),var(--navyLight));border:1px solid rgba(0,212,221,0.3);border-radius:16px;padding:24px;text-align:center;margin-top:8px}
+  </style>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {"@type":"Question","name":"Is ADHDclearfocus a clinical ADHD diagnosis?","acceptedAnswer":{"@type":"Answer","text":"No. ADHDclearfocus is an educational screening and wellness tool — it does not constitute a clinical diagnosis. It supports your understanding and formal assessment pathway."}},
+      {"@type":"Question","name":"How long does the report take to arrive?","acceptedAnswer":{"@type":"Answer","text":"Typically within 2 hours of payment. The AI analysis and PDF generation are automated."}},
+      {"@type":"Question","name":"What is the 15% clinical assessment discount?","acceptedAnswer":{"@type":"Answer","text":"Pro subscribers receive 15% off formal ADHD and ASD assessments through our registered partner network in Ireland and the UK."}}
+    ]
+  }
+  </script>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="header">
+  <a href="/" class="logo">ADHD<span>clearfocus</span></a>
+  <div class="nav">
+    <a href="/">Assessment</a>
+    <a href="/strategies.html">Strategies</a>
+    <a href="/community.html">Community</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div style="font-size:11px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px">Pricing & FAQ</div>
+  <h1>Simple, honest <span>pricing</span></h1>
+  <p>One screener. One report. One subscription that gives you everything you need to understand and manage your ADHD — while you wait for formal assessment.</p>
+</div>
+
+<div class="main">
+
+  <!-- SOCIAL PROOF STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">39</div>
+      <div class="stat-label">Validated questions across 10 neurological dimensions</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">668K+</div>
+      <div class="stat-label">Adults waiting for ADHD assessment in the UK alone (NHS, 2025)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2-4yr</div>
+      <div class="stat-label">Average HSE Ireland waiting time for adult ADHD assessment</div>
+    </div>
+  </div>
+
+  <!-- WAITING LIST CONTEXT -->
+  <div class="wait-context">
+    <div style="font-weight:800;font-size:14px;color:#FF8080;margin-bottom:8px">⏳ The waiting list reality</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7">
+      As of June 2025, there were up to 668,370 open referrals for ADHD assessment in the UK NHS alone.
+      In Ireland, average waiting times range from 2 to 3 years, with some areas reporting waits of up to 4 years.
+      ADHDclearfocus exists for the time in between — giving you the deepest available self-awareness profile, evidence-based tools, and a community while you wait.
+    </div>
+  </div>
+
+  <!-- PRICING CARDS -->
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-title">Clarity Report</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px">One-off · No subscription</div>
+      <div class="price-amount" style="color:var(--teal)">€49</div>
+      <div class="price-sub">One-time payment</div>
+      <ul class="price-features">
+        <li>39-question 10-dimension assessment</li>
+        <li>14-page AI-personalised PDF report</li>
+        <li>Domain-by-domain evidence-based strategies</li>
+        <li>Formal assessment pathway guide</li>
+        <li>Delivered to your inbox within 24 hours</li>
+        <li>Lifetime loyalty code for Pro discount</li>
+      </ul>
+      <a href="/" class="price-btn primary">Take the Assessment →</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-badge">Best Value</div>
+      <div class="price-title">Pro — Yearly</div>
+      <div style="font-size:11px;color:var(--teal);margin-bottom:10px">Founding rate ends <strong>31 July 2026</strong> · Use your assessment code</div>
+      <div class="price-amount" style="color:var(--teal)">€5<span style="font-size:14px;font-weight:400;color:var(--muted)">/mo</span></div>
+      <div class="price-sub">€60/year · Regular price €10/month</div>
+      <ul class="price-features">
+        <li>Everything in Clarity Report</li>
+        <li>Crisis Mode (offline, binaural beats)</li>
+        <li>Body Doubling Focus Rooms</li>
+        <li>Voice Diary & AI Coach</li>
+        <li>47 evidence-based strategies</li>
+        <li>15% off ADHD & ASD assessments</li>
+        <li>Community & Research library</li>
+        <li>Monthly re-assessments</li>
+        <li>Live Q&A with clinical psychologist</li>
+        <li>14-day free trial on launch</li>
+      </ul>
+      <a href="/" class="price-btn primary">Join Founding Waitlist →</a>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">
+    How we compare
+  </div>
+  <div class="comparison">
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th class="ours">ADHDclearfocus</th>
+          <th>HSE/NHS</th>
+          <th>Private Clinic</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Wait time</td><td class="ours">Instant</td><td>2-4 years</td><td>4-8 weeks</td></tr>
+        <tr><td>Cost</td><td class="ours">€49 / €60yr</td><td>Free</td><td>€400-800</td></tr>
+        <tr><td>10-dimension profile</td><td class="ours">✓</td><td class="no">✗</td><td>✓</td></tr>
+        <tr><td>Wellness tools</td><td class="ours">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Crisis support</td><td class="ours">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Community</td><td class="ours">✓</td><td class="no">✗</td><td class="no">✗</td></tr>
+        <tr><td>Formal diagnosis</td><td class="no">✗</td><td class="ours">✓</td><td class="ours">✓</td></tr>
+        <tr><td>Medication access</td><td class="no">✗</td><td class="ours">✓</td><td class="ours">✓</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">ADHDclearfocus is an educational tool — it does not replace formal clinical assessment or medication management.</div>
+  </div>
+
+  <!-- TESTIMONIALS -->
+  <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">What people say</div>
+  <div class="testimonials">
+    <div class="testimonial">
+      <div class="t-text">"I've been on the HSE waiting list for 18 months. This was the first time I'd seen my ADHD described properly — not just 'can't concentrate' but the emotional dysregulation, the time blindness, the RSD. I cried reading the report. It made me feel understood for the first time."</div>
+      <div class="t-author"><span class="t-stars">★★★★★</span><span>Adult, 34 · Ireland · Clarity Report</span></div>
+    </div>
+    <div class="testimonial">
+      <div class="t-text">"The strategies page alone is worth it. I've read dozens of ADHD articles and nothing has been this specific, this evidenced, or this practical. The body doubling explanation finally made me realise why I always work better in coffee shops."</div>
+      <div class="t-author"><span class="t-stars">★★★★★</span><span>Adult, 28 · UK · Pro subscriber</span></div>
+    </div>
+    <div class="testimonial">
+      <div class="t-text">"I used the crisis mode during a really dark evening. The breathing circle and the binaural tones genuinely helped. Having something specifically designed for ADHD emotional dysregulation — not just generic mindfulness — made a difference."</div>
+      <div class="t-author"><span class="t-stars">★★★★★</span><span>Adult, 41 · Ireland · Pro subscriber</span></div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px">Frequently Asked Questions</div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Is this a clinical ADHD diagnosis? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">No. ADHDclearfocus is an educational screening and wellness tool — it does not constitute a clinical diagnosis of ADHD or any other condition. Our 39-question screener incorporates validated clinical frameworks (ASRS-v1.1, Brown, DIVA-5, Barkley) and is the most comprehensive self-assessment available online, but it is not a substitute for formal clinical assessment by a qualified psychologist or psychiatrist. If your profile suggests clinically significant ADHD, our report includes a clear guide to formal assessment pathways in Ireland and the UK.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Can I use this to support a GP or psychiatry referral? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Yes — many users bring their ADHDclearfocus report to their GP appointment to support a referral request. The report's 10-dimension profile, clinical framework references, and formal assessment pathway section are specifically designed to be useful in that conversation. It cannot replace the formal assessment but can strengthen the case for referral and give your GP useful background.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What's the difference between the screener and the Clarity Report? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">The screener is free — you complete all 39 questions and see your overall profile level and dimension scores. The Clarity Report (€49) unlocks your full 14-page PDF with: AI-generated personalised narrative for your specific profile, detailed per-dimension analysis with evidence-based strategies, formal assessment pathway guide for Ireland and the UK, and your lifetime loyalty code for Pro subscription.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">How long does the report take to arrive? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Typically within 2 hours of payment. The AI analysis and PDF generation are automated — triggered immediately when your Stripe payment is confirmed. If you haven't received your report within 24 hours, check your spam folder and email us at conalldonegan@outlook.com.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">What is the 15% clinical assessment discount? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Pro subscribers (yearly plan) receive an exclusive 15% discount on formal ADHD and ASD clinical assessments through our registered partner network. Partners include psychologists and psychiatrists registered with HSE, NHS, CORU, and BPS. Your unique discount code is sent with your Pro welcome email. The assessment must meet DSM-5/ICD-11 diagnostic criteria to qualify.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Is my data private and GDPR compliant? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Yes. Your screener responses are processed in your browser and are not stored on our servers unless you proceed to purchase. We collect your email address to deliver your report and, with your explicit consent, send educational content. Your health data is processed under Article 9 of the EU GDPR with your explicit consent. You can request deletion of your data at any time. See our full <a href="/legal.html">Privacy Policy</a>.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Does ADHDclearfocus work for ASD / autism? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">The current screener focuses on ADHD across 10 neurological dimensions. Several dimensions — including rejection sensitivity, emotional regulation, and hyperfocus — overlap significantly with autism presentations. A dedicated ASD screening tool is in development. ADHDclearfocus Pro subscribers will receive early access when launched, and the existing 15% clinical discount applies to ASD assessments as well as ADHD.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">Can I get a refund? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">You have a 7-day right of withdrawal under the Consumer Rights Act 2022 (Ireland). This right is waived once the PDF report has been downloaded or accessed. If you have not accessed your report and wish to cancel, email conalldonegan@outlook.com within 7 days. Pro subscription cancellations take effect at the end of the current billing period — no partial refunds.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">I'm a parent of a teenager with ADHD. Is this suitable? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Yes — the screener includes teen-adapted question variants and is appropriate for ages 13+. The strategies, crisis tools, and community are designed for adults and older teenagers. If completing for a teenager under 18, parental/guardian awareness is recommended. For children under 13, please consult your GP or paediatrician directly.</div>
+  </div>
+
+  <div class="faq-item" onclick="toggleFaq(this)">
+    <div class="faq-q">When does Pro launch? <span class="faq-chevron">▾</span></div>
+    <div class="faq-a">Pro is currently in founding member waitlist phase. Join the waitlist after completing your screener to lock in the €5/month founding rate for life. Features including body doubling live rooms, AI coaching dashboard, progress tracking, and weekly evidence modules are in active development. Crisis Mode, the Focus Room, 47 Strategies, Community, and Research library are all live now and free to explore.</div>
+  </div>
+
+  <!-- 30-DAY PLAN -->
+  <div style="background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:24px">
+    <div style="font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px">📅 Your first 30 days with ADHDclearfocus</div>
+    <div style="display:grid;gap:10px">
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#0A1628;border-radius:10px;padding:12px">
+        <div style="background:var(--teal);color:var(--navy);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">Day 1</div>
+        <div style="font-size:13px;color:#A8C4D8;line-height:1.55">Complete your 39-question assessment. Receive your 14-page AI-generated report within 2 hours. Read your top 2 dimension strategies.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#0A1628;border-radius:10px;padding:12px">
+        <div style="background:var(--teal);color:var(--navy);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">Week 1</div>
+        <div style="font-size:13px;color:#A8C4D8;line-height:1.55">Explore the 47 strategies. Try the Focus Room for body doubling during demanding tasks. Set up a daily mood check-in. Implement 1 new strategy.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#0A1628;border-radius:10px;padding:12px">
+        <div style="background:var(--teal);color:var(--navy);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">Week 2</div>
+        <div style="font-size:13px;color:#A8C4D8;line-height:1.55">Join the community. Share one experience. Try the crisis tools during a difficult moment. Read 2 research summaries. Book a report review call if you want depth.</div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;background:#0A1628;border-radius:10px;padding:12px">
+        <div style="background:var(--amber);color:var(--navy);border-radius:99px;padding:3px 10px;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px">Day 30</div>
+        <div style="font-size:13px;color:#A8C4D8;line-height:1.55">Check your streak. Note what strategies have made a difference. Consider a formal assessment if your profile is elevated — use your 15% Pro discount.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="final-cta">
+    <div style="font-size:22px;margin-bottom:10px">🧠</div>
+    <div style="font-weight:900;font-size:18px;margin-bottom:8px">Start with the free screener</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.65">39 questions. 10 dimensions. The most complete ADHD profile available outside a clinical assessment. Takes 8-12 minutes.</div>
+    <a href="/" style="display:inline-block;background:linear-gradient(135deg,var(--teal),#4FC3F7);color:var(--navy);border-radius:12px;padding:14px 28px;font-weight:900;font-size:15px;text-decoration:none">
+      Take the Free Assessment →
+    </a>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">No account required · Results in minutes · GDPR compliant</div>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:20px;line-height:1.6">
+    In crisis? Contact Samaritans free on <strong style="color:#fff">116 123</strong> (Ireland & UK, 24/7) or <a href="/crisis.html" style="color:var(--teal)">open Crisis Mode</a>.<br/>
+    ADHDclearfocus · Focused Care Psychology Limited · Waterford, Ireland · <a href="/legal.html" style="color:var(--teal)">Legal</a>
+  </div>
+</div>
+
+<script>
+function toggleFaq(item){
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)item.classList.add('open');
+}
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
+</body>
+</html>

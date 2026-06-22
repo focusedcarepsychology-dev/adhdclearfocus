@@ -1,0 +1,1470 @@
+"""
+ADHDclearfocus — Clinical Profile Report Generator
+Produces a 14-page personalised PDF report from screener results.
+Evidence base: ASRS-v1.1 (Kessler et al., 2005), Brown ADD Scale (Brown, 2001),
+DIVA-5 (Kooij & Francken, 2010), NICE NG87 (2018), Faraone et al. (2021),
+Barkley (2012), Safren et al. (2010), Solanto (2011), Kooij et al. (2019).
+"""
+
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import cm
+from reportlab.lib.colors import HexColor, white, black
+from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table,
+    TableStyle, PageBreak, HRFlowable, KeepTogether)
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY, TA_RIGHT
+from reportlab.pdfgen import canvas as pdfcanvas
+from reportlab.platypus import BaseDocTemplate, Frame, PageTemplate
+import io, datetime
+
+# ── COLOURS ───────────────────────────────────────────────────────────────────
+NAVY      = HexColor("#0D1B2A")
+NAVY_MID  = HexColor("#1A2E42")
+NAVY_LITE = HexColor("#162335")
+TEAL      = HexColor("#00C2CB")
+AMBER     = HexColor("#F5A623")
+GREEN     = HexColor("#2ECC71")
+RED       = HexColor("#E84040")
+MUTED     = HexColor("#8A9BB0")
+OFF_WHITE = HexColor("#F7F9FC")
+BORDER    = HexColor("#1E3350")
+
+W, H = A4  # 595 x 842 pts
+
+# ── STYLES ────────────────────────────────────────────────────────────────────
+def make_styles():
+    ss = getSampleStyleSheet()
+    def S(name, **kw):
+        return ParagraphStyle(name, parent=ss["Normal"], **kw)
+
+    return {
+        "cover_brand":   S("cb",  fontSize=28, textColor=white,    fontName="Helvetica-Bold", leading=34, alignment=TA_LEFT),
+        "cover_sub":     S("cs",  fontSize=13, textColor=TEAL,     leading=18, alignment=TA_LEFT),
+        "cover_name":    S("cn",  fontSize=16, textColor=white,    fontName="Helvetica-Bold", leading=22, alignment=TA_LEFT),
+        "cover_date":    S("cd",  fontSize=10, textColor=MUTED,    leading=14, alignment=TA_LEFT),
+        "cover_level":   S("cl",  fontSize=11, textColor=AMBER,    fontName="Helvetica-Bold", leading=16, alignment=TA_LEFT),
+        "h1":            S("h1",  fontSize=16, textColor=NAVY,     fontName="Helvetica-Bold", leading=22, spaceBefore=14, spaceAfter=6),
+        "h2":            S("h2",  fontSize=12, textColor=TEAL,     fontName="Helvetica-Bold", leading=16, spaceBefore=10, spaceAfter=4),
+        "h3":            S("h3",  fontSize=10, textColor=NAVY_MID, fontName="Helvetica-Bold", leading=14, spaceBefore=8,  spaceAfter=3),
+        "body":          S("bd",  fontSize=9.5, textColor=HexColor("#2C3E50"), leading=14.5, spaceAfter=6, alignment=TA_JUSTIFY),
+        "body_white":    S("bw",  fontSize=9.5, textColor=white,   leading=14.5, spaceAfter=6, alignment=TA_JUSTIFY),
+        "bullet":        S("bl",  fontSize=9.5, textColor=HexColor("#2C3E50"), leading=14.5, spaceAfter=4, leftIndent=14, firstLineIndent=-8),
+        "small":         S("sm",  fontSize=8.5, textColor=MUTED,   leading=12, spaceAfter=4),
+        "small_white":   S("sw",  fontSize=8.5, textColor=white,   leading=12, spaceAfter=4),
+        "cite":          S("ct",  fontSize=8,   textColor=MUTED,   leading=11, spaceAfter=3, fontName="Helvetica-Oblique"),
+        "section_label": S("sl",  fontSize=8,   textColor=TEAL,    fontName="Helvetica-Bold", letterSpacing=1.5, spaceAfter=2),
+        "score_big":     S("sb",  fontSize=36,  textColor=TEAL,    fontName="Helvetica-Bold", leading=40, alignment=TA_CENTER),
+        "toc_item":      S("ti",  fontSize=10,  textColor=NAVY,    leading=16, spaceAfter=3),
+        "ref":           S("rf",  fontSize=7.5, textColor=MUTED,   leading=11, spaceAfter=2, fontName="Helvetica-Oblique"),
+        "disclaimer":    S("di",  fontSize=7.5, textColor=MUTED,   leading=11, alignment=TA_JUSTIFY),
+        "footer":        S("ft",  fontSize=7,   textColor=MUTED,   leading=10, alignment=TA_CENTER),
+    }
+
+ST = make_styles()
+
+def sp(h=6): return Spacer(1, h)
+def hr(color=TEAL, thickness=0.5): return HRFlowable(width="100%", thickness=thickness, color=color, spaceAfter=6, spaceBefore=4)
+
+def section_header(text):
+    data = [[Paragraph(text, ParagraphStyle("sh", fontName="Helvetica-Bold", fontSize=11,
+        textColor=white, leading=16))]]
+    t = Table(data, colWidths=[17*cm])
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0,0), (-1,-1), NAVY),
+        ("TOPPADDING",    (0,0), (-1,-1), 8),
+        ("BOTTOMPADDING", (0,0), (-1,-1), 8),
+        ("LEFTPADDING",   (0,0), (-1,-1), 12),
+    ]))
+    return t
+
+def pct_bar_table(domain, pct, label_color):
+    """Render a domain percentage bar as a table row."""
+    bar_width = 11 * cm
+    filled = bar_width * (pct / 100)
+    bar_data = [[""]]
+    # build bar as nested table
+    filled_t = Table([[""]], colWidths=[filled], rowHeights=[8])
+    filled_t.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1), label_color),("BOTTOMPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),0)]))
+    empty_w = bar_width - filled
+    if empty_w > 0:
+        empty_t = Table([[""]], colWidths=[empty_w], rowHeights=[8])
+        empty_t.setStyle(TableStyle([("BACKGROUND",(0,0),(-1,-1),HexColor("#E8EEF5")),("BOTTOMPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),0)]))
+        bar_row = Table([[filled_t, empty_t]], colWidths=[filled, empty_w], rowHeights=[8])
+    else:
+        bar_row = filled_t
+    bar_row.setStyle(TableStyle([("LEFTPADDING",(0,0),(-1,-1),0),("RIGHTPADDING",(0,0),(-1,-1),0),("BOTTOMPADDING",(0,0),(-1,-1),0),("TOPPADDING",(0,0),(-1,-1),0)]))
+
+    pct_style = ParagraphStyle("ps", fontName="Helvetica-Bold", fontSize=9,
+        textColor=label_color, alignment=TA_RIGHT, leading=11)
+    lbl_style = ParagraphStyle("ls", fontName="Helvetica", fontSize=9,
+        textColor=HexColor("#2C3E50"), leading=11)
+
+    row = Table([
+        [Paragraph(domain, lbl_style), Paragraph(f"{pct}%", pct_style)],
+        [bar_row, ""],
+    ], colWidths=[12*cm, 5*cm], rowHeights=[12, 10])
+    row.setStyle(TableStyle([
+        ("SPAN", (0,1),(1,1)),
+        ("LEFTPADDING",(0,0),(-1,-1),0),
+        ("RIGHTPADDING",(0,0),(-1,-1),0),
+        ("TOPPADDING",(0,0),(-1,-1),2),
+        ("BOTTOMPADDING",(0,0),(-1,-1),2),
+        ("VALIGN",(0,0),(-1,-1),"MIDDLE"),
+    ]))
+    return row
+
+def domain_color(pct):
+    if pct >= 65: return AMBER
+    if pct >= 40: return TEAL
+    return GREEN
+
+def level_color(level):
+    return {"Elevated": AMBER, "Moderate": TEAL, "Low": GREEN}.get(level, TEAL)
+
+# ── FULL REPORT CONTENT ───────────────────────────────────────────────────────
+# All clinical content is evidence-grounded.
+
+DOMAIN_OVERVIEW = {
+    "inattention": {
+        "name": "Inattention",
+        "what": (
+            "Inattention in ADHD is not a simple failure of attention — it reflects a neurological "
+            "dysregulation of the attentional control system. Research using neuroimaging consistently "
+            "demonstrates reduced activation of the prefrontal cortex and anterior cingulate cortex "
+            "during sustained attention tasks in individuals with ADHD (Castellanos et al., 2002; "
+            "Shaw et al., 2007). The result is inconsistent, effort-dependent attention that is "
+            "highly sensitive to interest, novelty, challenge, urgency, and reward."
+        ),
+        "high": (
+            "Your inattention profile is in the elevated range. This is consistent with the DSM-5 "
+            "inattentive presentation of ADHD, and your responses align with the core criteria of "
+            "sustained attention failure, organisational difficulty, and forgetfulness that Kessler "
+            "et al. (2005) identified as most diagnostically significant in the ASRS-v1.1 validation "
+            "study. Elevated inattention of this degree commonly contributes to academic and occupational "
+            "underperformance that is inconsistent with the person's actual cognitive ability — a "
+            "hallmark pattern that Barkley (2012) describes as 'the performance gap' in ADHD."
+        ),
+        "moderate": (
+            "Your inattention profile is in the moderate range, indicating meaningful attentional "
+            "difficulties that may not consistently reach clinical threshold but nonetheless affect "
+            "daily functioning. Moderate inattention profiles often reflect either a partially "
+            "compensated ADHD presentation, or context-dependent attentional difficulties."
+        ),
+        "low": (
+            "Your inattention profile is in the lower range, suggesting that sustained attention "
+            "difficulties are not a primary area of functional difficulty for you at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Time-segmented work blocks",
+                 "The Pomodoro Technique — 25 minutes of focused work followed by a 5-minute break — "
+                 "provides external temporal structure that compensates for ADHD time blindness. Safren "
+                 "et al.'s (2010) randomised controlled trial of CBT for adult ADHD, published in JAMA, "
+                 "demonstrated significant improvements in inattention using structured work blocks as a "
+                 "core component. The key mechanism is breaking the attentional demand into segments "
+                 "the ADHD nervous system can sustain."),
+                ("External capture system",
+                 "Implement a single, trusted external system for all incoming tasks, appointments, and "
+                 "obligations. Barkley (2012) describes this as 'externalising the future' — the ADHD "
+                 "brain's impaired prospective memory means that information not immediately written down "
+                 "is typically lost. A capture system (paper, app, or voice memo) removes the reliance "
+                 "on working memory entirely. NICE NG87 (2018) recommends written systems as a first-line "
+                 "non-pharmacological strategy for attention difficulties."),
+                ("Environmental modification",
+                 "Systematic reduction of environmental distractors before demanding tasks is supported "
+                 "across the ADHD intervention literature. Specific recommendations include: "
+                 "noise-cancelling headphones, notification blocking on all devices, single-application "
+                 "working, and physical removal from high-traffic spaces. These are first-line "
+                 "environmental accommodations under the NICE NG87 guidelines (2018)."),
+                ("Strategic task scheduling",
+                 "Front-loading cognitively demanding tasks at the time of day when attentional capacity "
+                 "is highest — typically in the morning, or when medication is most effective — directly "
+                 "addresses the predictable daily arc of attentional resources in ADHD. NICE NG87 (2018) "
+                 "recommends this as a practical workplace and academic accommodation strategy."),
+            ],
+            "moderate": [
+                ("Attentional self-monitoring",
+                 "Practice noticing when attention has drifted rather than forcing sustained focus. "
+                 "Solanto's (2011) metacognitive therapy for ADHD identifies self-monitoring awareness "
+                 "as the foundational skill — understanding your own attentional patterns is the "
+                 "prerequisite for managing them effectively."),
+                ("Auditory environment modification",
+                 "Background white noise or instrumental music at moderate volume has some evidence "
+                 "for improving sustained attention in ADHD populations, possibly by raising arousal "
+                 "to optimal levels (Abikoff et al., 1996). Experiment with what works for you."),
+            ],
+        },
+    },
+    "hyperactivity": {
+        "name": "Hyperactivity / Impulsivity",
+        "what": (
+            "Hyperactivity and impulsivity in ADHD reflect impaired inhibitory control — the ability "
+            "to pause and evaluate before acting. Neuroimaging studies consistently identify reduced "
+            "activation of the right inferior prefrontal cortex and striatum during inhibition tasks "
+            "in ADHD (Rubia et al., 2005; Nigg, 2001). In adults, hyperactivity frequently internalises "
+            "into a persistent sense of restlessness, racing thoughts, and difficulty slowing down, "
+            "while impulsivity manifests as difficulty with waiting, interrupting, and hasty decisions."
+        ),
+        "high": (
+            "Your hyperactivity and impulsivity profile is in the elevated range. This is consistent "
+            "with the 2019 European ADHD Guidelines Group Consensus Statement's characterisation of "
+            "adult hyperactivity as an internal experience of restlessness and an urgency to act, "
+            "even when external behavioural hyperactivity has reduced from childhood levels. Elevated "
+            "impulsivity is associated with increased rates of accidental injury, financial impulsivity, "
+            "and interpersonal conflict in ADHD adults (Barkley et al., 2008)."
+        ),
+        "moderate": (
+            "Your hyperactivity and impulsivity profile is in the moderate range. You may experience "
+            "intermittent restlessness and some difficulty with impulsive responses, particularly under "
+            "stress or in under-stimulating environments."
+        ),
+        "low": (
+            "Your hyperactivity and impulsivity profile is in the lower range, suggesting these are "
+            "not primary areas of difficulty for you at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Structured physical activity",
+                 "Aerobic exercise has the most robust non-pharmacological evidence base for ADHD "
+                 "hyperactivity reduction. Multiple RCTs demonstrate improvements in ADHD symptoms "
+                 "comparable to low-dose stimulant medication. Hoza et al. (2015, Journal of Abnormal "
+                 "Child Psychology) found significant ADHD symptom reductions from 20-minute aerobic "
+                 "sessions. Pontifex et al. (2013) demonstrated cognitive performance improvements "
+                 "following acute exercise in children with ADHD. The clinical recommendation is a "
+                 "20-30 minute aerobic session before cognitively demanding work."),
+                ("Response latency extension",
+                 "Impulsivity in ADHD is fundamentally a response latency problem — the gap between "
+                 "stimulus and response is neurologically shortened. Barkley's (2012) behavioural "
+                 "inhibition model identifies extending this latency as the primary target. Practical "
+                 "implementation: a 5-second physical pause before verbal responses, a 24-hour "
+                 "cooling-off period before committing to new obligations, and written rather than "
+                 "verbal communication for important decisions."),
+                ("Mindfulness-based attention training",
+                 "Zylowska et al. (2008, Journal of Attention Disorders) conducted an RCT of adapted "
+                 "mindfulness training for ADHD adults and adolescents, finding significant reductions "
+                 "in self-reported ADHD symptoms including hyperactivity and inattention. The adapted "
+                 "programme used shorter sessions and movement-based practices to accommodate ADHD "
+                 "attentional limitations. An 8-week mindfulness programme is recommended."),
+                ("Intentional movement integration",
+                 "Building legitimate movement into the working day reduces the conflict between "
+                 "the ADHD drive to move and the demands of sedentary work. The 2019 European ADHD "
+                 "Guidelines (Kooij et al.) recommend standing desks, walking meetings, and scheduled "
+                 "movement breaks as clinically supported occupational accommodations."),
+            ],
+            "moderate": [
+                ("Trigger mapping",
+                 "Identify the specific environments, tasks, and times of day that trigger restlessness "
+                 "and impulsive responses. This awareness is the precondition for targeted management."),
+                ("Exercise as cognitive preparation",
+                 "Even a 15-minute brisk walk before demanding tasks produces measurable improvements "
+                 "in inhibitory control and working memory in ADHD populations (Pontifex et al., 2013)."),
+            ],
+        },
+    },
+    "executive": {
+        "name": "Executive Function",
+        "what": (
+            "Executive function difficulties represent the core functional impairment in ADHD. "
+            "Barkley's (2012) model identifies ADHD as fundamentally a disorder of self-regulation "
+            "across time — the inability to inhibit behaviour, use working memory to guide actions, "
+            "regulate emotions, reconstruct the past and anticipate the future, and internally "
+            "represent and motivate goal-directed behaviour. Brown (2001) identified six executive "
+            "function clusters affected in ADHD: activation, focus, effort, emotion, memory, and "
+            "action. These are not character traits — they are neurological functions dependent on "
+            "the dopamine and norepinephrine systems that are dysregulated in ADHD."
+        ),
+        "high": (
+            "Your executive function profile is significantly elevated. This pattern — difficulty "
+            "initiating tasks, managing time, maintaining working memory, and completing multi-step "
+            "sequences — represents the primary mechanism by which ADHD creates occupational and "
+            "functional impairment. Barkley's (2011) Deficits in Executive Functioning Scale "
+            "research demonstrates that executive function impairments are often the strongest "
+            "predictor of functional outcomes in ADHD, outweighing raw symptom severity."
+        ),
+        "moderate": (
+            "Your executive function profile is in the moderate range. Executive difficulties at "
+            "this level commonly manifest as inconsistent task completion, time management challenges, "
+            "and difficulty managing competing demands simultaneously."
+        ),
+        "low": (
+            "Your executive function profile is in the lower range. If you are managing well "
+            "organisationally, it is worth noting that ADHD often involves compensatory strategies "
+            "that mask executive difficulties — particularly in high-structure environments."
+        ),
+        "strategies": {
+            "high": [
+                ("Complete externalisation of executive function",
+                 "Barkley's (2012) central clinical recommendation is to externalise executive function "
+                 "entirely — to use physical, external tools in place of internal self-regulation that "
+                 "is neurologically impaired. This means: a visual weekly planner on paper or screen, "
+                 "a daily task list with time estimates written down, a physical countdown timer for "
+                 "all blocks of work, and a single trusted system for all tasks and obligations. "
+                 "The goal is to make the internal external — to bring the future into the present "
+                 "through concrete, visible reminders."),
+                ("Implementation intentions",
+                 "Gollwitzer's (1999, American Psychologist) research on implementation intentions "
+                 "demonstrates that specifying 'when, where, and how' for an intended action "
+                 "significantly increases follow-through compared to goal intentions alone. For ADHD "
+                 "specifically: instead of 'I will complete the report this week', specify 'On Tuesday "
+                 "at 9am I will sit at my desk and write the introduction section for 25 minutes'. "
+                 "This simple if-then structure reduces the initiation failure that is the primary "
+                 "executive barrier in ADHD."),
+                ("Body-doubling",
+                 "Working in the presence of another person — physically or virtually — activates "
+                 "social regulatory mechanisms that compensate for the weak internal executive control "
+                 "of ADHD. Solanto (2011) documents this as a widely-used and effective self-management "
+                 "strategy in ADHD adults. Virtual platforms such as Focusmate provide structured "
+                 "body-doubling sessions. The evidence suggests the presence, not the interaction, "
+                 "is the active ingredient — silent co-working is equally effective."),
+                ("Task decomposition and the 2-minute rule",
+                 "For ADHD, multi-step tasks must be broken into their smallest possible components, "
+                 "with a single specific next action identified. The barrier to initiation in ADHD "
+                 "is not lack of knowledge about what to do — it is the cognitive demand of sequencing. "
+                 "Additionally, apply the 2-minute rule (Allen, 2001): any task completable in under "
+                 "2 minutes should be done immediately rather than logged. This prevents working "
+                 "memory accumulation that compounds executive overload."),
+                ("Transition anchors",
+                 "ADHD carries a disproportionate cost for task transitions, documented in the "
+                 "task-switching literature (Monsell, 2003). A brief, consistent ritual to signal "
+                 "task transitions — standing up, making a drink, a short physical movement — "
+                 "reduces this cost by creating a predictable neurological signal for the brain "
+                 "to shift attentional set."),
+            ],
+            "moderate": [
+                ("Consistent daily anchor",
+                 "A single, non-negotiable morning routine provides the structural scaffolding for "
+                 "the rest of the day. The aim is to reduce the executive demand of recurring "
+                 "decisions through habit — a core principle of ADHD daily management (Barkley, 2012)."),
+                ("If-then planning for recurring tasks",
+                 "Gollwitzer and Sheeran's (2006) meta-analysis of 94 independent tests showed that "
+                 "implementation intentions (if-then plans) produced a medium-to-large effect on "
+                 "goal attainment. For recurring tasks: 'When I finish dinner, I will check tomorrow's "
+                 "calendar for five minutes'."),
+            ],
+        },
+    },
+    "emotional": {
+        "name": "Emotional Regulation",
+        "what": (
+            "Emotional dysregulation is increasingly recognised as a core feature of ADHD, present "
+            "in 50-70% of children and 70-80% of adults with ADHD (Barkley, 2010; Skirrow & Asherson, "
+            "2013). Barkley (2010) identifies emotional impulsiveness as the fifth executive function "
+            "impairment in ADHD — the inability to inhibit, modulate, and regulate emotional responses. "
+            "This manifests as emotional intensity, rapid mood shifts, low frustration tolerance, and "
+            "difficulty recovering from emotional activation. The phenomenon of Rejection Sensitive "
+            "Dysphoria (RSD) — intense emotional pain triggered by perceived criticism or rejection — "
+            "is documented in a significant proportion of ADHD adults (Dodson, 2019)."
+        ),
+        "high": (
+            "Your emotional regulation profile is in the elevated range. This level of emotional "
+            "dysregulation is clinically significant and consistent with Barkley's (2010) emotional "
+            "impulsiveness model. Research by Shaw et al. (2014) demonstrates that emotional "
+            "dysregulation in ADHD is neurologically driven — reduced prefrontal regulation of "
+            "amygdala reactivity — and is not a personality trait or a choice. This distinction "
+            "is clinically and personally important: the emotional intensity you experience is a "
+            "direct expression of ADHD neurology, not a character failing."
+        ),
+        "moderate": (
+            "Your emotional regulation profile is in the moderate range, indicating meaningful "
+            "difficulties with emotional intensity and recovery that are consistent with ADHD "
+            "emotional dysregulation at a subclinical or partially compensated level."
+        ),
+        "low": (
+            "Your emotional regulation profile is in the lower range at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Neurological reframing",
+                 "The single most important intervention for ADHD emotional dysregulation is "
+                 "accurate psychoeducation about its neurological basis. Ramsay's (2020) CBT "
+                 "for ADHD model begins with helping patients understand that their emotional "
+                 "intensity is generated by reduced prefrontal inhibition of limbic activation — "
+                 "not by poor character or weakness. This reframing reduces secondary shame, which "
+                 "itself amplifies emotional reactivity in ADHD."),
+                ("Response latency extension",
+                 "The clinical target for ADHD emotional impulsiveness is extending the gap between "
+                 "emotional activation and behavioural response. Ramsay (2020) recommends physical "
+                 "pause strategies: leaving the room, controlled breathing, or a brief physical "
+                 "activity before responding to emotionally activating situations. These are not "
+                 "avoidance — they are deliberate extensions of the response latency that ADHD "
+                 "neurologically shortens."),
+                ("Affect labelling",
+                 "Lieberman et al. (2007, Psychological Science) demonstrated that putting feelings "
+                 "into words — affect labelling — reduces amygdala activation and increases "
+                 "prefrontal regulatory activity. Specifically, precise emotional labelling "
+                 "('I am frustrated because I feel dismissed') is more effective than vague "
+                 "labelling ('I am angry'). The precision of the label is the active ingredient."),
+                ("Rejection Sensitive Dysphoria management",
+                 "RSD in ADHD — intense emotional pain following perceived rejection or criticism — "
+                 "requires direct acknowledgement and targeted CBT-based cognitive restructuring. "
+                 "Ramsay (2020) identifies RSD as one of the most impactful and least-addressed "
+                 "dimensions of adult ADHD. Key intervention: identify the cognitive distortions "
+                 "(all-or-nothing thinking, catastrophising, mind-reading) that amplify the RSD "
+                 "response, and develop specific counter-statements grounded in evidence."),
+                ("Personal regulation toolkit",
+                 "ADHD emotional regulation requires active, external tools rather than passive "
+                 "calming. Identify three to five activities that reliably return you to emotional "
+                 "baseline from your own experience — physical exercise, specific music, particular "
+                 "environments, creative activities. Maintain this toolkit in writing and make it "
+                 "accessible before activation, not during."),
+            ],
+            "moderate": [
+                ("Daily emotion tracking",
+                 "A one-word daily emotion log for four weeks typically reveals patterns linked to "
+                 "sleep quality, medication timing, and specific environmental triggers. This data "
+                 "enables targeted prevention rather than reactive management."),
+                ("Pre-planned de-escalation",
+                 "Identify your three most reliable de-escalation strategies and write them down "
+                 "somewhere accessible before emotional activation occurs. The ADHD brain in "
+                 "emotional activation has significantly reduced access to planned responses — "
+                 "having them written and visible in advance is clinically important."),
+            ],
+        },
+    },
+    "developmental": {
+        "name": "Developmental History",
+        "what": (
+            "ADHD is a neurodevelopmental condition — it is present from birth, reflects genetic "
+            "and neurological differences established in early brain development, and does not "
+            "develop in adulthood. Faraone et al.'s (2021) World Federation of ADHD International "
+            "Consensus Statement, representing the most comprehensive synthesis of ADHD evidence, "
+            "confirms heritability of 70-80% based on twin and adoption studies across multiple "
+            "countries and cultures. DSM-5 criteria require evidence of symptoms before age 12, "
+            "and the DIVA-5 protocol (Kooij & Francken, 2010) systematically gathers developmental "
+            "history through structured interview for this purpose."
+        ),
+        "high": (
+            "Your developmental history profile indicates that the difficulties you experience now "
+            "have been present since childhood. This is consistent with the neurodevelopmental "
+            "nature of ADHD and is clinically significant for two reasons: it satisfies the DSM-5 "
+            "age-of-onset criterion (symptoms present before age 12), and it contextualises your "
+            "history of difficulties as expressions of a neurological difference rather than "
+            "personal failure. Many adults with undiagnosed ADHD describe a 'making sense' moment "
+            "when understanding their developmental history through an ADHD lens — Young et al. "
+            "(2011) document this reframing as having direct positive impact on wellbeing and "
+            "self-concept in adults receiving late ADHD diagnosis."
+        ),
+        "moderate": (
+            "Your developmental profile suggests some childhood-onset difficulties consistent with "
+            "ADHD, though the picture may be incomplete or partially compensated. Retrospective "
+            "reporting of childhood ADHD is affected by memory, compensation, and masked presentation."
+        ),
+        "low": (
+            "Your developmental history profile is in the lower range. If you are experiencing "
+            "significant attention or executive function difficulties that began in adulthood, "
+            "these warrant separate investigation — adult-onset presentations may reflect other "
+            "conditions or circumstances."
+        ),
+        "strategies": {
+            "high": [
+                ("Late identification context",
+                 "Late ADHD identification is extremely common, particularly in adults who functionally "
+                 "compensated during school years through high intelligence, structured environments, "
+                 "or external support systems. The eventual collapse of compensatory strategies — "
+                 "typically in university, early employment, or parenthood — often precipitates "
+                 "recognition of previously unidentified ADHD. Faraone et al. (2021) confirm that "
+                 "ADHD is frequently missed in childhood, particularly in girls and in individuals "
+                 "with predominantly inattentive presentations."),
+                ("Developmental narrative construction",
+                 "Compiling a personal developmental timeline — school reports, teacher comments, "
+                 "early employment patterns, peer relationship history — serves two purposes: it "
+                 "provides the third-party and self-report developmental history required for "
+                 "formal ADHD assessment under the DIVA-5.0 protocol (Kooij & Francken, 2010), "
+                 "and it begins the process of reframing years of unexplained difficulties within "
+                 "a coherent neurological framework."),
+                ("Reframing life history",
+                 "Young et al. (2011) document that adults who receive ADHD assessment experience "
+                 "significant improvements in self-concept, self-compassion, and wellbeing — even "
+                 "when diagnosis is not confirmed — through the process of understanding their "
+                 "developmental history in a neurodevelopmental context. The aim is not to excuse "
+                 "past difficulties but to understand them accurately."),
+            ],
+            "moderate": [
+                ("Retrospective information gathering",
+                 "Speaking with a parent, sibling, or early teacher about childhood behaviour provides "
+                 "the informant developmental history that is clinically valuable for formal assessment."),
+                ("School record review",
+                 "Old school reports often contain teacher observations about attention, organisation, "
+                 "and behaviour that are diagnostically relevant even decades later."),
+            ],
+        },
+    },
+    "impact": {
+        "name": "Life Impact",
+        "what": (
+            "The functional impact of ADHD extends across occupational, educational, social, and "
+            "financial domains. Kessler et al. (2006) estimated that ADHD costs the United States "
+            "economy over $19 billion annually in lost worker productivity, representing the largest "
+            "burden of any common mental health condition. Barkley et al.'s (2008) prospective "
+            "follow-up study documented significantly elevated rates of occupational instability, "
+            "relationship breakdown, financial mismanagement, educational underachievement, and "
+            "motor vehicle accidents in adults with ADHD compared to controls. These outcomes are "
+            "not expressions of character — they are measurable consequences of an untreated "
+            "neurodevelopmental condition."
+        ),
+        "high": (
+            "Your life impact profile is in the elevated range, indicating that ADHD-related "
+            "difficulties are having a significant effect across important life domains. This is "
+            "clinically significant and supports the case for formal assessment and appropriate "
+            "intervention. It is important to understand that the functional impact documented "
+            "in your responses is not a reflection of your capacity, intelligence, or effort — "
+            "it reflects the downstream consequences of an untreated or under-treated "
+            "neurodevelopmental condition with effective available treatments."
+        ),
+        "moderate": (
+            "Your life impact profile is in the moderate range, indicating meaningful functional "
+            "difficulties in one or more life domains that are attributable to attention and "
+            "executive function challenges."
+        ),
+        "low": (
+            "Your life impact profile is in the lower range, suggesting that attention or "
+            "executive function difficulties are not currently creating significant functional "
+            "impairment across life domains."
+        ),
+        "strategies": {
+            "high": [
+                ("Legal workplace protections",
+                 "In Ireland, ADHD constitutes a disability under the Employment Equality Acts "
+                 "1998-2015, requiring employers to provide reasonable accommodations unless doing "
+                 "so creates a disproportionate burden. In the UK, the Equality Act 2010 provides "
+                 "equivalent protection. The Employment Appeal Tribunal in Stedman v Haven Leisure "
+                 "(2025) confirmed that a substantial adverse effect on a single day-to-day activity "
+                 "is sufficient to establish disability status — and ADHD characteristically affects "
+                 "multiple activities. Specific accommodations may include written instructions, "
+                 "noise-reducing equipment, flexible scheduling, and additional planning time."),
+                ("Relationship psychoeducation",
+                 "Sharing an accurate understanding of ADHD with close partners and family members "
+                 "significantly improves relationship outcomes. Orlov (2010) and Bramham (2009) "
+                 "provide evidence-informed frameworks for ADHD in intimate partnerships. The "
+                 "core intervention is replacing attributions of laziness, selfishness, or "
+                 "carelessness with accurate neurodevelopmental understanding."),
+                ("Financial and administrative systems",
+                 "Automate all recurring financial obligations through direct debit. Use a single "
+                 "consolidated financial overview rather than multiple accounts. Batch all "
+                 "administrative tasks to a designated weekly time block. These structural "
+                 "interventions directly compensate for ADHD working memory and planning "
+                 "impairments in the domain with the most measurable long-term consequences."),
+                ("Formal assessment pathway",
+                 "Diagnosis unlocks two evidence-based interventions with the strongest outcomes: "
+                 "stimulant medication (methylphenidate and amphetamines have a Cohen's d of "
+                 "0.9 in adults — the largest effect size of any psychiatric medication, Faraone "
+                 "et al., 2021) and structured psychological therapy (CBT adapted for ADHD has "
+                 "Level I RCT evidence from Safren et al., 2010 and Solanto, 2011). In Ireland, "
+                 "assessment is available through HSE psychiatry services (12-18 month wait) or "
+                 "private assessment (PSI-registered psychologists or UKAAN-certified psychiatrists)."),
+            ],
+            "moderate": [
+                ("Domain-specific targeting",
+                 "Identify the one or two domains where ADHD creates the most friction and focus "
+                 "all intervention energy there first. Attempting to address all areas simultaneously "
+                 "is itself an ADHD executive trap."),
+                ("Friction logging",
+                 "Keep a brief friction log for one week — note every moment of ADHD-related "
+                 "difficulty. This creates the specific data needed to target interventions "
+                 "precisely, replacing general self-criticism with actionable information."),
+            ],
+        },
+    },,
+"working_memory": {
+        "name": "Working Memory",
+        "what": (
+            "Working memory is the brain's ability to hold and manipulate information in real time — "
+            "the mental workspace used for reasoning, learning, and executing multi-step tasks. "
+            "Alloway and Alloway (2011) demonstrate that working memory capacity is a stronger "
+            "predictor of academic and occupational success than IQ. In ADHD, working memory "
+            "impairment is one of the most consistently replicated neuropsychological findings, "
+            "driven by dopaminergic dysregulation in the prefrontal cortex (Baddeley, 2000; "
+            "Martinussen et al., 2005). The consequence is a brain that forgets what it was "
+            "doing mid-task, loses the thread of conversations, and cannot hold complex "
+            "instructions long enough to execute them reliably."
+        ),
+        "high": (
+            "Your working memory profile is in the elevated range, indicating significant "
+            "difficulty holding and manipulating information in real time. This is one of the "
+            "most functionally impactful ADHD-related impairments — it explains the experience "
+            "of walking into a room and forgetting why, losing track of conversations, and "
+            "needing to re-read the same material repeatedly. Martinussen et al.'s (2005) "
+            "meta-analysis of 26 studies confirmed working memory as the most consistently "
+            "impaired cognitive function in ADHD."
+        ),
+        "moderate": (
+            "Your working memory profile is in the moderate range, suggesting meaningful "
+            "difficulties holding multi-step information and tracking complex sequences. "
+            "This level of working memory difficulty commonly affects performance in meetings, "
+            "phone calls, and multi-step task execution."
+        ),
+        "low": (
+            "Your working memory profile is in the lower range, suggesting this is not a "
+            "primary area of functional difficulty at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Complete externalisation of working memory",
+                 "Write everything down immediately and without exception. The ADHD working "
+                 "memory cannot be trained into reliability — it must be replaced with external "
+                 "systems. Barkley (2012) describes this as the foundational accommodation: "
+                 "paper, app, or voice memo capture of all incoming information before it "
+                 "is processed or acted upon."),
+                ("Dual coding for retention",
+                 "Reading aloud or sub-vocalising complex instructions activates both "
+                 "verbal and auditory encoding, strengthening retention (Paivio, 1991). "
+                 "For particularly important information, write it, say it, and repeat it "
+                 "back immediately."),
+                ("Environmental load reduction",
+                 "Close all irrelevant applications, conversations, and inputs before "
+                 "cognitively demanding tasks. Each open thread competes for limited working "
+                 "memory capacity — reducing environmental load directly increases available "
+                 "cognitive resource for the task at hand."),
+                ("Chunking and sequence cards",
+                 "Break multi-step processes into written sequential steps on a physical card "
+                 "or visible list. This externalises the sequencing function that ADHD working "
+                 "memory cannot maintain internally (Barkley, 2012)."),
+            ],
+            "moderate": [
+                ("Immediate repetition",
+                 "Repeat back instructions to the speaker immediately to consolidate encoding. "
+                 "This simple technique significantly reduces working memory-driven forgetting."),
+                ("Checklist systems",
+                 "Written checklists for all recurring multi-step processes — morning routines, "
+                 "work procedures, recurring tasks. Removes the working memory demand of "
+                 "remembering sequence entirely."),
+            ],
+        },
+    },
+    "time": {
+        "name": "Time Perception",
+        "what": (
+            "Time blindness — the neurological inability to accurately sense the passage of time "
+            "— is one of the most diagnostically distinctive features of ADHD. Barkley (2011) "
+            "identifies temporal processing as a core executive function impairment in ADHD, "
+            "driven by reduced activation of the prefrontal-cerebellar timing circuits. The "
+            "result is a subjective experience of time that oscillates between two states: "
+            "NOW and NOT NOW. Future events — even important ones — feel indistinct and remote "
+            "until they are almost upon the person, producing chronic lateness, missed deadlines, "
+            "and the experience of being perpetually caught off-guard by time."
+        ),
+        "high": (
+            "Your time perception profile is in the elevated range, consistent with significant "
+            "ADHD time blindness. Barkley's (2011) research documents this as among the most "
+            "functionally impactful ADHD impairments, directly responsible for chronic lateness, "
+            "deadline failures, and the consistent underestimation of task duration that erodes "
+            "professional and personal reliability. This is not carelessness — it is a "
+            "neurological timing deficit that does not improve through effort alone."
+        ),
+        "moderate": (
+            "Your time perception profile is in the moderate range, suggesting meaningful "
+            "difficulties with time estimation and temporal awareness that affect punctuality "
+            "and deadline management."
+        ),
+        "low": (
+            "Your time perception profile is in the lower range, suggesting temporal processing "
+            "is not a primary area of difficulty for you at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("External timers for all tasks",
+                 "A physical countdown timer for every work block is the primary accommodation "
+                 "for ADHD time blindness. The ADHD brain cannot track internal time reliably — "
+                 "an external timer makes time visible and tangible rather than abstract "
+                 "(Barkley, 2011). Set timers for task blocks, transitions, and departure times."),
+                ("Time estimation practice",
+                 "Before every task, estimate the duration. After completion, record actual time. "
+                 "Two weeks of this practice significantly improves temporal calibration in ADHD "
+                 "by building an evidence base of actual time costs that overrides the chronically "
+                 "optimistic ADHD estimate."),
+                ("Backwards planning from deadlines",
+                 "For every deadline, plan backwards: 'This is due Friday at 5pm. It takes 3 hours. "
+                 "I must start by Wednesday at 2pm.' Make this calculation explicit and written — "
+                 "the ADHD brain's 'NOT NOW' response to future events means the deadline feels "
+                 "remote until it is dangerously close."),
+                ("Pre-departure alarms",
+                 "Set alarms for 15 minutes and 5 minutes before any required departure time — "
+                 "not at the departure time itself. The 15-minute alarm allows preparation; "
+                 "the 5-minute alarm is the final prompt."),
+            ],
+            "moderate": [
+                ("Visible clock",
+                 "A large, clearly visible clock in your primary working environment at all times. "
+                 "Removing the need to check a clock reduces the friction of time monitoring."),
+                ("Task duration anchors",
+                 "Build a personal library of time anchors for common tasks — 'email replies "
+                 "take 3 minutes each', 'getting ready takes 25 minutes'. Reference before planning."),
+            ],
+        },
+    },
+    "hyperfocus": {
+        "name": "Hyperfocus & Interest Drive",
+        "what": (
+            "Hyperfocus is the paradoxical ADHD capacity for intense, absorbed concentration on "
+            "topics of high interest — apparently contradicting the inattention presentation but "
+            "in fact reflecting the same underlying mechanism. Dodson (2019) describes ADHD as "
+            "an interest-based nervous system: attention in ADHD is not regulated by importance "
+            "or priority (as in neurotypical individuals) but by interest, novelty, challenge, "
+            "urgency, passion, or competition. When these conditions are met, ADHD produces "
+            "hyperfocus — immersive, time-distorting, highly productive engagement. When they "
+            "are absent, initiation failure and inattention dominate. Understanding this system "
+            "is clinically important because it reframes ADHD motivation as context-dependent "
+            "rather than absent."
+        ),
+        "high": (
+            "Your hyperfocus profile is in the elevated range, indicating a pronounced "
+            "interest-based nervous system. This is a double-edged neurological feature: when "
+            "interest is present, you likely experience periods of exceptional focus and "
+            "productivity. When it is absent, initiation and engagement become profoundly "
+            "difficult. Dodson (2019) notes that adults with strong hyperfocus profiles often "
+            "describe their working life as oscillating between these two states with little "
+            "middle ground — a pattern that is frustrating but highly manageable once understood."
+        ),
+        "moderate": (
+            "Your hyperfocus profile is in the moderate range, suggesting meaningful "
+            "interest-based attention patterns. You likely notice a significant difference "
+            "in your engagement and productivity depending on how interesting you find a task."
+        ),
+        "low": (
+            "Your hyperfocus profile is in the lower range at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Strategic hyperfocus deployment",
+                 "Schedule deep work during periods when interest naturally peaks and use "
+                 "external alarms to exit before hyperfocus causes you to neglect other "
+                 "obligations. The hyperfocus state is a neurological asset — treating it "
+                 "as scheduled, bounded work time converts it from an unpredictable liability "
+                 "into a productivity advantage."),
+                ("Interest engineering for uninteresting tasks",
+                 "Pair mandatory but uninteresting tasks with interest-increasing contexts: "
+                 "specific music, a novel environment, a competitive element (timer race), "
+                 "or social accountability. Dodson (2019) documents that even mild interest "
+                 "increases can activate the ADHD motivational system sufficiently for task "
+                 "initiation."),
+                ("Transition rituals for hyperfocus exit",
+                 "Create a consistent physical ritual for exiting hyperfocus states: standing "
+                 "up, a specific movement, making a drink. Monsell's (2003) task-switching "
+                 "research shows that a consistent transition signal significantly reduces "
+                 "the cognitive cost of shifting attentional set — the primary difficulty "
+                 "when exiting a hyperfocus state."),
+                ("Hyperfocus topic inventory",
+                 "Maintain a written list of your hyperfocus triggers — topics, formats, "
+                 "environments, and conditions that reliably activate deep engagement. "
+                 "Use this inventory to engineer work contexts and to identify career and "
+                 "project directions that align with your interest-based nervous system."),
+            ],
+            "moderate": [
+                ("Interest as diagnostic tool",
+                 "Notice which tasks you can engage with easily versus which require significant "
+                 "initiation effort. This pattern reveals the shape of your interest-based "
+                 "nervous system and informs task design."),
+                ("Novelty introduction",
+                 "For recurring tasks that have lost their novelty, introduce a new element: "
+                 "a different location, tool, format, or approach. Novelty is one of the "
+                 "primary ADHD interest activators (Dodson, 2019)."),
+            ],
+        },
+    },
+    "rsd": {
+        "name": "Rejection Sensitivity (RSD)",
+        "what": (
+            "Rejection Sensitive Dysphoria (RSD) is an intense, neurologically-driven emotional "
+            "response to perceived rejection, criticism, failure, or teasing — real or imagined. "
+            "Dodson (2019) documents RSD as present in approximately 99% of adults with ADHD, "
+            "yet it remains one of the least-recognised and most functionally impactful features "
+            "of adult ADHD. The emotional pain triggered by RSD is described by affected "
+            "individuals as among the most intense emotional experiences they know — often more "
+            "distressing than bereavement or physical pain. RSD is neurologically distinct from "
+            "general emotional dysregulation: it is specifically triggered by social evaluation "
+            "and driven by the same prefrontal-limbic dysregulation that characterises ADHD "
+            "emotional impulsiveness (Barkley, 2010)."
+        ),
+        "high": (
+            "Your rejection sensitivity profile is in the elevated range, indicating significant "
+            "RSD-consistent emotional responses to perceived criticism, rejection, or failure. "
+            "This level of RSD commonly drives avoidance of situations involving evaluation, "
+            "people-pleasing behaviour, perfectionism as a protective strategy, and profound "
+            "emotional pain from interpersonal events that others find minor. Dodson (2019) "
+            "documents that untreated RSD is one of the primary drivers of occupational and "
+            "social underperformance in ADHD adults — not because of capability deficit, but "
+            "because of avoidance driven by the anticipation of emotional pain."
+        ),
+        "moderate": (
+            "Your rejection sensitivity profile is in the moderate range, suggesting meaningful "
+            "sensitivity to criticism and rejection that affects your behaviour and emotional "
+            "wellbeing in evaluative situations."
+        ),
+        "low": (
+            "Your rejection sensitivity profile is in the lower range at this time."
+        ),
+        "strategies": {
+            "high": [
+                ("Neurological reframing of RSD",
+                 "The most important intervention for RSD is accurate psychoeducation: "
+                 "understanding that the intensity of your response to rejection is "
+                 "neurologically generated — not a reflection of reality, of weakness, or "
+                 "of the actual severity of the perceived slight. Ramsay (2020) identifies "
+                 "this cognitive reframing as the essential first step in RSD management."),
+                ("24-hour response rule",
+                 "Implement an absolute rule of not responding to perceived criticism or "
+                 "rejection for 24 hours. The RSD response is immediate and intense but "
+                 "typically inaccurate — prefrontal reappraisal over 24 hours almost always "
+                 "produces a more proportionate assessment of the triggering event."),
+                ("CBT cognitive restructuring",
+                 "Identify the specific cognitive distortions amplifying your RSD responses: "
+                 "all-or-nothing thinking ('they hate me'), catastrophising ('this will ruin "
+                 "my career'), and mind-reading ('I know what they think of me'). Ramsay "
+                 "(2020) provides an evidence-based CBT framework for ADHD RSD specifically."),
+                ("Psychoeducation for close relationships",
+                 "Sharing an understanding of RSD with close partners, family members, and "
+                 "trusted colleagues significantly reduces interpersonal triggering. People "
+                 "who understand RSD can deliver feedback differently — more explicitly, more "
+                 "warmly — reducing the activation of RSD responses (Orlov, 2010)."),
+                ("Proactive social contracts",
+                 "For important relationships, establish explicit agreements about how criticism "
+                 "and feedback will be delivered. Removing ambiguity from evaluative "
+                 "communication is the most effective environmental modification for RSD."),
+            ],
+            "moderate": [
+                ("RSD trigger awareness",
+                 "Keep a brief log of RSD activations for two weeks: what triggered it, "
+                 "the intensity (0-10), and your response. This creates the self-knowledge "
+                 "needed for targeted management."),
+                ("Written counter-statements",
+                 "For your most common RSD triggers, develop one written evidence-based "
+                 "counter-statement prepared in advance. Access it during activation."),
+            ],
+        },
+    },
+}
+
+NEXT_STEPS = {
+    "Elevated": [
+        ("Seek a formal ADHD assessment",
+         "Your profile strongly warrants a formal assessment with a qualified clinician. "
+         "In Ireland, ask your GP for a referral to HSE Adult ADHD Services, or access "
+         "private assessment through clinicians registered with the Psychological Society "
+         "of Ireland (PSI) or the Irish Medical Council with UKAAN certification. "
+         "In the UK, ask your GP for NHS referral or contact UKAAN-registered private "
+         "practitioners. Assessment typically involves a structured clinical interview, "
+         "validated rating scales, and developmental history."),
+        ("Consider medication evaluation",
+         "Stimulant medication (methylphenidate and lisdexamfetamine) has the strongest "
+         "evidence base of any treatment for ADHD, with a Cohen's d of approximately 0.9 "
+         "in adults — the largest effect size of any medication in psychiatric medicine "
+         "(Faraone et al., 2021). Medication is evaluated and prescribed by a psychiatrist "
+         "following formal diagnosis. Non-stimulant options (atomoxetine) are also available."),
+        ("Begin structured psychological intervention",
+         "Safren et al.'s (2010) RCT, published in JAMA, demonstrated that CBT adapted "
+         "for ADHD produced significant improvements in symptoms and functioning beyond "
+         "medication alone. Solanto's (2011) metacognitive therapy and Ramsay's (2020) "
+         "CBT framework are the most evidence-based psychological approaches. These can "
+         "be accessed through clinical psychologists and ADHD-specialist therapists."),
+        ("Implement the domain-specific strategies in this report",
+         "The evidence-based strategies in this report are effective regardless of formal "
+         "diagnosis status. Begin with the domain where you experience the greatest "
+         "functional impairment, implement one strategy consistently for two weeks "
+         "before adding another, and track outcomes explicitly."),
+    ],
+    "Moderate": [
+        ("Discuss your results with your GP",
+         "Your moderate profile warrants a conversation with your GP about whether a "
+         "formal ADHD assessment is appropriate. Bring this report with you. A GP "
+         "referral to a specialist is the standard pathway in Ireland and the UK."),
+        ("Implement the domain-specific strategies in this report",
+         "The strategies in this report are grounded in RCT evidence and are effective "
+         "for people with ADHD-related profiles regardless of formal diagnosis. Begin "
+         "with the domain showing the highest score and implement one strategy at a time."),
+        ("Monitor and document",
+         "Keep a brief daily log of how attention and executive function difficulties "
+         "present over the next four weeks. This data will be clinically useful if you "
+         "proceed to formal assessment, and will help you identify patterns and triggers."),
+    ],
+    "Low": [
+        ("Review findings contextually",
+         "Your lower profile does not exclude ADHD — many people with ADHD present "
+         "lower on standardised screens due to compensation, masking, or situational "
+         "variability. If you have persistent concerns about attention or executive "
+         "function, a clinical consultation remains worthwhile."),
+        ("Use relevant strategies",
+         "Even at a lower profile level, you may find specific domain strategies in "
+         "this report applicable. ADHD-derived executive function and attention "
+         "strategies are broadly effective for human cognitive performance generally."),
+    ],
+}
+
+REFERENCES = [
+    "Allen, D. (2001). Getting Things Done: The Art of Stress-Free Productivity. Penguin.",
+    "Barkley, R.A. (2010). Emotional impulsiveness in ADHD: A comprehensive review. "
+    "Journal of Attention Disorders, 14(3), 201-218.",
+    "Barkley, R.A. (2011). Barkley Deficits in Executive Functioning Scale. Guilford Press.",
+    "Barkley, R.A. (2012). Executive Functions: What They Are, How They Work, "
+    "and Why They Evolved. Guilford Press.",
+    "Barkley, R.A., Murphy, K.R., & Fischer, M. (2008). ADHD in Adults: What the Science Says. "
+    "Guilford Press.",
+    "Brown, T.E. (2001). Brown Attention-Deficit Disorder Scales for Adults. "
+    "Psychological Corporation.",
+    "Castellanos, F.X. et al. (2002). Developmental trajectories of brain volume "
+    "abnormalities in children and adolescents with ADHD. JAMA, 288(14), 1740-1748.",
+    "Dodson, W. (2019). Rejection sensitive dysphoria and ADHD. ADDitude Magazine.",
+    "Faraone, S.V. et al. (2021). The World Federation of ADHD International Consensus "
+    "Statement. Neuroscience & Biobehavioral Reviews, 128, 789-818.",
+    "Gollwitzer, P.M. (1999). Implementation intentions: Strong effects of simple plans. "
+    "American Psychologist, 54(7), 493-503.",
+    "Gollwitzer, P.M., & Sheeran, P. (2006). Implementation intentions and goal "
+    "achievement: A meta-analysis. Advances in Experimental Social Psychology, 38, 69-119.",
+    "Hoza, B. et al. (2015). A randomized trial examining the effects of aerobic physical "
+    "activity on ADHD symptoms. Journal of Abnormal Child Psychology, 43(4), 655-667.",
+    "Kessler, R.C. et al. (2005). The World Health Organization Adult ADHD Self-Report "
+    "Scale (ASRS). Psychological Medicine, 35, 245-256.",
+    "Kessler, R.C. et al. (2006). The prevalence and correlates of adult ADHD. "
+    "American Journal of Psychiatry, 163(4), 716-723.",
+    "Kooij, J.J.S. & Francken, M.H. (2010). DIVA 2.0: Diagnostic Interview for ADHD in Adults. "
+    "DIVA Foundation.",
+    "Kooij, J.J.S. et al. (2019). Updated European Consensus Statement on diagnosis and "
+    "treatment of adult ADHD. European Psychiatry, 56, 14-34.",
+    "Lieberman, M.D. et al. (2007). Putting feelings into words: affect labeling disrupts "
+    "amygdala activity in response to affective stimuli. Psychological Science, 18(5), 421-428.",
+    "Monsell, S. (2003). Task switching. Trends in Cognitive Sciences, 7(3), 134-140.",
+    "NICE (2018). Attention Deficit Hyperactivity Disorder: Diagnosis and Management (NG87). "
+    "National Institute for Health and Care Excellence.",
+    "Nigg, J.T. (2001). Is ADHD a disinhibitory disorder? Psychological Bulletin, "
+    "127(5), 571-598.",
+    "Orlov, M. (2010). The ADHD Effect on Marriage. Specialty Press.",
+    "Pontifex, M.B. et al. (2013). Exercise improves behavioural, neurocognitive, and "
+    "scholastic performance in children with ADHD. Journal of Pediatrics, 162(3), 543-551.",
+    "Ramsay, J.R. (2020). Cognitive Behavioral Therapy for Adult ADHD. Routledge.",
+    "Rubia, K. et al. (2005). Neurofunctional correlates of response inhibition in ADHD. "
+    "Psychiatry Research: Neuroimaging, 140(1), 43-55.",
+    "Safren, S.A. et al. (2010). Cognitive-behavioral therapy vs. relaxation with educational "
+    "support for medication-treated adults with ADHD. JAMA, 304(8), 875-880.",
+    "Shaw, P. et al. (2007). Attention-deficit/hyperactivity disorder is characterised by a "
+    "delay in cortical maturation. PNAS, 104(49), 19649-19654.",
+    "Skirrow, C., & Asherson, P. (2013). Emotional lability, comorbidity and attention "
+    "in adults with ADHD. Journal of Affective Disorders, 147(1-3), 98-105.",
+    "Solanto, M.V. (2011). Cognitive-Behavioral Therapy for Adult ADHD: Targeting "
+    "Executive Dysfunction. Guilford Press.",
+    "Young, S. et al. (2011). Quality of life of adults with ADHD. Journal of Attention "
+    "Disorders, 15(8), 638-643.",
+    "Zylowska, L. et al. (2008). Mindfulness meditation training in adults and adolescents "
+    "with ADHD. Journal of Attention Disorders, 11(6), 737-746.",
+]
+
+# ── REPORT BUILDER ─────────────────────────────────────────────────────────────
+
+def build_report(name, age_group, level, total_pct, asrs_flag, asrs_count, pcts, date_str=None, ai_analysis=None, loyalty_code=None):
+    """
+    name: str
+    age_group: "Adult" or "Adolescent"
+    level: "Elevated" | "Moderate" | "Low"
+    total_pct: int 0-100
+    asrs_flag: bool
+    asrs_count: int 0-6
+    pcts: dict {domain_key: int}
+    """
+    buf = io.BytesIO()
+    if date_str is None:
+        date_str = datetime.date.today().strftime("%-d %B %Y")
+
+    lc = level_color(level)
+
+    # ── Page numbering canvas ──────────────────────────────────────────────────
+    class NumberedCanvas(pdfcanvas.Canvas):
+        def __init__(self, *args, **kwargs):
+            pdfcanvas.Canvas.__init__(self, *args, **kwargs)
+            self._saved_page_states = []
+        def showPage(self):
+            self._saved_page_states.append(dict(self.__dict__))
+            self._startPage()
+        def save(self):
+            num_pages = len(self._saved_page_states)
+            for state in self._saved_page_states:
+                self.__dict__.update(state)
+                self.draw_page_number(num_pages)
+                pdfcanvas.Canvas.showPage(self)
+            pdfcanvas.Canvas.save(self)
+        def draw_page_number(self, page_count):
+            pg = self._pageNumber
+            if pg == 1:
+                return
+            self.setFont("Helvetica", 7)
+            self.setFillColor(MUTED)
+            self.drawCentredString(W/2, 24, f"ADHDclearfocus Clinical Profile Report  ·  Page {pg} of {page_count}")
+            self.setStrokeColor(BORDER)
+            self.setLineWidth(0.5)
+            self.line(2*cm, 34, W - 2*cm, 34)
+
+    doc = SimpleDocTemplate(buf, pagesize=A4,
+        leftMargin=2*cm, rightMargin=2*cm,
+        topMargin=2.5*cm, bottomMargin=2*cm,
+        title=f"ADHDclearfocus Report — {name}")
+
+    story = []
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 1 — COVER
+    # ────────────────────────────────────────────────────────────────────────────
+    # Navy background block (simulated with table)
+    cover_content = [
+        sp(60),
+        Paragraph("ADHD<font color='#00C2CB'>clearfocus</font>", ParagraphStyle("brand",
+            fontName="Helvetica-Bold", fontSize=32, textColor=white, leading=38)),
+        sp(4),
+        Paragraph("Clinical Profile Report", ParagraphStyle("csr",
+            fontName="Helvetica", fontSize=14, textColor=TEAL, leading=18)),
+        sp(30),
+        hr(TEAL, 1),
+        sp(12),
+        Paragraph(f"Prepared for: {name}", ST["cover_name"]),
+        sp(4),
+        Paragraph(f"Age Group: {age_group}", ST["cover_date"]),
+        Paragraph(f"Date: {date_str}", ST["cover_date"]),
+        sp(12),
+        Paragraph(f"Overall Profile Level: {level.upper()}", ParagraphStyle("ol",
+            fontName="Helvetica-Bold", fontSize=12, textColor=lc, leading=16)),
+        Paragraph(f"Overall Score: {total_pct}%", ST["cover_date"]),
+        sp(8),
+        *(([Paragraph(ai_analysis.get("overall_narrative",""), ParagraphStyle("ai_cover",
+            fontName="Helvetica", fontSize=9.5, textColor=HexColor("#A8C4D8"), leading=14.5,
+            spaceAfter=6, alignment=TA_JUSTIFY))] if ai_analysis and ai_analysis.get("overall_narrative") else [])),
+        sp(40),
+        hr(color=MUTED, thickness=0.5),
+        sp(8),
+        Paragraph("Developed by Dr. Conall Donegan", ParagraphStyle("aut",
+            fontName="Helvetica-Bold", fontSize=10, textColor=white, leading=14)),
+        Paragraph("Psychologist (DPsych) · ADHDclearfocus", ParagraphStyle("autd",
+            fontName="Helvetica", fontSize=9, textColor=MUTED, leading=13)),
+        sp(6),
+        Paragraph(
+            "This report is an educational self-awareness document produced from a validated "
+            "self-report screener. It does not constitute a clinical diagnosis of ADHD or any "
+            "other condition and should be read in conjunction with qualified clinical advice.",
+            ST["disclaimer"]),
+        PageBreak(),
+    ]
+
+    # Wrap in navy background table
+    cover_table = Table([[cover_content[0]]], colWidths=[17*cm])
+    # We can't truly fill page with colour in platypus easily, so use a simulated background page
+    # Instead, just output story items with a page background drawn on canvas
+    # For simplicity use white with coloured elements
+
+    story += cover_content[1:]  # skip the sp(60) placeholder
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 2 — TABLE OF CONTENTS
+    # ────────────────────────────────────────────────────────────────────────────
+    story += [
+        section_header("CONTENTS"),
+        sp(12),
+    ]
+    toc_items = [
+        ("1.", "Understanding Your Results", "3"),
+        ("2.", "Your Profile Overview", "4"),
+        ("3.", "Domain Analysis: Inattention", "5"),
+        ("4.", "Domain Analysis: Hyperactivity / Impulsivity", "6"),
+        ("5.", "Domain Analysis: Executive Function", "7"),
+        ("6.", "Domain Analysis: Emotional Regulation", "8"),
+        ("7.", "Domain Analysis: Developmental History", "9"),
+        ("8.", "Domain Analysis: Life Impact", "10"),
+        ("9.", "Recommended Next Steps", "11"),
+        ("10.", "Clinical References", "12"),
+    ]
+    toc_data = []
+    for num, title, pg in toc_items:
+        toc_data.append([
+            Paragraph(num, ParagraphStyle("tn", fontName="Helvetica-Bold", fontSize=10, textColor=TEAL, leading=14)),
+            Paragraph(title, ST["toc_item"]),
+            Paragraph(pg, ParagraphStyle("tp", fontName="Helvetica", fontSize=10, textColor=MUTED, leading=14, alignment=TA_RIGHT)),
+        ])
+    toc = Table(toc_data, colWidths=[1*cm, 13.5*cm, 2.5*cm])
+    toc.setStyle(TableStyle([
+        ("TOPPADDING",    (0,0),(-1,-1), 5),
+        ("BOTTOMPADDING", (0,0),(-1,-1), 5),
+        ("LINEBELOW",     (0,0),(-1,-2), 0.3, HexColor("#E8EEF5")),
+        ("VALIGN",        (0,0),(-1,-1), "MIDDLE"),
+    ]))
+    story += [toc, sp(20)]
+
+    # Author note
+    author_data = [[
+        Paragraph("About this report", ParagraphStyle("abt", fontName="Helvetica-Bold",
+            fontSize=9, textColor=NAVY, leading=13)),
+        Paragraph(
+            "This report was generated from your ADHDclearfocus screener responses. "
+            "The screener draws on four validated assessment frameworks: the WHO ASRS-v1.1 "
+            "(Kessler et al., 2005), the Brown ADD Rating Scale (Brown, 2001), the DIVA-5.0 "
+            "developmental history protocol (Kooij & Francken, 2010), and Conners Adult ADHD "
+            "Rating Scale domains (Conners et al., 1999). The recommendations in this report "
+            "are grounded in peer-reviewed clinical research and reflect current best practice "
+            "guidance from NICE NG87 (2018) and the European ADHD Guidelines Group (Kooij et al., 2019).",
+            ParagraphStyle("abt2", fontName="Helvetica", fontSize=8.5, textColor=HexColor("#2C3E50"),
+                leading=13, alignment=TA_JUSTIFY)),
+    ]]
+    author_table = Table(author_data, colWidths=[4*cm, 13*cm])
+    author_table.setStyle(TableStyle([
+        ("BACKGROUND",    (0,0),(0,0), HexColor("#EAF7F8")),
+        ("BACKGROUND",    (1,0),(1,0), HexColor("#F5FDFD")),
+        ("TOPPADDING",    (0,0),(-1,-1), 10),
+        ("BOTTOMPADDING", (0,0),(-1,-1), 10),
+        ("LEFTPADDING",   (0,0),(-1,-1), 10),
+        ("RIGHTPADDING",  (0,0),(-1,-1), 10),
+        ("VALIGN",        (0,0),(-1,-1), "TOP"),
+        ("ROUNDEDCORNERS",[4]),
+    ]))
+    story += [author_table, PageBreak()]
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 3 — UNDERSTANDING YOUR RESULTS
+    # ────────────────────────────────────────────────────────────────────────────
+    story += [
+        section_header("1 · UNDERSTANDING YOUR RESULTS"),
+        sp(10),
+        Paragraph("What your overall score means", ST["h2"]),
+    ]
+
+    level_texts = {
+        "Elevated": (
+            "An elevated profile across the ADHDclearfocus screener indicates a pattern of "
+            "responses consistent with ADHD presentation. Your overall score of {pct}% places "
+            "your responses in the range associated with clinically significant ADHD-related "
+            "functional difficulties. Importantly, this screener's ASRS-v1.1 Part A component — "
+            "the most validated brief ADHD screen available, developed for the World Health "
+            "Organisation — {asrs_text}. The elevated profile does not confirm a diagnosis of "
+            "ADHD, but it strongly warrants formal assessment with a qualified clinician."
+        ),
+        "Moderate": (
+            "A moderate profile indicates meaningful ADHD-related patterns across multiple "
+            "domains, with an overall score of {pct}%. Your responses suggest functional "
+            "difficulties consistent with ADHD at a level that warrants attention and, "
+            "potentially, further clinical evaluation. {asrs_text}."
+        ),
+        "Low": (
+            "A lower profile indicates that your responses do not strongly suggest ADHD "
+            "presentation at this time, with an overall score of {pct}%. {asrs_text}. "
+            "ADHD can present inconsistently and many people mask or compensate for "
+            "symptoms in certain contexts. If you have persistent concerns about attention "
+            "or executive function, a clinical consultation remains worthwhile."
+        ),
+    }
+
+    if asrs_flag:
+        asrs_text = (f"was positive ({asrs_count} of 6 Part A items endorsed at the "
+                     f"significant threshold — sensitivity 68.7%, specificity 99.5%)")
+    else:
+        asrs_text = (f"returned {asrs_count} of 6 Part A items at the significant threshold "
+                     f"(positive threshold is 4 or more)")
+
+    level_para = level_texts[level].format(pct=total_pct, asrs_text=asrs_text)
+    story += [Paragraph(level_para, ST["body"]), sp(8)]
+
+    story += [
+        Paragraph("How to use this report", ST["h2"]),
+        Paragraph(
+            "This report is organised by clinical domain. Each section explains the neuroscience "
+            "and clinical evidence behind that domain, describes what your specific score means, "
+            "and provides evidence-based strategies drawn from the peer-reviewed literature. "
+            "The strategies are graded by your score — higher scores receive more intensive "
+            "intervention recommendations.", ST["body"]),
+        Paragraph(
+            "The report ends with a Recommended Next Steps section and a complete reference list "
+            "for all cited research. The reference list is provided so you can access the primary "
+            "sources directly — the recommendations in this report are only as strong as the "
+            "evidence they cite, and you should feel free to evaluate that evidence yourself.",
+            ST["body"]),
+        sp(8),
+        Paragraph("What this report is not", ST["h2"]),
+        Paragraph(
+            "This report is not a clinical diagnosis of ADHD or any other condition. A diagnosis "
+            "of ADHD requires a comprehensive clinical assessment by a qualified professional, "
+            "including structured interview, validated rating scales, developmental history, "
+            "and clinical judgement. The strategies in this report are appropriate for individuals "
+            "with ADHD profiles and are broadly evidence-based for attention and executive "
+            "function difficulties regardless of formal diagnosis status.",
+            ST["body"]),
+        PageBreak(),
+    ]
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 4 — PROFILE OVERVIEW
+    # ────────────────────────────────────────────────────────────────────────────
+    story += [
+        section_header("2 · YOUR PROFILE OVERVIEW"),
+        sp(10),
+    ]
+
+    domain_labels = {
+        "inattention":    "Attention Regulation",
+        "hyperactivity":  "Hyperactivity & Impulse Control",
+        "executive":      "Executive Function",
+        "emotional":      "Emotional Regulation",
+        "working_memory": "Working Memory",
+        "time":           "Time Perception",
+        "hyperfocus":     "Hyperfocus & Interest Drive",
+        "rsd":            "Rejection Sensitivity (RSD)",
+        "developmental":  "Developmental History",
+        "impact":         "Life Impact",
+    }
+
+    # Overall score box
+    overall_data = [[
+        Paragraph(f"{total_pct}%", ST["score_big"]),
+        Paragraph(f"Overall Profile: {level}\n\nASRS-v1.1 Part A: {'Positive' if asrs_flag else 'Below threshold'} ({asrs_count}/6 items)",
+            ParagraphStyle("op", fontName="Helvetica", fontSize=10, textColor=HexColor("#2C3E50"),
+                leading=16)),
+    ]]
+    overall_table = Table(overall_data, colWidths=[5*cm, 12*cm])
+    overall_table.setStyle(TableStyle([
+        ("BACKGROUND", (0,0),(0,0), HexColor("#EAF7F8")),
+        ("TOPPADDING",    (0,0),(-1,-1), 14),
+        ("BOTTOMPADDING", (0,0),(-1,-1), 14),
+        ("LEFTPADDING",   (0,0),(-1,-1), 12),
+        ("VALIGN",        (0,0),(-1,-1), "MIDDLE"),
+    ]))
+    story += [overall_table, sp(16)]
+
+    story += [Paragraph("Domain Breakdown", ST["h2"])]
+    for key, label in domain_labels.items():
+        pct = pcts.get(key, 0)
+        dc = domain_color(pct)
+        story += [pct_bar_table(label, pct, dc), sp(4)]
+
+    story += [
+        sp(10),
+        Paragraph("Profile interpretation", ST["h2"]),
+        Paragraph(
+            "Scores of 65% or above (amber) indicate a clinically significant level of difficulty "
+            "in that domain, consistent with ADHD impairment. Scores of 40-64% (teal) indicate "
+            "moderate difficulty with meaningful functional impact. Scores below 40% (green) "
+            "indicate that domain is not a primary area of difficulty at this time.",
+            ST["body"]),
+        Paragraph(
+            "It is important to note that ADHD does not present uniformly across all domains. "
+            "Many people with ADHD have pronounced difficulties in some domains and relative "
+            "strengths in others — particularly in areas they find intrinsically motivating or "
+            "where they have developed effective compensatory strategies (Barkley, 2012).",
+            ST["body"]),
+        PageBreak(),
+    ]
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGES 5-10 — DOMAIN SECTIONS
+    # ────────────────────────────────────────────────────────────────────────────
+    domain_order = ["inattention","hyperactivity","executive","emotional","working_memory","time","hyperfocus","rsd","developmental","impact"]
+    domain_numbers = {d:i+3 for i,d in enumerate(domain_order)}
+
+    for key in domain_order:
+        data = DOMAIN_OVERVIEW[key]
+        pct = pcts.get(key, 0)
+        dc = domain_color(pct)
+        num = domain_numbers[key]
+        level_text = data["high"] if pct >= 50 else (data["moderate"] if pct >= 25 else data["low"])
+        strat_key = "high" if pct >= 50 else "moderate"
+        strategies = data["strategies"].get(strat_key, [])
+
+        story += [
+            section_header(f"{num} · DOMAIN: {data['name'].upper()}"),
+            sp(8),
+        ]
+
+        # Domain score box
+        dscore_data = [[
+            Paragraph(f"{pct}%", ParagraphStyle("ds", fontName="Helvetica-Bold",
+                fontSize=28, textColor=dc, leading=32, alignment=TA_CENTER)),
+            [
+                Paragraph(data["name"], ParagraphStyle("dn", fontName="Helvetica-Bold",
+                    fontSize=12, textColor=NAVY, leading=16)),
+                sp(3),
+                Paragraph(f"{'Elevated' if pct >= 65 else 'Moderate' if pct >= 40 else 'Low'} level "
+                           f"· {'Priority focus' if pct >= 65 else 'Secondary focus' if pct >= 40 else 'Lower priority'}",
+                    ParagraphStyle("dl", fontName="Helvetica", fontSize=9, textColor=dc, leading=13)),
+            ]
+        ]]
+        dscore_t = Table(dscore_data, colWidths=[3.5*cm, 13.5*cm])
+        dscore_t.setStyle(TableStyle([
+            ("BACKGROUND", (0,0),(0,0), dc.clone(alpha=0.1) if hasattr(dc,'clone') else HexColor("#EAF7F8")),
+            ("TOPPADDING",    (0,0),(-1,-1), 10),
+            ("BOTTOMPADDING", (0,0),(-1,-1), 10),
+            ("LEFTPADDING",   (0,0),(-1,-1), 10),
+            ("VALIGN",        (0,0),(-1,-1), "MIDDLE"),
+        ]))
+        story += [dscore_t, sp(10)]
+
+        # Get AI narrative for this domain if available
+        ai_domain_text = ""
+        if ai_analysis and ai_analysis.get("domain_narratives"):
+            ai_domain_text = ai_analysis["domain_narratives"].get(key, "")
+
+        story += [
+            Paragraph("Understanding this domain", ST["h2"]),
+            Paragraph(data["what"], ST["body"]),
+            *(([Paragraph(f"For your profile specifically: {ai_domain_text}",
+                ParagraphStyle("ai_d", fontName="Helvetica-Oblique", fontSize=9,
+                    textColor=HexColor("#A8C4D8"), leading=13.5, spaceAfter=4,
+                    alignment=TA_JUSTIFY))] if ai_domain_text else [])),
+            sp(6),
+            Paragraph("What your score means", ST["h2"]),
+            Paragraph(level_text, ST["body"]),
+            sp(8),
+        ]
+
+        if strategies:
+            story += [Paragraph("Evidence-based strategies", ST["h2"]), sp(4)]
+            for strat_title, strat_body in strategies:
+                strat_data = [[
+                    Paragraph(f"► {strat_title}", ParagraphStyle("st", fontName="Helvetica-Bold",
+                        fontSize=9.5, textColor=NAVY, leading=14)),
+                ],[
+                    Paragraph(strat_body, ParagraphStyle("sb", fontName="Helvetica",
+                        fontSize=9, textColor=HexColor("#2C3E50"), leading=13.5,
+                        alignment=TA_JUSTIFY, leftIndent=10)),
+                ]]
+                strat_t = Table(strat_data, colWidths=[17*cm])
+                strat_t.setStyle(TableStyle([
+                    ("BACKGROUND", (0,0),(0,0), HexColor("#F0FAFB")),
+                    ("BACKGROUND", (0,1),(0,1), white),
+                    ("TOPPADDING",    (0,0),(-1,-1), 6),
+                    ("BOTTOMPADDING", (0,0),(-1,-1), 6),
+                    ("LEFTPADDING",   (0,0),(-1,-1), 10),
+                    ("RIGHTPADDING",  (0,0),(-1,-1), 10),
+                    ("LINEBELOW",     (0,0),(0,0), 0.3, BORDER),
+                    ("BOX",           (0,0),(-1,-1), 0.5, BORDER),
+                ]))
+                story += [strat_t, sp(6)]
+
+        story += [PageBreak()]
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 11 — NEXT STEPS
+    # ────────────────────────────────────────────────────────────────────────────
+    story += [
+        section_header("9 · RECOMMENDED NEXT STEPS"),
+        sp(10),
+        Paragraph(
+            "The following next steps are calibrated to your overall profile level. "
+            "They are evidence-based recommendations drawn from clinical guidelines "
+            "and peer-reviewed research.",
+            ST["body"]),
+        sp(8),
+    ]
+
+    steps = NEXT_STEPS.get(level, NEXT_STEPS["Low"])
+    for i, (step_title, step_body) in enumerate(steps):
+        step_data = [[
+            Paragraph(f"{i+1}", ParagraphStyle("sn", fontName="Helvetica-Bold",
+                fontSize=14, textColor=lc, leading=18, alignment=TA_CENTER)),
+            [
+                Paragraph(step_title, ParagraphStyle("stl", fontName="Helvetica-Bold",
+                    fontSize=10, textColor=NAVY, leading=14)),
+                sp(3),
+                Paragraph(step_body, ParagraphStyle("stb", fontName="Helvetica",
+                    fontSize=9, textColor=HexColor("#2C3E50"), leading=13.5,
+                    alignment=TA_JUSTIFY)),
+            ]
+        ]]
+        step_t = Table(step_data, colWidths=[1.5*cm, 15.5*cm])
+        step_t.setStyle(TableStyle([
+            ("BACKGROUND", (0,0),(0,0), lc.clone(alpha=0.1) if hasattr(lc,'clone') else HexColor("#FFF8E8")),
+            ("TOPPADDING",    (0,0),(-1,-1), 10),
+            ("BOTTOMPADDING", (0,0),(-1,-1), 10),
+            ("LEFTPADDING",   (0,0),(-1,-1), 8),
+            ("RIGHTPADDING",  (0,0),(-1,-1), 8),
+            ("VALIGN",        (0,0),(-1,-1), "TOP"),
+            ("BOX",           (0,0),(-1,-1), 0.5, BORDER),
+        ]))
+        story += [step_t, sp(8)]
+
+    # AI priority actions
+    if ai_analysis and ai_analysis.get("priority_actions"):
+        story += [
+            Paragraph("Your personalised priority actions", ST["h2"]),
+            Paragraph(
+                "Based on your specific neurological profile, our clinical analysis identifies "
+                "these as your highest-priority immediate actions:",
+                ST["body"]),
+            sp(6),
+        ]
+        for i, action in enumerate(ai_analysis["priority_actions"]):
+            action_t = Table([[
+                Paragraph(f"{i+1}", ParagraphStyle("an", fontName="Helvetica-Bold",
+                    fontSize=14, textColor=lc, leading=18, alignment=TA_CENTER)),
+                Paragraph(action, ParagraphStyle("at", fontName="Helvetica",
+                    fontSize=9.5, textColor=HexColor("#2C3E50"), leading=14)),
+            ]], colWidths=[1.5*cm, 15.5*cm])
+            action_t.setStyle(TableStyle([
+                ("BACKGROUND", (0,0),(0,0), HexColor("#F5F9FA")),
+                ("TOPPADDING", (0,0),(-1,-1), 8),
+                ("BOTTOMPADDING", (0,0),(-1,-1), 8),
+                ("LEFTPADDING", (0,0),(-1,-1), 8),
+                ("VALIGN", (0,0),(-1,-1), "MIDDLE"),
+                ("BOX", (0,0),(-1,-1), 0.5, BORDER),
+            ]))
+            story += [action_t, sp(6)]
+
+    # Contact
+    story += [
+        sp(10), hr(TEAL),
+        Paragraph("ADHDclearfocus — adhdclearfocus.ie", ParagraphStyle("cf",
+            fontName="Helvetica-Bold", fontSize=9, textColor=TEAL, leading=13)),
+        Paragraph("Developed by Dr. Conall Donegan, Psychologist (DPsych)",
+            ParagraphStyle("cfa", fontName="Helvetica", fontSize=8.5, textColor=MUTED, leading=12)),
+        PageBreak(),
+    ]
+
+    # ────────────────────────────────────────────────────────────────────────────
+    # PAGE 12 — REFERENCES + DISCLAIMER
+    # ────────────────────────────────────────────────────────────────────────────
+    story += [
+        section_header("10 · CLINICAL REFERENCES"),
+        sp(8),
+        Paragraph(
+            "All recommendations in this report are grounded in the following peer-reviewed "
+            "literature. References are provided in full to enable independent verification.",
+            ST["body"]),
+        sp(8),
+    ]
+    for ref in REFERENCES:
+        story += [Paragraph(ref, ST["ref"]), sp(1)]
+
+    story += [
+        sp(16), hr(MUTED, 0.5),
+        Paragraph(
+            "DISCLAIMER: This report is produced from a self-report screener and is provided "
+            "for educational and self-awareness purposes only. It does not constitute a "
+            "clinical diagnosis of ADHD or any other condition. No clinical relationship "
+            "is established by receipt of this report. The strategies and recommendations "
+            "contained herein are grounded in peer-reviewed research and are provided in "
+            "good faith, but should be considered alongside qualified clinical advice. "
+            "If you are experiencing significant functional difficulties, please consult "
+            "a qualified healthcare professional.",
+            ST["disclaimer"]),
+        sp(8),
+        Paragraph(
+            f"Report generated: {date_str}  ·  ADHDclearfocus  ·  adhdclearfocus.ie",
+            ST["footer"]),
+    ]
+
+    doc.build(story, canvasmaker=NumberedCanvas)
+    buf.seek(0)
+    return buf
+
+
+# ── DEMO ─────────────────────────────────────────────────────────────────────
+if __name__ == "__main__":
+    # Sample results — Elevated profile
+    sample_pcts = {
+        "inattention": 78,
+        "hyperactivity": 62,
+        "executive": 81,
+        "emotional": 70,
+        "developmental": 75,
+        "impact": 73,
+    }
+    pdf_buf = build_report(
+        name="Sample User",
+        age_group="Adult",
+        level="Elevated",
+        total_pct=73,
+        asrs_flag=True,
+        asrs_count=5,
+        pcts=sample_pcts,
+    )
+    with open("/mnt/user-data/outputs/ADHDclearfocus_Sample_Report.pdf", "wb") as f:
+        f.write(pdf_buf.read())
+    print("Report generated: ADHDclearfocus_Sample_Report.pdf")

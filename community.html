@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="ADHDclearfocus community — ask questions, share experiences, connect with others who understand ADHD."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>Community — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    @keyframes slideInUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--navy:#0A1628;--mid:#112240;--light:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}.logo span{color:var(--teal)}
+    .nav{display:flex;gap:8px;align-items:center}
+    .nav a{color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border-radius:6px;transition:color 0.2s}
+    .nav a:hover{color:#fff}
+    .hero{background:linear-gradient(135deg,#0F2847,#0A1628,#1A0A35);padding:32px 20px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero h1{font-size:clamp(22px,5vw,34px);font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+    .hero h1 span{color:var(--teal)}
+    .hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:500px;margin:0 auto 16px}
+    .rules{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:560px;margin:0 auto}
+    .rule{background:var(--light);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start;text-align:left}
+    .main{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+    .signin-wall{background:linear-gradient(135deg,var(--mid),var(--navy));border:1px solid rgba(0,212,221,0.3);border-radius:16px;padding:24px;margin-bottom:20px;text-align:center;animation:slideInUp 0.4s ease}
+    .signin-wall h3{font-size:18px;font-weight:900;margin-bottom:8px}
+    .signin-wall p{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;max-width:380px;margin-left:auto;margin-right:auto}
+    .email-inp{width:100%;background:#0A1628;border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s;margin-bottom:8px}
+    .email-inp:focus{border-color:var(--teal)}
+    .btn-primary{background:linear-gradient(135deg,var(--teal),#4FC3F7);color:var(--navy);border:none;border-radius:10px;padding:12px 24px;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit;width:100%;transition:transform 0.15s}
+    .btn-primary:active{transform:scale(0.98)}
+    .user-bar{background:var(--light);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:12px}
+    .user-bar .name{color:var(--teal);font-weight:700}
+    .user-bar button{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit}
+    .new-post{background:var(--light);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:20px}
+    .new-post h3{font-weight:800;font-size:14px;margin-bottom:12px;color:var(--teal)}
+    .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+    .tag{background:var(--mid);border:1px solid var(--border);border-radius:99px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;color:var(--muted);transition:all 0.2s;font-family:inherit}
+    .tag.sel{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+    .post-input{width:100%;background:#0A1628;border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;resize:vertical;min-height:80px;outline:none;transition:border-color 0.2s;margin-bottom:8px}
+    .post-input:focus{border-color:var(--teal)}
+    .title-inp{width:100%;background:#0A1628;border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s;margin-bottom:8px}
+    .title-inp:focus{border-color:var(--teal)}
+    .post-btn{background:linear-gradient(135deg,var(--teal),#4FC3F7);color:var(--navy);border:none;border-radius:10px;padding:10px 20px;font-weight:900;font-size:14px;cursor:pointer;font-family:inherit;transition:transform 0.15s}
+    .post-btn:active{transform:scale(0.98)}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+    .filter-btn{background:var(--light);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);font-family:inherit;transition:all 0.2s}
+    .filter-btn.active,.filter-btn:hover{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+    .post-card{background:var(--light);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;transition:border-color 0.2s;animation:fadeIn 0.3s ease}
+    .post-card:hover{border-color:rgba(0,212,221,0.3)}
+    .post-meta{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+    .avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700;background:linear-gradient(135deg,var(--teal),var(--purple))}
+    .post-author{font-size:12px;font-weight:700;color:var(--muted)}
+    .post-time{font-size:11px;color:var(--border)}
+    .post-tag{display:inline-block;border-radius:99px;padding:2px 8px;font-size:10px;font-weight:700;background:rgba(0,212,221,0.15);color:var(--teal);border:1px solid rgba(0,212,221,0.3)}
+    .pinned-badge{background:rgba(255,179,71,0.2);border:1px solid rgba(255,179,71,0.4);color:var(--amber);border-radius:99px;padding:2px 8px;font-size:10px;font-weight:700}
+    .post-title{font-weight:800;font-size:15px;margin-bottom:6px;line-height:1.3}
+    .post-body{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+    .post-actions{display:flex;gap:12px;align-items:center}
+    .post-action{background:transparent;border:none;color:var(--muted);font-size:12px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;padding:4px 8px;border-radius:6px;transition:all 0.2s}
+    .post-action:hover{background:var(--mid);color:#fff}
+    .post-action.liked{color:#FF6B9D}
+    .replies{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:none}
+    .replies.open{display:block}
+    .reply{background:#0A1628;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;color:var(--muted);line-height:1.6}
+    .reply-author{font-weight:700;color:#fff;font-size:12px;margin-bottom:4px}
+    .reply-inp{width:100%;background:#0A1628;border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:#fff;font-size:13px;font-family:inherit;outline:none;margin-top:8px;transition:border-color 0.2s}
+    .reply-inp:focus{border-color:var(--teal)}
+    .crisis-bar{background:#0A0810;border:1px solid rgba(255,82,82,0.3);border-radius:12px;padding:12px 16px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+    .sync-badge{font-size:10px;border-radius:99px;padding:2px 8px;font-weight:700}
+    .sync-online{background:rgba(0,230,118,0.2);color:var(--green);border:1px solid rgba(0,230,118,0.3)}
+    .sync-local{background:rgba(255,179,71,0.2);color:var(--amber);border:1px solid rgba(255,179,71,0.3)}
+    .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin 0.8s linear infinite;display:inline-block}
+    .empty{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+    .cloud-info{background:var(--mid);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:var(--muted);line-height:1.7}
+  </style>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="header">
+  <a href="/" class="logo">ADHD<span>clearfocus</span></a>
+  <div class="nav">
+    <span id="syncBadge" class="sync-badge sync-local">● Local</span>
+    <a href="/app.html">🔐 Resources</a>
+    <a href="/strategies.html">📚 Strategies</a>
+    <a href="/resources.html">🔬 Research</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div style="font-size:11px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px">👥 ADHDclearfocus Community</div>
+  <h1>Ask. Share. <span>Understand.</span></h1>
+  <p>A moderated space for adults navigating ADHD. Ask questions, share what works, connect with others who get it. Anyone can read — sign in free to post.</p>
+  <div class="rules">
+    <div class="rule"><span>✓</span><span>Be kind — everyone is figuring things out</span></div>
+    <div class="rule"><span>✓</span><span>Share experience, not prescriptions</span></div>
+    <div class="rule"><span>🚫</span><span>No self-harm content — use Crisis Mode</span></div>
+    <div class="rule"><span>🚫</span><span>No medication dosage advice — consult your GP</span></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="crisis-bar">
+    <strong style="color:#FF5252">In crisis?</strong> This forum is not monitored in real time. Contact Samaritans free on <strong style="color:#fff">116 123</strong> (24/7) or <a href="/crisis.html" style="color:var(--teal);font-weight:700">open Crisis Mode →</a>
+  </div>
+
+  <!-- SIGN-IN WALL -->
+  <div id="signinWall" style="display:none">
+    <div class="signin-wall">
+      <div style="font-size:28px;margin-bottom:10px">💬</div>
+      <h3>Sign in to post and reply</h3>
+      <p>Reading is always free. Enter your email to post questions, share experiences, and reply to others. No password. No card.</p>
+      <input type="email" id="siEmail" class="email-inp" placeholder="Your email address" maxlength="100"
+        onkeydown="if(event.key==='Enter')signIn()"/>
+      <div id="siError" style="font-size:12px;color:#FF8080;margin-bottom:8px;display:none"></div>
+      <button class="btn-primary" onclick="signIn()">Join the Community — Free →</button>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px">No password · No card · GDPR compliant · Posts are moderated</div>
+    </div>
+  </div>
+
+  <!-- USER BAR -->
+  <div id="userBar" class="user-bar" style="display:none">
+    <div>Posting as <span class="name" id="userNameDisplay"></span></div>
+    <button onclick="signOut()">Sign out</button>
+  </div>
+
+  <!-- CLOUD INFO (shown only in local mode) -->
+  <div id="cloudInfo" class="cloud-info" style="display:none">
+    <strong style="color:#fff">📱 Local mode:</strong> Your posts are saved on this device. To enable cross-device syncing for all community members, configure JSONBin.io (free) in community.html. 
+    <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--teal)">Sign up free at jsonbin.io →</a>
+  </div>
+
+  <!-- NEW POST BOX -->
+  <div id="newPostBox" class="new-post" style="display:none">
+    <h3>💬 Share something</h3>
+    <input class="title-inp" id="newTitle" type="text" placeholder="Title — what's your post about?" maxlength="100"/>
+    <div class="tag-row">
+      <span style="font-size:11px;color:var(--muted);align-self:center;margin-right:4px">Topic:</span>
+      <button class="tag" onclick="selTag(this,'Attention')">🎯 Attention</button>
+      <button class="tag" onclick="selTag(this,'Executive Function')">🧩 Executive</button>
+      <button class="tag" onclick="selTag(this,'Emotional')">🌊 Emotional</button>
+      <button class="tag" onclick="selTag(this,'RSD')">💔 RSD</button>
+      <button class="tag" onclick="selTag(this,'Medication')">💊 Medication</button>
+      <button class="tag" onclick="selTag(this,'Relationships')">💬 Relationships</button>
+      <button class="tag" onclick="selTag(this,'Work & Study')">💼 Work & Study</button>
+      <button class="tag" onclick="selTag(this,'Wins')">🎉 Wins</button>
+      <button class="tag" onclick="selTag(this,'Question')">❓ Question</button>
+    </div>
+    <textarea class="post-input" id="newPost" placeholder="Share your experience, ask a question, or tell us what's working..."></textarea>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:11px;color:var(--muted)">Posts moderated · Shows as your email prefix</span>
+      <button class="post-btn" onclick="submitPost()" id="submitBtn">Post →</button>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterPosts('all',this)">All Posts</button>
+    <button class="filter-btn" onclick="filterPosts('Attention',this)">🎯 Attention</button>
+    <button class="filter-btn" onclick="filterPosts('Emotional',this)">🌊 Emotional</button>
+    <button class="filter-btn" onclick="filterPosts('RSD',this)">💔 RSD</button>
+    <button class="filter-btn" onclick="filterPosts('Wins',this)">🎉 Wins</button>
+    <button class="filter-btn" onclick="filterPosts('Question',this)">❓ Questions</button>
+    <button class="filter-btn" onclick="filterPosts('pinned',this)">📌 Pinned</button>
+  </div>
+
+  <div id="loadingEl" style="text-align:center;padding:40px;display:none">
+    <div class="spinner" style="width:28px;height:28px;margin:0 auto 12px"></div>
+    <div style="font-size:13px;color:var(--muted)">Loading posts...</div>
+  </div>
+  <div id="postsContainer"></div>
+
+  <div style="text-align:center;padding:20px;font-size:12px;color:var(--muted);line-height:1.6">
+    Peer support space — not clinical advice.<br/>
+    For professional support: <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075" target="_blank" rel="noopener" style="color:var(--teal)">connect with a psychologist →</a>
+  </div>
+</div>
+
+<script>
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+
+// ── JSONBIN CONFIG ────────────────────────────────────────────────
+// FREE cross-device storage. Steps:
+// 1. Go to jsonbin.io → create free account
+// 2. Click 'New Bin' → paste {} → Save
+// 3. Copy the BIN ID from the URL
+// 4. Go to API Keys → copy Master Key
+// 5. Paste both below — redeploy — community is now cross-device
+const BIN_ID  = '6a38525eda38895dfee84b8a';  // paste your bin ID here e.g. '6656abc...'
+const BIN_KEY = '$2a$10$NQ43uuryp/VqzrqLmQqn9OcgZT4W.KLmma5lrizDj8JnQbwDi6bm6';  // paste your master key here e.g. '$2b$10$...'
+const CLOUD   = !!(BIN_ID && BIN_KEY);
+
+const LS_KEY = 'acf_community_v3';
+let currentUser = null, selTagVal = '', curFilter = 'all', posts = [];
+
+// ── SEED POSTS ────────────────────────────────────────────────────
+const SEEDS = [
+  {id:'pin1',pinned:true,tag:'Question',
+   title:'Welcome to the ADHDclearfocus Community 📌',
+   body:'This is your space to ask questions, share what works, and connect with others who understand ADHD. Sign in with your email to post. Posts are moderated — be kind.',
+   displayName:'ADHDclearfocus Team',time:Date.now()-86400000*4,likes:14,replies:[],avatar:'🧠'},
+  {id:'s1',pinned:false,tag:'Attention',
+   title:'Brown noise completely changed my work from home life',
+   body:"Spent 2 years thinking I just couldn't focus. Then tried brown noise. Three weeks later I'm getting consistent 3-hour work blocks. The deeper frequency compared to white noise hits differently. Anyone else found specific audio that works?",
+   displayName:'anon8472',time:Date.now()-3600000*22,likes:28,replies:[
+     {author:'focus_fan',text:'Lofi hip hop works for me — predictable rhythm gives my brain just enough without distracting.',time:Date.now()-3600000*20},
+     {author:'rainsounds_ie',text:'Rain sounds only. No lyrics — even instrumental with variation pulls my attention.',time:Date.now()-3600000*17},
+   ],avatar:'🎧'},
+  {id:'s2',pinned:false,tag:'RSD',
+   title:'Completely shutting down after minor criticism — anyone else?',
+   body:'Manager made a small comment on a report. I spent three days convinced I was getting fired and that I am fundamentally incompetent. Intellectually I know it is disproportionate but in the moment it is 100% real. Is this RSD?',
+   displayName:'quietly_struggling',time:Date.now()-3600000*16,likes:38,replies:[
+     {author:'rsd_survivor',text:'24-hour rule changed my life. Never respond to anything that activates that feeling for 24 hours. The intensity reduces massively.',time:Date.now()-3600000*14},
+     {author:'adhd_ie',text:'I told my manager about RSD. She now starts feedback with "this comes from care not criticism." Sounds small — it is transformative.',time:Date.now()-3600000*11},
+   ],avatar:'💔'},
+  {id:'s3',pinned:false,tag:'Wins',
+   title:'Formal diagnosis at 34 — everything finally makes sense',
+   body:'After years of thinking I was lazy and broken, I got my diagnosis at 34. Reading about executive function, time blindness, RSD — someone wrote a biography of my life. The relief of understanding is indescribable. If you are on the fence — please get assessed.',
+   displayName:'finally_understood',time:Date.now()-3600000*9,likes:55,replies:[
+     {author:'late_dx_32',text:'31 here. Diagnosis was the single most useful thing that has ever happened to me therapeutically.',time:Date.now()-3600000*7},
+   ],avatar:'🎉'},
+  {id:'s4',pinned:false,tag:'Work & Study',
+   title:'Virtual body doubling — why is this so effective?',
+   body:'Working from home destroyed me. Then I started keeping a Zoom call open with a friend — barely talk, just work in the same room. I get 3x more done. The Focus Room on this platform does the same thing. The science on body doubling makes complete sense now.',
+   displayName:'remote_worker_adhd',time:Date.now()-3600000*5,likes:22,replies:[],avatar:'💼'},
+  {id:'s5',pinned:false,tag:'Question',
+   title:'ADHD in job interviews — any strategies that actually work?',
+   body:'I am consistently terrible in interviews. Lose my train of thought, go off on tangents, forget questions. I know I can do the job but cannot demonstrate it under interview conditions. Any strategies that have actually helped?',
+   displayName:'interview_anxiety',time:Date.now()-1800000,likes:11,replies:[],avatar:'❓'},
+];
+
+// ── AUTH ──────────────────────────────────────────────────────────
+function init(){
+  const email = localStorage.getItem('acf_email')||'';
+  if(email) login(email, false);
+  else document.getElementById('signinWall').style.display = 'block';
+  if(!CLOUD) document.getElementById('cloudInfo').style.display = 'block';
+  loadPosts();
+}
+
+function login(email, toast){
+  currentUser = email;
+  const name = email.split('@')[0];
+  document.getElementById('signinWall').style.display='none';
+  document.getElementById('userBar').style.display='flex';
+  document.getElementById('newPostBox').style.display='block';
+  document.getElementById('userNameDisplay').textContent=name;
+  if(toast) showToast('Welcome to the community! 🧠');
+}
+
+function signIn(){
+  const email = (document.getElementById('siEmail').value||'').trim().toLowerCase();
+  const err = document.getElementById('siError');
+  if(!email||!email.includes('@')||!email.includes('.')){
+    err.textContent='Please enter a valid email address';err.style.display='block';return;
+  }
+  localStorage.setItem('acf_email',email);
+  fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email,tags:['community-member']})}).catch(()=>{});
+  login(email,true);
+  if(typeof gtag!=='undefined')gtag('event','community_signin');
+}
+
+function signOut(){
+  if(!confirm('Sign out? Your posts stay. Sign back in with same email.'))return;
+  localStorage.removeItem('acf_email');
+  currentUser=null;
+  document.getElementById('signinWall').style.display='block';
+  document.getElementById('userBar').style.display='none';
+  document.getElementById('newPostBox').style.display='none';
+}
+
+// ── STORAGE ───────────────────────────────────────────────────────
+async function loadPosts(){
+  document.getElementById('loadingEl').style.display='block';
+  try{
+    if(CLOUD){
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+        {headers:{'X-Master-Key':BIN_KEY,'X-Bin-Meta':false}});
+      if(r.ok){
+        const d=await r.json();
+        const cloud=Array.isArray(d)?d:(d.posts||[]);
+        posts=[...SEEDS,...cloud];
+        setSyncBadge(true);
+      } else { posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
+    } else { posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
+  }catch(e){ posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
+  document.getElementById('loadingEl').style.display='none';
+  renderPosts();
+}
+
+function localPosts(){
+  try{return JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch{return[];}
+}
+
+function saveLocal(post){
+  try{
+    const ex=localPosts(); ex.unshift(post);
+    localStorage.setItem(LS_KEY,JSON.stringify(ex.slice(0,150)));
+  }catch(e){}
+}
+
+async function saveCloud(post){
+  if(!CLOUD)return false;
+  try{
+    const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
+      {headers:{'X-Master-Key':BIN_KEY,'X-Bin-Meta':false}});
+    const d=await r.json();
+    const ex=Array.isArray(d)?d:(d.posts||[]);
+    ex.unshift(post);
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':BIN_KEY},
+      body:JSON.stringify(ex.slice(0,200))
+    });
+    return true;
+  }catch(e){return false;}
+}
+
+function setSyncBadge(online){
+  const b=document.getElementById('syncBadge');
+  if(online){b.className='sync-badge sync-online';b.textContent='☁ Synced';}
+  else{b.className='sync-badge sync-local';b.textContent='● Local';}
+}
+
+// ── POSTING ───────────────────────────────────────────────────────
+function selTag(btn,tag){
+  document.querySelectorAll('.tag').forEach(t=>t.classList.remove('sel'));
+  selTagVal=selTagVal===tag?'':tag;
+  if(selTagVal)btn.classList.add('sel');
+}
+
+async function submitPost(){
+  if(!currentUser){showToast('Please sign in to post');return;}
+  const title=(document.getElementById('newTitle').value||'').trim();
+  const body=(document.getElementById('newPost').value||'').trim();
+  if(!title){showToast('Please add a title');return;}
+  if(body.length<10){showToast('Please add a bit more detail');return;}
+  const btn=document.getElementById('submitBtn');
+  btn.innerHTML='<span class="spinner" style="width:12px;height:12px;vertical-align:middle"></span> Posting...';
+  btn.disabled=true;
+  const post={
+    id:'u_'+Date.now()+'_'+Math.random().toString(36).substr(2,4),
+    pinned:false,tag:selTagVal||'Question',title,body,
+    displayName:currentUser.split('@')[0],
+    time:Date.now(),likes:0,replies:[],
+    avatar:['🧠','⚡','🎯','💙','✨','🌊'][Math.floor(Math.random()*6)]
+  };
+  saveLocal(post);posts.unshift(post);renderPosts();
+  const synced=await saveCloud(post);
+  showToast(synced?'Post shared ☁ ✓':'Post saved locally ✓');
+  document.getElementById('newTitle').value='';
+  document.getElementById('newPost').value='';
+  selTagVal='';
+  document.querySelectorAll('.tag').forEach(t=>t.classList.remove('sel'));
+  btn.innerHTML='Post →';btn.disabled=false;
+  if(typeof gtag!=='undefined')gtag('event','community_post');
+}
+
+// ── REPLIES ───────────────────────────────────────────────────────
+function toggleReplies(id){
+  const el=document.getElementById('rep_'+id);
+  if(el)el.classList.toggle('open');
+}
+
+function submitReply(postId){
+  if(!currentUser){showToast('Sign in to reply');return;}
+  const inp=document.getElementById('ri_'+postId);
+  if(!inp||inp.value.trim().length<3)return;
+  const post=posts.find(p=>p.id===postId);if(!post)return;
+  const reply={author:currentUser.split('@')[0],text:inp.value.trim(),time:Date.now()};
+  post.replies.push(reply);
+  const lp=localPosts();const lpost=lp.find(p=>p.id===postId);
+  if(lpost){lpost.replies.push(reply);localStorage.setItem(LS_KEY,JSON.stringify(lp));}
+  renderPosts();
+  setTimeout(()=>{const el=document.getElementById('rep_'+postId);if(el)el.classList.add('open');},50);
+}
+
+function toggleLike(postId){
+  const k='lk_'+postId;const liked=localStorage.getItem(k);
+  const post=posts.find(p=>p.id===postId);if(!post)return;
+  if(liked){post.likes=Math.max(0,post.likes-1);localStorage.removeItem(k);}
+  else{post.likes++;localStorage.setItem(k,'1');}
+  renderPosts();
+}
+
+// ── RENDER ────────────────────────────────────────────────────────
+function filterPosts(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');curFilter=cat;renderPosts();
+}
+
+function ago(ts){
+  const d=Date.now()-ts;
+  if(d<60000)return'just now';
+  if(d<3600000)return Math.floor(d/60000)+'m ago';
+  if(d<86400000)return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
+
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function renderPosts(){
+  const c=document.getElementById('postsContainer');
+  let filtered=posts.filter(p=>{
+    if(curFilter==='pinned')return p.pinned;
+    if(curFilter==='all')return true;
+    return p.tag===curFilter;
+  });
+  filtered.sort((a,b)=>((b.pinned?1:0)-(a.pinned?1:0))||(b.time-a.time));
+  if(!filtered.length){c.innerHTML='<div class="empty">No posts yet. Be the first!</div>';return;}
+  const canPost=!!currentUser;
+  c.innerHTML=filtered.map(p=>{
+    const liked=localStorage.getItem('lk_'+p.id);
+    const reps=(p.replies||[]).map(r=>`<div class="reply"><div class="reply-author">${esc(r.author)} · ${ago(r.time)}</div>${esc(r.text)}</div>`).join('');
+    return`<div class="post-card" id="pc_${p.id}">
+      <div class="post-meta">
+        <div class="avatar">${esc(p.avatar||'?')}</div>
+        <span class="post-author">${esc(p.displayName||'Anonymous')}</span>
+        <span class="post-time">${ago(p.time)}</span>
+        <span class="post-tag">${esc(p.tag)}</span>
+        ${p.pinned?'<span class="pinned-badge">📌 Pinned</span>':''}
+      </div>
+      <div class="post-title">${esc(p.title)}</div>
+      <div class="post-body">${esc(p.body)}</div>
+      <div class="post-actions">
+        <button class="post-action${liked?' liked':''}" onclick="toggleLike('${p.id}')">${liked?'❤️':'🤍'} ${p.likes}</button>
+        <button class="post-action" onclick="toggleReplies('${p.id}')">💬 ${(p.replies||[]).length} ${(p.replies||[]).length===1?'reply':'replies'}</button>
+        <button class="post-action" onclick="${canPost?`toggleReplies('${p.id}')`:"showToast('Sign in to reply')"}">Reply</button>
+      </div>
+      <div class="replies" id="rep_${p.id}">
+        ${reps}
+        ${canPost?`<input class="reply-inp" id="ri_${p.id}" type="text" placeholder="Write a reply..." maxlength="500" onkeydown="if(event.key==='Enter')submitReply('${p.id}')"/>
+        <div style="text-align:right;margin-top:6px"><button onclick="submitReply('${p.id}')" style="background:var(--teal);color:var(--navy);border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">Reply →</button></div>`:
+        `<div style="font-size:12px;color:var(--muted);padding:8px 0"><a href="#signinWall" style="color:var(--teal)" onclick="document.getElementById('siEmail').focus()">Sign in</a> to reply</div>`}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function showToast(msg){
+  const t=document.createElement('div');t.textContent=msg;
+  Object.assign(t.style,{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',
+    background:'#1A2E4A',border:'1px solid #1E3A5F',color:'#fff',padding:'10px 18px',
+    borderRadius:'10px',fontSize:'13px',zIndex:'200',whiteSpace:'nowrap',
+    animation:'slideInUp 0.3s ease',boxShadow:'0 4px 20px rgba(0,0,0,0.4)'});
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';setTimeout(()=>t.remove(),300);},3000);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="ADHD research explained simply. The latest peer-reviewed studies on ADHD, summarised in plain language with links to the original papers."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>Research — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--navy:#0A1628;--navyMid:#112240;--navyLight:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}.logo span{color:var(--teal)}
+    .nav{display:flex;gap:8px}
+    .nav a{color:var(--muted);text-decoration:none;font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid transparent;transition:all 0.2s}
+    .nav a:hover{color:#fff;border-color:var(--border)}
+    .hero{background:linear-gradient(135deg,#0F2847,#0A1628,#1A0A35);padding:36px 20px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero h1{font-size:clamp(22px,5vw,36px);font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+    .hero h1 span{color:var(--teal)}
+    .hero p{color:var(--muted);font-size:14px;line-height:1.7;max-width:520px;margin:0 auto}
+    .main{max-width:760px;margin:0 auto;padding:20px 16px 80px}
+    .filter-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+    .filter-btn{background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);font-family:inherit;transition:all 0.2s}
+    .filter-btn.active,.filter-btn:hover{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+    .article{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;transition:border-color 0.2s}
+    .article:hover{border-color:var(--teal)40}
+    .article-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+    .article-tag{display:inline-block;border-radius:99px;padding:3px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px}
+    .article-date{font-size:11px;color:var(--muted)}
+    .impact{font-size:10px;font-weight:700;border-radius:99px;padding:2px 8px}
+    .impact.high{background:#00E67620;color:var(--green);border:1px solid #00E67640}
+    .impact.medium{background:#FFB34720;color:var(--amber);border:1px solid #FFB34740}
+    .impact.emerging{background:#A855F720;color:#C084FC;border:1px solid #A855F740}
+    .article-title{font-weight:900;font-size:16px;margin-bottom:8px;line-height:1.3}
+    .plain-summary{background:#0A1628;border-radius:10px;padding:14px 16px;margin-bottom:12px;border-left:3px solid var(--teal)}
+    .plain-summary .label{font-size:10px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .plain-summary p{font-size:13px;color:#A8C4D8;line-height:1.7}
+    .what-means{background:#0A1628;border-radius:10px;padding:14px 16px;margin-bottom:12px;border-left:3px solid var(--green)}
+    .what-means .label{font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .what-means p{font-size:13px;color:#A8C4D8;line-height:1.7}
+    .caveats{background:#0A1628;border-radius:10px;padding:14px 16px;margin-bottom:12px;border-left:3px solid var(--amber)}
+    .caveats .label{font-size:10px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .caveats p{font-size:13px;color:#A8C4D8;line-height:1.7}
+    .article-source{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+    .source-label{font-size:11px;color:var(--muted)}
+    .source-link{font-size:11px;color:var(--teal);text-decoration:none;font-weight:700}
+    .source-link:hover{text-decoration:underline}
+    .journal-badge{background:var(--navyMid);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--muted)}
+    .read-more{background:transparent;border:none;color:var(--teal);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:0;margin-top:4px}
+    .article-detail{display:none;margin-top:12px}
+    .article.open .article-detail{display:block}
+    .reveal{opacity:0;transform:translateY(16px);transition:opacity 0.4s ease,transform 0.4s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+  </style>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="header">
+  <a href="/" class="logo">ADHD<span>clearfocus</span></a>
+  <div class="nav">
+    <a href="/app.html">🔐 Resources</a>
+    <a href="/strategies.html">📚 Strategies</a>
+    <a href="/community.html">👥 Community</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div style="font-size:11px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:12px">🔬 ADHD Research Explained</div>
+  <h1>What the Science <span>Actually Says</span></h1>
+  <p>The latest peer-reviewed ADHD research — translated from academic language into plain English. Each article includes what the study found, what it means for you, and honest caveats about its limitations.</p>
+</div>
+
+<div class="main">
+
+  <div class="filter-wrap">
+    <button class="filter-btn active" onclick="filterArticles('all',this)">All Research</button>
+    <button class="filter-btn" onclick="filterArticles('medication',this)">💊 Medication</button>
+    <button class="filter-btn" onclick="filterArticles('psychology',this)">🧠 Psychology</button>
+    <button class="filter-btn" onclick="filterArticles('lifestyle',this)">🏃 Lifestyle</button>
+    <button class="filter-btn" onclick="filterArticles('neuroscience',this)">🔬 Neuroscience</button>
+    <button class="filter-btn" onclick="filterArticles('emotional',this)">🌊 Emotional</button>
+  </div>
+
+  <!-- ARTICLE 1 -->
+  <div class="article reveal" data-category="psychology" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#00D4DD20;color:var(--teal);border:1px solid #00D4DD40">Psychology</span>
+      <span class="impact high">★ High Impact</span>
+      <span class="article-date">2025 · JAMA Psychiatry</span>
+    </div>
+    <div class="article-title">CBT for adult ADHD: 82 studies, nearly 3,000 participants — what the evidence actually shows</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>Researchers combined data from 82 separate studies — including 48 properly randomised controlled trials — looking at whether Cognitive Behavioural Therapy (CBT) helps adults with ADHD. The short answer: yes, it does. CBT consistently reduced ADHD symptoms, improved daily functioning, and reduced the anxiety and depression that commonly accompany ADHD. Crucially, these benefits were seen even in studies designed to rule out placebo effects.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>If you have ADHD and haven't tried CBT, this meta-analysis represents the strongest available evidence that it's worth pursuing. It's especially relevant if medication hasn't fully addressed your symptoms, if you experience significant anxiety or depression alongside ADHD, or if you prefer a non-pharmacological approach. The gains from CBT appear to persist after treatment ends — unlike medication, where benefits stop when you stop taking it.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>Not all CBT is the same. Generic CBT may be less effective than ADHD-specific CBT adapted for executive function impairment. Access varies significantly by location. Cost can be a barrier. Effectiveness also depends heavily on therapist quality and ADHD-specific training.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">JAMA Psychiatry 2025</span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener" class="source-link">View on PubMed →</a>
+        <span style="margin-left:auto">
+          <a href="/strategies.html" style="font-size:11px;color:var(--teal);text-decoration:none;font-weight:700">→ See CBT strategies</a>
+        </span>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 2 -->
+  <div class="article reveal" data-category="medication" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#FFB34720;color:var(--amber);border:1px solid #FFB34740">Medication</span>
+      <span class="impact high">★ High Impact</span>
+      <span class="article-date">2025 · The Lancet Psychiatry</span>
+    </div>
+    <div class="article-title">The largest ever analysis of pharmacological vs non-pharmacological ADHD treatments — what comes out on top</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>The Lancet Psychiatry published a component network meta-analysis — the most sophisticated type of evidence synthesis — comparing every available ADHD treatment for adults. Stimulant medications (methylphenidate, amphetamines) consistently outperformed all other options for core ADHD symptoms. Non-pharmacological interventions including CBT, DBT, and exercise showed meaningful benefits, particularly for emotional regulation and quality of life.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>Medication remains the most effective single intervention for ADHD core symptoms (Cohen's d ≈ 0.9 for stimulants). The combination of medication plus psychological therapy consistently outperformed either alone. If you have an ADHD diagnosis and haven't tried medication, this evidence suggests it's worth discussing with your psychiatrist or GP. If medication isn't right for you, CBT and structured behavioural interventions offer the next best evidence base.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>Effect sizes vary significantly between individuals. Side effects affect a meaningful proportion of people on stimulants. Response to medication is not guaranteed. Formal diagnosis is required before medication can be prescribed — a screener like ADHDclearfocus is not sufficient on its own.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">Lancet Psychiatry 2025</span>
+        <a href="https://www.thelancet.com/journals/lanpsy/article/PIIS2215-0366(24)00360-2/fulltext" target="_blank" rel="noopener" class="source-link">Read the paper →</a>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 3 -->
+  <div class="article reveal" data-category="emotional psychology" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#A855F720;color:#C084FC;border:1px solid #A855F740">Emotional</span>
+      <span class="impact high">★ High Impact</span>
+      <span class="article-date">2022 · Multicenter RCT</span>
+    </div>
+    <div class="article-title">DBT vs treatment as usual for adult ADHD — multicenter RCT results</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>121 adults with ADHD across 7 outpatient clinics were randomly assigned to either 14 weeks of DBT-based group therapy or their usual treatment (medication, standard support). The DBT group showed significantly larger improvements in executive functioning and core ADHD symptoms. Crucially, all improvements were still present at 6-month follow-up — suggesting the skills were genuinely learned rather than just temporarily masked.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>DBT isn't just for borderline personality disorder. The skills it teaches — distress tolerance, emotional regulation, mindfulness, interpersonal effectiveness — map directly onto the difficulties most adults with ADHD experience. And unlike medication, the benefits appear to persist after the therapy ends because you've learned the skills. Several DBT techniques can be self-taught from workbooks without formal therapy.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>This was a relatively small trial (n=121). Full DBT is resource-intensive (time and cost). Self-guided DBT skill-building hasn't been as rigorously tested as formal therapy, though the skills themselves are teachable.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">PMC 2022 (Halmøy et al.)</span>
+        <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9706966/" target="_blank" rel="noopener" class="source-link">Read the paper →</a>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 4 -->
+  <div class="article reveal" data-category="lifestyle neuroscience" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#00E67620;color:var(--green);border:1px solid #00E67640">Lifestyle</span>
+      <span class="impact high">★ High Impact</span>
+      <span class="article-date">2013 · Journal of Abnormal Child Psychology</span>
+    </div>
+    <div class="article-title">Acute exercise produces ADHD symptom reductions equivalent to low-dose methylphenidate</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>Pontifex et al. compared the cognitive effects of a 20-minute bout of moderate aerobic exercise against a 20-minute rest period in children with ADHD. The exercise group showed significantly better performance on measures of attention, inhibitory control, and reading comprehension. The magnitude of improvement was comparable to what is typically seen with low-dose methylphenidate (Ritalin).</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>20 minutes of moderate exercise before demanding cognitive work can meaningfully improve your focus, impulse control, and performance. This is one of the most directly applicable findings in the ADHD research literature — it's something you can do today with no cost, no prescription, and no side effects. The effect is acute (lasts 1-2 hours after exercise), not cumulative — so timing matters. Schedule exercise before your most cognitively demanding work.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>The original study was in children — adult replication studies also support the benefit but effect sizes may differ. Exercise doesn't replace medication for most people with significant ADHD. It's best understood as a complementary strategy, not a primary treatment.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">Journal of Abnormal Child Psychology 2013</span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/23417739/" target="_blank" rel="noopener" class="source-link">Read on PubMed →</a>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 5 -->
+  <div class="article reveal" data-category="neuroscience" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#00D4DD20;color:var(--teal);border:1px solid #00D4DD40">Neuroscience</span>
+      <span class="impact medium">◆ Medium Impact</span>
+      <span class="article-date">2025 · Scientific Reports (n=80)</span>
+    </div>
+    <div class="article-title">Binaural beats: large parametric study confirms brain entrainment occurs — but benefits are frequency-dependent</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>A 2025 study randomised 80 participants across 16 different binaural beat conditions (varying frequency, carrier tone, and background noise). It confirmed that binaural beats do produce measurable changes in brainwave patterns (entrainment) — settling a long-disputed question. However, cognitive performance improvements appeared only in specific parameter combinations, not across the board. The study identified which combinations were most effective.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>Binaural beats are not snake oil — they do affect brainwave activity. But the benefit is not guaranteed from any generic "binaural beats" recording. The most effective conditions appear to involve beta frequencies (14-20Hz for focus), with background pink or white noise, and stereo headphones. The effects on ADHD specifically haven't been directly tested in this study, but the neurochemical rationale remains sound.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>This study didn't specifically test adults with ADHD — it tested generally healthy participants. Effect sizes are modest. A 2023 systematic review found inconsistent EEG entrainment evidence. Binaural beats should be seen as a low-cost, low-risk complement to evidence-based strategies — not a primary intervention.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">Scientific Reports 2025</span>
+        <a href="https://www.nature.com/articles/s41598-025-94242-4" target="_blank" rel="noopener" class="source-link">Read the paper →</a>
+        <span style="margin-left:auto">
+          <a href="/crisis.html" style="font-size:11px;color:var(--teal);text-decoration:none;font-weight:700">→ Try binaural tones</a>
+        </span>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 6 -->
+  <div class="article reveal" data-category="psychology neuroscience" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#FF6B9D20;color:#FF6B9D;border:1px solid #FF6B9D40">Emotional</span>
+      <span class="impact high">★ High Impact</span>
+      <span class="article-date">2025 · JAMA Psychiatry (38 RCTs)</span>
+    </div>
+    <div class="article-title">Neurofeedback for ADHD: the largest ever meta-analysis finds no significant benefit</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>A 2025 JAMA Psychiatry systematic review and meta-analysis analysed 38 randomised controlled trials with 2,472 participants of all ages. When only probably-blinded assessments were used (to control for placebo effects), neurofeedback showed no significant improvement in ADHD total symptoms (effect size 0.04 — essentially zero). A small significant effect appeared only in a subset of 9 trials using specific established protocols.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>Neurofeedback is frequently discussed in ADHD communities and heavily marketed by some practitioners. This meta-analysis — the most rigorous available — does not support spending €1,500-3,000+ on a course of neurofeedback. The money and time are better directed toward medication (if appropriate) or CBT, both of which have substantially stronger evidence bases. If you have already tried neurofeedback and found it helpful, that's valid individual experience — but the population-level controlled evidence doesn't support recommending it broadly.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>The small effect found in standard-protocol trials (d=0.21) is not nothing. Individual responses vary. Some practitioners argue that the heterogeneity of protocols makes meta-analysis difficult. The evidence may improve as protocols become more standardised. This assessment reflects the best current evidence.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">JAMA Psychiatry 2025 (Westwood et al.)</span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/39661381/" target="_blank" rel="noopener" class="source-link">Read on PubMed →</a>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- ARTICLE 7 -->
+  <div class="article reveal" data-category="lifestyle" onclick="toggleArticle(this)">
+    <div class="article-meta">
+      <span class="article-tag" style="background:#00E67620;color:var(--green);border:1px solid #00E67640">Lifestyle</span>
+      <span class="impact emerging">◈ Emerging</span>
+      <span class="article-date">2020 · Lancet Psychiatry</span>
+    </div>
+    <div class="article-title">75% of adults with ADHD have significant sleep difficulties — and treating sleep improves all ADHD symptoms</div>
+    <div class="plain-summary">
+      <div class="label">Plain English Summary</div>
+      <p>A major Lancet Psychiatry review confirmed that sleep disturbances are present in approximately 75% of adults with ADHD — not just as a symptom but as a bidirectional relationship. Poor sleep worsens ADHD symptoms. And critically, improving sleep quality produces measurable improvements in attention, executive function, and emotional regulation — sometimes equivalent to the benefits of low-dose medication.</p>
+    </div>
+    <div class="article-detail">
+      <div class="what-means">
+        <div class="label">What This Means For You</div>
+        <p>Sleep is not optional for ADHD management. If you are consistently sleeping less than 7-8 hours or have poor sleep quality, you are operating with an additional cognitive handicap on top of ADHD. Addressing sleep hygiene — fixed wake time, screen curfew, brain dump before bed, bedtime alarm — may produce more improvement than any single supplementary strategy. This should be one of the first non-pharmacological targets.</p>
+      </div>
+      <div class="caveats">
+        <div class="label">Important Caveats</div>
+        <p>ADHD-related sleep dysfunction often has a neurological component (delayed circadian rhythm) that doesn't fully respond to behavioural strategies alone. Melatonin is supported by evidence for sleep onset delay in ADHD — discuss with your GP. Some ADHD medications also affect sleep quality, making timing and dose adjustments relevant.</p>
+      </div>
+      <div class="article-source">
+        <span class="source-label">Source:</span>
+        <span class="journal-badge">Lancet Psychiatry 2020 (Cortese et al.)</span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/33007186/" target="_blank" rel="noopener" class="source-link">Read on PubMed →</a>
+      </div>
+    </div>
+    <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
+  </div>
+
+  <!-- BOOK CTA -->
+  <div style="background:linear-gradient(135deg,#1A1000,#0A1628);border:1px solid #FFB34750;border-radius:16px;padding:22px;margin:20px 0;display:flex;gap:16px;align-items:flex-start">
+    <span style="font-size:36px;flex-shrink:0">📚</span>
+    <div>
+      <div style="font-size:11px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Clinical Resource</div>
+      <div style="font-weight:900;font-size:16px;margin-bottom:6px">The Gratitude Prescription</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:12px">
+        Written by a DPsych psychologist with 17 years of clinical experience, this evidence-based programme applies the neuroscience of gratitude to daily life — including for ADHD brains. Gratitude practice activates the prefrontal cortex (underactivated in ADHD), improves emotional regulation, and builds resilience. Structured for people who find habits difficult: takes seconds per day. Available globally.
+      </div>
+      <a href="https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL" target="_blank" rel="noopener"
+        style="display:inline-block;background:linear-gradient(135deg,var(--amber),#FF8C00);color:#0A1628;border-radius:10px;padding:10px 20px;font-weight:900;font-size:13px;text-decoration:none">
+        Get it on Amazon (Worldwide) →
+      </a>
+    </div>
+  </div>
+
+  <!-- CLINICAL SUPPORT CTA -->
+  <div style="background:linear-gradient(135deg,#0A1A35,#0A1628);border:1px solid rgba(0,212,221,0.3);border-radius:16px;padding:22px;margin:20px 0">
+    <div style="font-size:11px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🧠 Clinical Support</div>
+    <div style="font-weight:900;font-size:16px;margin-bottom:8px">Work with a specialist psychologist</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:14px">
+      For ADHD and ASD assessments, CBT, DBT skills training, and evidence-based psychological support — available in-person in Waterford and Cork, and online. DCounsPsych · CPsychol PSI · 17 years experience. Free 15-minute initial consultation.
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075" target="_blank" rel="noopener"
+        style="display:inline-block;background:linear-gradient(135deg,var(--teal),#4FC3F7);color:var(--navy);border-radius:10px;padding:10px 20px;font-weight:900;font-size:13px;text-decoration:none">
+        View Profile on Psychology Today →
+      </a>
+      <a href="/" style="display:inline-block;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:10px 20px;font-weight:700;font-size:13px;text-decoration:none">
+        Take the ADHD Assessment first
+      </a>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px">ADHDclearfocus Pro subscribers receive 15% off assessments through our clinical partner network.</div>
+  </div>
+
+  <div style="font-size:12px;color:var(--muted);line-height:1.6;padding:16px;background:var(--navyLight);border-radius:12px;border:1px solid var(--border)">
+    <strong style="color:#fff">About this page:</strong> All research summaries are prepared by the ADHDclearfocus clinical team and reviewed for accuracy. We cite original peer-reviewed sources and include caveats where evidence is preliminary. If you identify an error or would like to suggest a study for inclusion, contact us at <a href="mailto:conalldonegan@outlook.com" style="color:var(--teal)">conalldonegan@outlook.com</a>. This page does not constitute clinical advice.
+  </div>
+
+</div>
+
+<div style="background:var(--navyMid);border-top:1px solid var(--border);padding:20px;text-align:center;font-size:12px;color:var(--muted)">
+  <div style="margin-bottom:6px">
+    <a href="/" style="color:var(--teal);text-decoration:none">ADHDclearfocus</a> ·
+    <a href="/strategies.html" style="color:var(--teal);text-decoration:none">Strategies</a> ·
+    <a href="/community.html" style="color:var(--teal);text-decoration:none">Community</a> ·
+    <a href="/legal.html" style="color:var(--teal);text-decoration:none">Legal</a>
+  </div>
+  <div>Focused Care Psychology Limited · Waterford, Ireland</div>
+</div>
+
+<script>
+function toggleArticle(article){
+  const wasOpen = article.classList.contains('open');
+  document.querySelectorAll('.article.open').forEach(a=>a.classList.remove('open'));
+  if(!wasOpen) article.classList.add('open');
+  const btn = article.querySelector('.read-more');
+  if(btn) btn.textContent = (!wasOpen ? 'Read less ▴' : 'Read more ▾');
+}
+
+function filterArticles(cat, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.article').forEach(el=>{
+    const cats = el.dataset.category || '';
+    el.style.display = (cat==='all' || cats.includes(cat)) ? '' : 'none';
+  });
+}
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
+</body>
+</html>

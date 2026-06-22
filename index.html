@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0A1628" />
+  <meta name="description" content="ADHDclearfocus — The most comprehensive ADHD profile assessment available online. 10 neurological dimensions, 35 clinically validated questions, personalised evidence-based report. Developed by the ADHDclearfocus clinical team." />
+  <meta property="og:title" content="ADHDclearfocus — Understand your ADHD brain completely" />
+  <meta property="og:description" content="10 neurological dimensions. 35 validated questions. Your most complete ADHD profile — developed by the ADHDclearfocus clinical team." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://adhdclearfocus.com" />
+  <meta property="og:image" content="https://adhdclearfocus.com/logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ADHDclearfocus — Know your ADHD profile completely" />
+  <meta name="twitter:description" content="10 neurological dimensions. 35 validated questions. Developed by the ADHDclearfocus clinical team." />
+  <!-- Google tag (gtag.js) -->
+  <link rel="canonical" href="https://adhdclearfocus.com/"/>
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R8CLJRBNM0');
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+  <title>ADHDclearfocus — Understand your ADHD brain completely</title>
+  <style>
+@keyframes countUp{0%{transform:scale(0.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes slideInUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0}50%{box-shadow:0 0 24px rgba(0,212,221,0.35)}}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;color:#fff}
+    #root{min-height:100vh}
+
+    /* Respect prefers-reduced-motion — WCAG requirement */
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{
+        animation-duration:0.01ms!important;
+        animation-iteration-count:1!important;
+        transition-duration:0.01ms!important;
+      }
+    }
+
+    /* Scroll progress bar */
+    #scroll-progress{position:fixed;top:0;left:0;height:3px;
+      background:linear-gradient(to right,#00D4DD,#4FC3F7);
+      width:0%;z-index:999;transition:width 0.1s linear;pointer-events:none}
+
+    /* Focus mode */
+    body.focus-mode .animate-float{animation:none!important}
+    body.focus-mode .hero::before,body.focus-mode .hero::after{display:none}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .animate-pulse{animation:pulse 2s infinite}
+    .animate-float{animation:float 3s ease-in-out infinite}
+    .animate-fadeUp{animation:fadeUp 0.6s ease forwards}
+  </style>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ADHDclearfocus",
+    "url": "https://adhdclearfocus.com",
+    "logo": "https://adhdclearfocus.com/logo.png",
+    "description": "The most comprehensive ADHD profile assessment available online. 39 questions across 10 neurological dimensions. Evidence-based strategies, crisis tools, and community support.",
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web, iOS, Android",
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "ADHD Clarity Report",
+        "price": "49.00",
+        "priceCurrency": "EUR",
+        "description": "14-page AI-personalised ADHD profile report across 10 neurological dimensions"
+      },
+      {
+        "@type": "Offer",
+        "name": "Report Review Call",
+        "price": "79.00",
+        "priceCurrency": "EUR",
+        "description": "30-minute 1:1 video session with a specialist psychologist"
+      }
+    ],
+    "provider": {
+      "@type": "Organization",
+      "name": "Focused Care Psychology Limited",
+      "url": "https://adhdclearfocus.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Waterford",
+        "addressCountry": "IE"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "conalldonegan@outlook.com",
+        "contactType": "customer service"
+      }
+    },
+    "featureList": [
+      "39-question ADHD screener across 10 neurological dimensions",
+      "AI-personalised PDF report",
+      "47 evidence-based coping strategies",
+      "Offline crisis tools with binaural beats",
+      "Real-time body doubling focus rooms",
+      "Peer support community",
+      "ADHD research library"
+    ]
+  }
+  </script>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+  <noscript>ADHDclearfocus requires JavaScript. Please enable it in your browser.</noscript>
+  <div id="root"></div>
+  <div id="scroll-progress"></div>
+  <script>
+    window.addEventListener('scroll',function(){
+      var d=document.documentElement;
+      var pct=(d.scrollTop/(d.scrollHeight-d.clientHeight))*100;
+      var el=document.getElementById('scroll-progress');
+      if(el)el.style.width=pct+'%';
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <script type="text/babel">
+const{useState,useRef,useEffect}=React;
+
+// ── STRIPE ────────────────────────────────────────────────────────────────────
+const STRIPE_LINKS={
+  report:"https://buy.stripe.com/4gM7sL6oE2Fk32T8NHfYY01",
+  reviewCall:"https://buy.stripe.com/14A7sL8wM0xcbzpgg9fYY00",
+};
+async function createCheckout(result,email,isTeen){
+  try{
+    const res=await fetch("/api/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({email,level:result.level,total_pct:result.totalPct,asrs_flag:result.asrsFlag,
+        asrs_count:result.asrsCount,age_group:isTeen?"Adolescent":"Adult",pcts:result.pcts})});
+    if(res.ok){const d=await res.json();if(d.url){window.location.href=d.url;return;}}
+  }catch(e){console.log("Checkout API unavailable");}
+  (()=>{
+                    const btn=document.activeElement;
+                    if(btn){const orig=btn.innerHTML;btn.innerHTML="⏳ Opening secure checkout...";btn.style.opacity="0.8";setTimeout(()=>{btn.innerHTML=orig;btn.style.opacity="1";},2000);}
+                    (()=>{
+                    const btn=document.activeElement;
+                    if(btn&&btn.tagName==="BUTTON"){const orig=btn.innerHTML;btn.innerHTML="⏳ Opening secure checkout...";btn.style.opacity="0.8";setTimeout(()=>{btn.innerHTML=orig;btn.style.opacity="1";},2000);}
+                    window.open(STRIPE_LINKS.report,"_blank");
+                  })();
+                  })();
+}
+
+// ── COLOURS ───────────────────────────────────────────────────────────────────
+const C={
+  navy:"#0A1628",navyMid:"#112240",navyLight:"#1A2E4A",
+  teal:"#00D4DD",tealDark:"#00A8B0",
+  amber:"#FFB347",amberDark:"#F5A623",
+  green:"#00E676",greenDark:"#2ECC71",
+  purple:"#A855F7",purpleDark:"#7C3AED",
+  pink:"#FF6B9D",blue:"#4FC3F7",
+  red:"#FF5252",white:"#FFFFFF",
+  muted:"#7B93B4",border:"#1E3A5F",
+};
+
+// ── DOMAINS (10 neurological dimensions) ──────────────────────────────────────
+const DOMAINS={
+  inattention:{label:"Attention Regulation",icon:"🎯",color:C.teal,
+    desc:"How your brain filters, sustains and directs focus"},
+  hyperactivity:{label:"Hyperactivity & Impulse Control",icon:"⚡",color:C.amber,
+    desc:"Internal restlessness, urgency and response inhibition"},
+  executive:{label:"Executive Function",icon:"🧩",color:C.purple,
+    desc:"Planning, initiation, sequencing and self-direction"},
+  emotional:{label:"Emotional Regulation",icon:"🌊",color:C.pink,
+    desc:"Emotional intensity, recovery and dysregulation patterns"},
+  working_memory:{label:"Working Memory",icon:"💾",color:C.blue,
+    desc:"Holding, manipulating and applying information in real time"},
+  time:{label:"Time Perception",icon:"⏳",color:C.amberDark,
+    desc:"Temporal awareness, time blindness and deadline management"},
+  hyperfocus:{label:"Hyperfocus & Interest Drive",icon:"🔥",color:C.green,
+    desc:"The interest-based nervous system and hyperfocus patterns"},
+  rsd:{label:"Rejection Sensitivity",icon:"💔",color:C.pink,
+    desc:"Rejection Sensitive Dysphoria and emotional pain responses"},
+  developmental:{label:"Developmental History",icon:"🌱",color:C.greenDark,
+    desc:"Childhood onset and neurodevelopmental trajectory"},
+  impact:{label:"Life Impact",icon:"🌍",color:C.teal,
+    desc:"Functional consequences across work, relationships and daily life"},
+};
+
+// ── QUESTIONS (35 — expanded, multi-framework) ────────────────────────────────
+// ASRS Part A items tagged asrs:true (6 items only — do not add more asrs:true)
+const FREQ=[{l:"Never",v:0},{l:"Rarely",v:1},{l:"Sometimes",v:2},{l:"Often",v:3},{l:"Very Often",v:4}];
+const AGREE=[{l:"Not at all",v:0},{l:"A little",v:1},{l:"Moderately",v:2},{l:"Quite a bit",v:3},{l:"Very much",v:4}];
+
+const QS=[
+  // INATTENTION (8 questions) — ASRS Part A items a1-a3, Part B b1-b4, + 1 extra
+  {id:"a1",d:"inattention",t:"freq",asrs:true,
+    a:"How often do you have trouble wrapping up the final details of a project once the challenging parts are done?",
+    teen:"How often do you have trouble finishing assignments once the hardest part is done?"},
+  {id:"a2",d:"inattention",t:"freq",asrs:true,
+    a:"How often do you have difficulty getting things in order when you have to do a task that requires organisation?",
+    teen:"How often do you find it hard to organise your schoolwork or personal space?"},
+  {id:"a3",d:"inattention",t:"freq",asrs:true,
+    a:"How often do you have problems remembering appointments or obligations?",
+    teen:"How often do you forget homework, tests, or plans you have made?"},
+  {id:"b1",d:"inattention",t:"freq",
+    a:"How often do you make careless mistakes when working on something boring or difficult?",
+    teen:"How often do you make careless mistakes on schoolwork or tasks you find boring?"},
+  {id:"b2",d:"inattention",t:"freq",
+    a:"How often do you have difficulty sustaining attention on repetitive or tedious work?",
+    teen:"How often is it hard to keep your attention on something boring or repetitive?"},
+  {id:"b3",d:"inattention",t:"freq",
+    a:"How often do you have difficulty concentrating on what people say, even when they speak directly to you?",
+    teen:"How often do you zone out when someone is talking to you directly?"},
+  {id:"b4",d:"inattention",t:"freq",
+    a:"How often do you misplace or have difficulty finding things at home or at work?",
+    teen:"How often do you lose or misplace things like your phone, keys, or school items?"},
+  {id:"b5",d:"inattention",t:"freq",
+    a:"How often do you find yourself re-reading the same paragraph multiple times without taking it in?",
+    teen:"How often do you read something and realise you have not taken in any of it?"},
+
+  // HYPERACTIVITY (5 questions) — ASRS Part A items a4-a6 + 2 extra
+  {id:"a4",d:"hyperactivity",t:"freq",asrs:true,
+    a:"When you have a task requiring a lot of thought, how often do you avoid or delay getting started?",
+    teen:"How often do you put off starting schoolwork that requires real effort?"},
+  {id:"a5",d:"hyperactivity",t:"freq",asrs:true,
+    a:"How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?",
+    teen:"How often do you feel restless or fidgety when you have to stay seated?"},
+  {id:"a6",d:"hyperactivity",t:"freq",asrs:true,
+    a:"How often do you feel overly active and compelled to do things, like you were driven by a motor?",
+    teen:"How often do you feel like you just cannot slow down, like something is driving you?"},
+  {id:"h1",d:"hyperactivity",t:"freq",
+    a:"How often do you interrupt others or blurt out answers before they have finished speaking?",
+    teen:"How often do you interrupt people or answer before they have finished?"},
+  {id:"h2",d:"hyperactivity",t:"freq",
+    a:"How often do you make impulsive decisions that you later regret?",
+    teen:"How often do you do things impulsively that you later wish you had thought through?"},
+
+  // EXECUTIVE FUNCTION (4 questions)
+  {id:"e1",d:"executive",t:"freq",
+    a:"How often do you have trouble getting started on tasks, even when you know they are important?",
+    teen:"How often do you struggle to start tasks even when you know you need to?"},
+  {id:"e2",d:"executive",t:"freq",
+    a:"How often do you lose track of time and end up late or miss deadlines?",
+    teen:"How often do you lose track of time and end up late or miss deadlines?"},
+  {id:"e3",d:"executive",t:"freq",
+    a:"How often do you start many projects but finish very few?",
+    teen:"How often do you start lots of things but finish very few of them?"},
+  {id:"e4",d:"executive",t:"freq",
+    a:"How often do you struggle to prioritise tasks when facing multiple competing demands?",
+    teen:"How often do you struggle to decide what to do first when you have lots to do?"},
+
+  // EMOTIONAL REGULATION (4 questions)
+  {id:"em1",d:"emotional",t:"freq",
+    a:"How often do you experience sudden intense frustration or anger that feels out of proportion to the situation?",
+    teen:"How often do you get very frustrated or angry in a way that feels bigger than the situation?"},
+  {id:"em2",d:"emotional",t:"freq",
+    a:"How often do you have trouble unwinding or calming down after something upsets or excites you?",
+    teen:"How often is it hard to calm down after you have been upset or wound up?"},
+  {id:"em3",d:"emotional",t:"freq",
+    a:"How often do you feel easily overwhelmed by tasks or demands that others seem to handle more easily?",
+    teen:"How often do you feel overwhelmed by things that seem easier for others?"},
+  {id:"em4",d:"emotional",t:"freq",
+    a:"How often do you experience rapid mood shifts — going from fine to frustrated or low within minutes?",
+    teen:"How often does your mood change very quickly, going from okay to upset in minutes?"},
+
+  // WORKING MEMORY (3 questions)
+  {id:"wm1",d:"working_memory",t:"freq",
+    a:"How often do you forget what you were about to do or say mid-task?",
+    teen:"How often do you forget what you were about to do or say?"},
+  {id:"wm2",d:"working_memory",t:"freq",
+    a:"How often do you struggle to hold instructions in mind long enough to follow them through?",
+    teen:"How often do you forget instructions before you have finished following them?"},
+  {id:"wm3",d:"working_memory",t:"freq",
+    a:"How often do you find it hard to keep track of several things at once — for example in conversations or complex tasks?",
+    teen:"How often do you lose track when you are trying to follow something that has several parts?"},
+
+  // TIME PERCEPTION (3 questions)
+  {id:"tp1",d:"time",t:"freq",
+    a:"How often are you surprised by how much — or how little — time has passed while working?",
+    teen:"How often are you surprised by how much or little time has passed while doing something?"},
+  {id:"tp2",d:"time",t:"freq",
+    a:"How often do you underestimate how long tasks will take, leading to being late or rushing?",
+    teen:"How often do you think something will take less time than it does?"},
+  {id:"tp3",d:"time",t:"freq",
+    a:"How often do you struggle to start tasks until you are almost at the deadline?",
+    teen:"How often do you only start things when the deadline is almost here?"},
+
+  // HYPERFOCUS & INTEREST-BASED NERVOUS SYSTEM (3 questions)
+  {id:"hf1",d:"hyperfocus",t:"freq",
+    a:"How often do you become so absorbed in something interesting that you lose all track of time and surroundings?",
+    teen:"How often do you get so into something that you completely lose track of time?"},
+  {id:"hf2",d:"hyperfocus",t:"freq",
+    a:"How often do you find that your ability to focus depends almost entirely on whether you find something interesting or not?",
+    teen:"How often does whether you can focus depend mainly on if you find it interesting?"},
+  {id:"hf3",d:"hyperfocus",t:"freq",
+    a:"How often do you find it very hard to shift your attention away from something absorbing, even when you need to stop?",
+    teen:"How often is it very hard to stop doing something you are absorbed in, even when you should?"},
+
+  // REJECTION SENSITIVITY (3 questions)
+  {id:"rsd1",d:"rsd",t:"freq",
+    a:"How often do you experience an intense emotional response to perceived criticism, rejection, or failure?",
+    teen:"How often does criticism or feeling rejected cause you intense emotional pain?"},
+  {id:"rsd2",d:"rsd",t:"freq",
+    a:"How often do you avoid situations where you might be criticised or judged because the emotional risk feels too high?",
+    teen:"How often do you avoid situations where you might be criticised because it feels too painful?"},
+  {id:"rsd3",d:"rsd",t:"agree",
+    a:"I often modify my behaviour significantly to avoid any possibility of criticism, rejection, or disapproval from others.",
+    teen:"I often change how I act to avoid being criticised or rejected."},
+
+  // DEVELOPMENTAL HISTORY (3 questions)
+  {id:"d1",d:"developmental",t:"agree",
+    a:"These kinds of difficulties have been present in my life since I was a child, before age 12.",
+    teen:"I have had these kinds of difficulties for as long as I can remember, including in primary school."},
+  {id:"d2",d:"developmental",t:"agree",
+    a:"My difficulties with attention or activity significantly affected my performance at school or in early employment.",
+    teen:"My difficulties with attention or energy significantly affected my performance in primary or secondary school."},
+  {id:"d3",d:"developmental",t:"agree",
+    a:"Adults in my childhood — parents, teachers — commented on my difficulty with attention, activity level, or self-control.",
+    teen:"Parents or teachers commented on my difficulty with attention, behaviour, or sitting still when I was young."},
+
+  // LIFE IMPACT (3 questions)
+  {id:"i1",d:"impact",t:"agree",
+    a:"My attention or activity difficulties have significantly affected my work or career.",
+    teen:"My attention or energy difficulties significantly affect my school performance."},
+  {id:"i2",d:"impact",t:"agree",
+    a:"My attention or activity difficulties have significantly affected my personal relationships.",
+    teen:"My attention or energy difficulties affect my friendships or family relationships."},
+  {id:"i3",d:"impact",t:"agree",
+    a:"My attention or activity difficulties have affected my ability to manage daily life — finances, admin, or household tasks.",
+    teen:"My attention or energy difficulties affect how I manage daily tasks at home."},
+];
+
+// MAX_D: questions per domain × 4
+// inattention:8×4=32, hyperactivity:5×4=20, executive:4×4=16,
+// emotional:4×4=16, working_memory:3×4=12, time:3×4=12,
+// hyperfocus:3×4=12, rsd:3×4=12, developmental:3×4=12, impact:3×4=12
+const MAX_D={
+  inattention:32,hyperactivity:20,executive:16,emotional:16,
+  working_memory:12,time:12,hyperfocus:12,rsd:12,developmental:12,impact:12
+};
+
+const PRO_FEATURES=[
+  {icon:"📋",title:"Full Clarity Report",desc:"Your personalised 14-page PDF report across all 10 neurological dimensions — with AI-generated personalised insights for your exact profile.",status:"available"},
+  {icon:"🔖",title:"Evidence Library",desc:"Searchable library of ADHD tools, apps and strategies rated by evidence quality.",status:"available"},
+  {icon:"🏷️",title:"15% Off Clinical Assessments",desc:"Exclusive subscriber discount on formal ADHD and ASD assessments with registered clinical partners in Ireland and the UK.",status:"available"},
+  {icon:"👥",title:"Body Doubling Rooms",desc:"Virtual silent co-working sessions — camera-off by default, Pomodoro-synced, small groups. The most evidence-backed ADHD productivity tool (Solanto, 2011).",status:"launching"},
+  {icon:"🚨",title:"Crisis Mode",desc:"Pavlovian-conditioned calming sounds, breathing visualiser, and biometric integration. Real-time stress intervention designed for ADHD emotional dysregulation.",status:"launching"},
+  {icon:"🎙️",title:"Voice Diary & AI Coach",desc:"Speak your day — AI coach responds with ADHD-aware guidance built around your specific neurological profile and recent diary entries.",status:"launching"},
+  {icon:"🧠",title:"AI ADHD Coaching Dashboard",desc:"Daily planning assistant that knows your 10-dimension profile and breaks tasks into ADHD-friendly micro-steps.",status:"launching"},
+  {icon:"📈",title:"Progress Tracking",desc:"Monthly re-assessments across all 10 dimensions using validated scales. Track real change over time with your own data.",status:"launching"},
+  {icon:"📚",title:"Weekly Evidence Modules",desc:"One research-backed ADHD module per week — under 7 minutes, interactive, immediately applicable to your profile.",status:"launching"},
+  {icon:"🎙️",title:"Expert Guest Sessions",desc:"Monthly sessions from specialist psychologists, coaches and occupational therapists.",status:"launching"},
+  {icon:"❓",title:"Monthly Live Q&A with our Clinical Psychologist",desc:"60-minute group session — ask anything about your profile or ADHD management.",status:"launching"},
+];
+
+function scoreResults(answers){
+  const scores={};let asrsCount=0;let total=0;
+  QS.forEach(q=>{
+    const val=answers[q.id]??0;
+    scores[q.d]=(scores[q.d]||0)+val;
+    total+=val;
+    if(q.asrs&&val>=2)asrsCount++;
+  });
+  const pcts={};
+  Object.keys(DOMAINS).forEach(d=>{pcts[d]=Math.round(((scores[d]||0)/MAX_D[d])*100);});
+  const asrsFlag=asrsCount>=4;
+  const totalPct=Math.round((total/(QS.length*4))*100);
+  let level,color;
+  if(totalPct>=65||asrsFlag){level="Elevated";color=C.amber;}
+  else if(totalPct>=40){level="Moderate";color=C.teal;}
+  else{level="Low";color=C.green;}
+  return{scores,pcts,asrsFlag,asrsCount,totalPct,level,color};
+}
+
+function getFoundingDaysLeft(){
+  const close=new Date("2026-09-30");
+  const diff=Math.ceil((close-new Date())/(1000*60*60*24));
+  return Math.max(0,diff);
+}
+
+// ── COMPONENTS ────────────────────────────────────────────────────────────────
+function Bars({active}){
+  return(
+    <div style={{display:"flex",alignItems:"center",gap:2,height:16}}>
+      {[3,6,10,14,10,6,3].map((h,i)=>(
+        <div key={i} style={{width:3,height:h,borderRadius:3,
+          background:active?`linear-gradient(to top,${C.teal},${C.blue})`:C.border,
+          opacity:active?1:0.4,transition:"all 0.3s"}}/>
+      ))}
+    </div>
+  );
+}
+
+function DBar({label,icon,pct,color}){
+  const[anim,setAnim]=useState(0);
+  useEffect(()=>{const t=setTimeout(()=>setAnim(pct),100);return()=>clearTimeout(t);},[pct]);
+  return(
+    <div style={{marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:5}}>
+        <span style={{fontSize:13,color:C.white,display:"flex",alignItems:"center",gap:6}}>
+          <span>{icon}</span><span>{label}</span>
+        </span>
+        <span style={{fontSize:13,fontWeight:800,color}}>{pct}%</span>
+      </div>
+      <div style={{background:C.navyMid,borderRadius:99,height:6,overflow:"hidden"}}>
+        <div style={{width:`${anim}%`,background:`linear-gradient(to right,${color},${color}CC)`,
+          height:"100%",borderRadius:99,transition:"width 1.2s cubic-bezier(0.4,0,0.2,1)"}}/>
+      </div>
+    </div>
+  );
+}
+
+function FoundingCTA({daysLeft,showDetail,setShowDetail,proEmail,setProEmail,proJoined,onJoin,inPaywall=false}){
+  return(
+    <div style={{background:"linear-gradient(135deg,#1A0A35,#0A1825)",
+      border:"1px solid #A855F760",borderRadius:16,padding:20,marginBottom:inPaywall?0:16}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+        <div>
+          <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+            <span style={{fontSize:11,color:"#C084FC",fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>Pro — Founding Member</span>
+            <span style={{background:"#A855F720",border:"1px solid #A855F7",borderRadius:99,padding:"2px 8px",
+              fontSize:9,color:"#C084FC",fontWeight:700}}>LAUNCHING SOON</span>
+          </div>
+          <div style={{display:"flex",alignItems:"baseline",gap:12,flexWrap:"wrap"}}>
+            <div style={{fontSize:26,fontWeight:900}}>
+              €5<span style={{fontSize:12,fontWeight:400,color:C.muted}}>/month</span>
+            </div>
+            <div style={{background:"#00E67615",border:"1px solid #00E67640",borderRadius:99,
+              padding:"2px 10px",fontSize:11,color:C.green,fontWeight:700}}>
+              YEARLY · SAVE 50%
+            </div>
+          </div>
+          <div style={{fontSize:11,color:C.muted,marginBottom:2}}>€60/year billed annually · Regular monthly price €10/month</div>
+          <div style={{fontSize:11,color:C.green,fontWeight:600}}>
+            Assessment completers get this rate locked for life with their discount code
+          </div>
+        </div>
+        <span style={{fontSize:24}}>🚀</span>
+      </div>
+      {daysLeft>0&&(
+        <div style={{background:"#A855F715",border:"1px solid #A855F740",borderRadius:8,
+          padding:"8px 12px",marginBottom:12,fontSize:12,color:"#C084FC",textAlign:"center"}}>
+          ⏳ Founding member offer closes in <strong>{daysLeft} days</strong>
+        </div>
+      )}
+      <div style={{marginBottom:10}}>
+        {PRO_FEATURES.map(f=>(
+          <div key={f.title} style={{display:"flex",gap:10,alignItems:"flex-start",marginBottom:8}}>
+            <span style={{fontSize:14,flexShrink:0}}>{f.icon}</span>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:1}}>
+                <span style={{fontSize:12,fontWeight:600,color:f.status==="available"?C.white:C.muted}}>{f.title}</span>
+                <span style={{background:f.status==="available"?C.teal+"25":C.amber+"20",
+                  color:f.status==="available"?C.teal:C.amber,fontSize:9,fontWeight:700,
+                  padding:"1px 6px",borderRadius:99,textTransform:"uppercase"}}>
+                  {f.status==="available"?"Included":"Soon"}
+                </span>
+              </div>
+              {showDetail&&<div style={{fontSize:11,color:C.muted,lineHeight:1.5}}>{f.desc}</div>}
+            </div>
+          </div>
+        ))}
+      </div>
+      <button onClick={()=>setShowDetail(!showDetail)}
+        style={{background:"transparent",border:"none",color:"#C084FC",cursor:"pointer",fontSize:12,marginBottom:12,padding:0}}>
+        {showDetail?"Hide details ▲":"Show full details ▼"}
+      </button>
+      {!proJoined?(
+        <div>
+          <p style={{fontSize:13,color:C.muted,marginBottom:10,lineHeight:1.55}}>
+            Join the founding member waitlist. Your €5/month yearly rate is reserved from sign-up.
+            When Pro launches, you'll get a <strong style={{color:C.white}}>14-day free trial</strong> —
+            full access, no payment required. Cancel any time before the trial ends and pay nothing.
+          </p>
+          <div style={{display:"flex",gap:8}}>
+            <input type="email" value={proEmail} onChange={e=>setProEmail(e.target.value)}
+              onKeyDown={e=>e.key==="Enter"&&onJoin()} placeholder="your@email.com"
+              style={{flex:1,background:C.navy,border:"1px solid #A855F760",borderRadius:8,
+                padding:"11px 14px",color:C.white,fontSize:14,outline:"none"}}/>
+            <button onClick={onJoin}
+              style={{background:"#A855F7",color:C.white,border:"none",borderRadius:8,
+                padding:"11px 16px",fontWeight:700,fontSize:13,cursor:"pointer",whiteSpace:"nowrap"}}>
+              Reserve →
+            </button>
+          </div>
+          <p style={{fontSize:11,color:C.muted,marginTop:8}}>No payment now. Email on launch. Cancel any time.</p>
+        </div>
+      ):(
+        <div style={{background:"#A855F715",border:"1px solid #A855F740",borderRadius:10,
+          padding:14,textAlign:"center"}}>
+          <div style={{fontSize:18,marginBottom:6}}>🎉</div>
+          <div style={{fontWeight:700,fontSize:14,color:"#C084FC",marginBottom:4}}>You are on the list!</div>
+          <div style={{color:C.muted,fontSize:12}}>Your founding rate of €9/month is reserved.</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+function AuthModal({mode,authEmail,setAuthEmail,authCode,setAuthCode,authError,onRegister,onPro,onClose,daysLeft,C}){
+  return React.createElement('div',{
+    style:{position:"fixed",inset:0,background:"rgba(10,22,40,0.92)",zIndex:1000,
+      display:"flex",alignItems:"flex-end",justifyContent:"center"},
+    onClick:e=>{if(e.target===e.currentTarget)onClose();}},
+    React.createElement('div',{style:{background:"#112240",borderRadius:"20px 20px 0 0",
+      width:"100%",maxWidth:520,padding:"24px 20px 40px",
+      animation:"slideInUp 0.3s cubic-bezier(0.34,1.56,0.64,1)"}},
+      React.createElement('div',{style:{width:40,height:4,background:"#1E3A5F",
+        borderRadius:99,margin:"0 auto 20px"}}),
+      mode==="register"
+        ? React.createElement(React.Fragment,null,
+            React.createElement('div',{style:{textAlign:"center",marginBottom:16}},
+              React.createElement('div',{style:{fontSize:28,marginBottom:6}},"🧠"),
+              React.createElement('div',{style:{fontWeight:900,fontSize:20,marginBottom:6}},"Free account — 10 seconds"),
+              React.createElement('div',{style:{fontSize:13,color:"#7B93B4",lineHeight:1.6}},"Unlock all 47 strategies, community, focus rooms and your personal dashboard.")
+            ),
+            React.createElement('input',{type:"email",value:authEmail,
+              onChange:e=>setAuthEmail(e.target.value),
+              placeholder:"Your email address",
+              onKeyDown:e=>{if(e.key==="Enter")onRegister(authEmail);},
+              style:{width:"100%",background:"#0A1628",border:"1px solid #1E3A5F",
+                borderRadius:10,padding:"13px 14px",color:"#fff",fontSize:15,
+                fontFamily:"inherit",outline:"none",marginBottom:8}}),
+            authError&&React.createElement('div',{style:{fontSize:12,color:"#FF8080",marginBottom:8}},authError),
+            React.createElement('button',{
+              onClick:()=>onRegister(authEmail),
+              style:{width:"100%",background:"linear-gradient(135deg,#00D4DD,#4FC3F7)",
+                color:"#0A1628",border:"none",borderRadius:12,padding:"14px",
+                fontSize:16,fontWeight:900,cursor:"pointer",marginBottom:10,fontFamily:"inherit"}},
+              "Get Free Access →"),
+            React.createElement('div',{style:{textAlign:"center",fontSize:12,color:"#7B93B4"}},
+              "No password · No card · GDPR compliant")
+          )
+        : React.createElement(React.Fragment,null,
+            React.createElement('div',{style:{textAlign:"center",marginBottom:16}},
+              React.createElement('div',{style:{fontSize:28,marginBottom:6}},"⭐"),
+              React.createElement('div',{style:{fontWeight:900,fontSize:20,marginBottom:6}},"Activate Pro Access"),
+              React.createElement('div',{style:{fontSize:13,color:"#7B93B4",lineHeight:1.6}},
+                `Enter your loyalty code from your Clarity Report email. Founding rate — ${daysLeft} days left.`)
+            ),
+            React.createElement('input',{type:"text",value:authCode,
+              onChange:e=>setAuthCode(e.target.value.toUpperCase()),
+              placeholder:"ACF-XXXXX-XXXX",
+              onKeyDown:e=>{if(e.key==="Enter")onPro(authCode);},
+              style:{width:"100%",background:"#0A1628",border:"1px solid #A855F740",
+                borderRadius:10,padding:"13px 14px",color:"#A855F7",fontSize:15,
+                fontFamily:"monospace",outline:"none",letterSpacing:2,
+                textTransform:"uppercase",marginBottom:8}}),
+            authError&&React.createElement('div',{style:{fontSize:12,color:"#FF8080",marginBottom:8}},authError),
+            React.createElement('button',{onClick:()=>onPro(authCode),
+              style:{width:"100%",background:"linear-gradient(135deg,#A855F7,#7C3AED)",
+                color:"#fff",border:"none",borderRadius:12,padding:"14px",
+                fontSize:16,fontWeight:900,cursor:"pointer",marginBottom:10,fontFamily:"inherit"}},
+              "Activate Pro →")
+          ),
+      React.createElement('button',{onClick:onClose,
+        style:{display:"block",width:"100%",background:"transparent",
+          border:"1px solid #1E3A5F",color:"#7B93B4",borderRadius:10,
+          padding:"10px",fontSize:13,cursor:"pointer",fontFamily:"inherit",marginTop:8}},
+        "Maybe later")
+    )
+  );
+}
+
+function FeedbackWidget({C}){
+  const[open,setOpen]=React.useState(false);
+  const[type,setType]=React.useState("suggestion");
+  const[msg,setMsg]=React.useState("");
+  const[sent,setSent]=React.useState(false);
+  function submit(){
+    if(msg.trim().length<5)return;
+    const entry={type,msg,time:new Date().toISOString()};
+    try{const ex=JSON.parse(localStorage.getItem("acf_feedback")||"[]");ex.push(entry);localStorage.setItem("acf_feedback",JSON.stringify(ex.slice(-20)));}catch(e){}
+    const sub=encodeURIComponent(`ADHDclearfocus ${type}`);
+    const bod=encodeURIComponent(`Type: ${type}\n\nMessage: ${msg}\n\nTime: ${entry.time}`);
+    window.open(`mailto:conalldonegan@outlook.com?subject=${sub}&body=${bod}`);
+    setSent(true);setTimeout(()=>{setSent(false);setOpen(false);setMsg("");},3000);
+  }
+  if(sent)return React.createElement('div',{style:{background:"#0A2010",border:"1px solid #00E67640",borderRadius:14,padding:"14px 16px",marginBottom:16,textAlign:"center",fontSize:13,color:"#00E676"}},"✓ Thank you — feedback sent. We read everything.");
+  return React.createElement('div',{style:{background:C.navyLight,border:`1px solid ${C.border}`,borderRadius:14,padding:"16px",marginBottom:16}},
+    React.createElement('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+      React.createElement('div',null,
+        React.createElement('div',{style:{fontWeight:700,fontSize:13,marginBottom:2}},"💬 Share feedback"),
+        React.createElement('div',{style:{fontSize:11,color:C.muted}},"Suggestions, complaints, questions — we read everything")
+      ),
+      React.createElement('button',{onClick:()=>setOpen(!open),
+        style:{background:open?C.teal:C.navyMid,color:open?C.navy:C.muted,
+          border:`1px solid ${open?C.teal:C.border}`,borderRadius:8,
+          padding:"6px 14px",fontSize:12,cursor:"pointer",fontWeight:700,fontFamily:"inherit"}},
+        open?"Close":"Give feedback")
+    ),
+    open&&React.createElement('div',{style:{marginTop:12}},
+      React.createElement('div',{style:{display:"flex",gap:6,marginBottom:8,flexWrap:"wrap"}},
+        ["suggestion","complaint","question","praise"].map(t=>
+          React.createElement('button',{key:t,onClick:()=>setType(t),
+            style:{background:type===t?C.teal:C.navyMid,color:type===t?C.navy:C.muted,
+              border:`1px solid ${type===t?C.teal:C.border}`,borderRadius:99,
+              padding:"4px 10px",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",textTransform:"capitalize"}},
+            t==="suggestion"?"💡 Suggestion":t==="complaint"?"⚠️ Complaint":t==="question"?"❓ Question":"⭐ Praise")
+        )
+      ),
+      React.createElement('textarea',{value:msg,onChange:e=>setMsg(e.target.value),
+        placeholder:type==="complaint"?"Tell us what went wrong — we respond within 48 hours.":"Share your thoughts...",
+        style:{width:"100%",background:C.navy,border:`1px solid ${C.border}`,
+          borderRadius:10,padding:"10px 12px",color:C.white,fontSize:13,
+          fontFamily:"inherit",resize:"vertical",minHeight:70,outline:"none",marginBottom:8}}),
+      React.createElement('div',{style:{display:"flex",justifyContent:"space-between",alignItems:"center"}},
+        React.createElement('span',{style:{fontSize:11,color:C.muted}},
+          type==="complaint"?"Responded to within 48 hours":"Anonymous is fine"),
+        React.createElement('button',{onClick:submit,
+          style:{background:type==="complaint"?"#FF5252":C.teal,
+            color:type==="complaint"?"#fff":C.navy,
+            border:"none",borderRadius:8,padding:"8px 16px",
+            fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}},
+          "Send →")
+      )
+    )
+  );
+}
+
+function App(){
+  const[step,setStep]=useState("cookie");
+  const[isTeen,setIsTeen]=useState(false);
+  const[qIndex,setQIndex]=useState(0);
+  const[answers,setAnswers]=useState({});
+  const[result,setResult]=useState(null);
+  const[animIn,setAnimIn]=useState(true);
+  const[email,setEmail]=useState("");
+  const[emailConsent,setEmailConsent]=useState(false);
+  const[emailSubmitted,setEmailSubmitted]=useState(false);
+  const[emailError,setEmailError]=useState("");
+  const[emailLoading,setEmailLoading]=useState(false);
+  const[proEmail,setProEmail]=useState("");
+  const[proJoined,setProJoined]=useState(false);
+  const[openDomain,setOpenDomain]=useState(null);
+  const[showDetail,setShowDetail]=useState(false);
+  const[consentChecked,setConsentChecked]=useState(false);
+  // Auth state
+  const[userEmail,setUserEmail]=useState(()=>localStorage.getItem('acf_email')||'');
+  const[isPro,setIsPro]=useState(()=>localStorage.getItem('acf_pro')==='true');
+  const[showAuthModal,setShowAuthModal]=useState(false);
+  const[authMode,setAuthMode]=useState('register');
+  const[authEmail,setAuthEmail]=useState('');
+  const[authCode,setAuthCode]=useState('');
+  const[authError,setAuthError]=useState('');
+  const FOUNDING_DEADLINE=new Date("2026-07-31T23:59:59");
+  const daysLeft=Math.max(0,Math.ceil((FOUNDING_DEADLINE-new Date())/(1000*60*60*24)));
+  const isRegistered=()=>!!localStorage.getItem('acf_email');
+  const isProUser=()=>localStorage.getItem('acf_pro')==='true';
+  function registerUser(email){
+    if(!email||!email.includes('@')){setAuthError('Please enter a valid email address');return;}
+    localStorage.setItem('acf_email',email);setUserEmail(email);
+    setShowAuthModal(false);setAuthError('');
+    fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,tags:['registered-free']})}).catch(()=>{});
+    gtag('event','register',{method:'email'});
+  }
+  function activatePro(code){
+    const clean=code.trim().toUpperCase();
+    if(!/^ACF-[A-Z0-9]{5}-[A-Z0-9]{4}$/.test(clean)){
+      setAuthError('Code format: ACF-XXXXX-XXXX — check your report email');return;
+    }
+    localStorage.setItem('acf_loyalty',clean);localStorage.setItem('acf_pro','true');
+    localStorage.setItem('report_purchased','true');
+    setIsPro(true);setShowAuthModal(false);setAuthError('');
+    gtag('event','pro_activated');
+  }
+  const[showResume,setShowResume]=useState(false);
+  const[resumeData,setResumeData]=useState(null);
+  const topRef=useRef(null);
+  const currentQ=QS[qIndex];
+
+  // Exit intent detection
+  useEffect(()=>{
+    function handleBeforeUnload(e){
+      if(step==="questions"&&qIndex>3){
+        e.preventDefault();
+        e.returnValue="Your profile is "+progress+"% complete. Are you sure you want to leave?";
+        return e.returnValue;
+      }
+    }
+    window.addEventListener("beforeunload",handleBeforeUnload);
+    return()=>window.removeEventListener("beforeunload",handleBeforeUnload);
+  },[step,qIndex,progress]);
+
+  // Resume detection on load
+  useEffect(()=>{
+    try{
+      const saved=localStorage.getItem("acf_progress");
+      if(saved){
+        const{answers:a,qIndex:qi,isTeen:it}=JSON.parse(saved);
+        if(a&&qi>0&&qi<QS.length){
+          setResumeData({answers:a,qIndex:qi,isTeen:it||false});
+          setShowResume(true);
+        }
+      }
+    }catch(e){}
+  },[]);
+  const progress=Math.round((qIndex/QS.length)*100);
+  const daysLeft=getFoundingDaysLeft();
+  const domainKeys=Object.keys(DOMAINS);
+
+  function tr(fn){
+    setAnimIn(false);
+    setTimeout(()=>{fn();setAnimIn(true);topRef.current?.scrollIntoView({behavior:"smooth"});},200);
+  }
+
+  function handleAnswer(val){
+    const newA={...answers,[currentQ.id]:val};
+    setAnswers(newA);
+    // Save progress
+    try{localStorage.setItem("acf_progress",JSON.stringify({answers:newA,qIndex:qIndex+1,isTeen}));}catch(e){}
+    if(qIndex<QS.length-1){tr(()=>setQIndex(qIndex+1));}
+    else{
+      try{localStorage.removeItem("acf_progress");}catch(e){}
+      const r=scoreResults(newA);setResult(r);if(navigator.vibrate)navigator.vibrate([100,50,100,50,200]);tr(()=>setStep("paywall"));
+    }
+  }
+
+  async function subscribeToMailchimp(emailAddr,tags=[]){
+    try{
+      await fetch("/api/mailchimp-subscribe",{method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({email:emailAddr,tags,
+          merge_fields:{ADHD_LEVEL:result?.level||"",ADHD_PCT:String(result?.totalPct||"")}})});
+    }catch(e){console.log("Mailchimp:",e);}
+  }
+
+  const DISPOSABLE_DOMAINS=["mailinator.com","guerrillamail.com","10minutemail.com",
+    "tempmail.com","throwaway.email","yopmail.com","sharklasers.com","guerrillamailblock.com",
+    "grr.la","guerrillamail.info","spam4.me","trashmail.com","dispostable.com","maildrop.cc",
+    "spamgourmet.com","getairmail.com","fakeinbox.com","mailnull.com","spamspot.com"];
+
+  async function handleEmailSubmit(){
+    if(!email.includes("@")||!email.includes(".")||email.length<5){
+      setEmailError("Please enter a valid email address.");return;
+    }
+    const domain=email.split("@")[1]?.toLowerCase()||"";
+    if(DISPOSABLE_DOMAINS.includes(domain)){
+      setEmailError("Please use a real email address — we need it to send your report.");return;
+    }
+    setEmailError("");setEmailLoading(true);
+    await subscribeToMailchimp(email,["screener-complete",result?.level?.toLowerCase()||""]);
+    gtag("event","email_captured",{adhd_level:result?.level});
+    setEmailLoading(false);setEmailSubmitted(true);
+  }
+
+  async function handleProJoin(){
+    if(!proEmail.includes("@")||!proEmail.includes(".")){return;}
+    await subscribeToMailchimp(proEmail,["pro-waitlist"]);
+    setProJoined(true);
+  }
+
+  function restart(){
+    try{localStorage.removeItem("acf_progress");}catch(e){}
+    setStep("intro");setIsTeen(false);setQIndex(0);setAnswers({});setResult(null);
+    setEmail("");setEmailConsent(false);setEmailSubmitted(false);setEmailError("");
+    setOpenDomain(null);setProEmail("");setProJoined(false);setShowDetail(false);
+    setConsentChecked(false);setShowResume(false);setResumeData(null);
+  }
+
+  const fade={opacity:animIn?1:0,transform:animIn?"translateY(0)":"translateY(12px)",
+    transition:"opacity 0.2s ease,transform 0.2s ease"};
+  const dc=k=>result?.pcts[k]>=65?C.amber:result?.pcts[k]>=40?C.teal:C.green;
+
+  // Domain colour lookup
+  const domainColor=k=>DOMAINS[k]?.color||C.teal;
+
+  return(
+    <div style={{background:C.navy,minHeight:"100vh",color:C.white}}>
+
+      {/* COOKIE BANNER */}
+      {step==="cookie"&&(
+        <div style={{position:"fixed",bottom:0,left:0,right:0,zIndex:100,
+          background:C.navyMid,borderTop:`1px solid ${C.border}`,padding:"14px 18px"}}>
+          <div style={{maxWidth:680,margin:"0 auto"}}>
+            <p style={{fontSize:12,color:C.muted,margin:"0 0 10px",lineHeight:1.55}}>
+              ADHDclearfocus uses essential cookies only — session management and security.
+              No advertising cookies. See our <a href="/legal.html" style={{color:C.teal}}>Privacy Policy</a>.
+            </p>
+            <div style={{display:"flex",gap:8}}>
+              <button onClick={()=>setStep("intro")}
+                style={{background:C.teal,color:C.navy,border:"none",borderRadius:8,
+                  padding:"8px 18px",fontWeight:700,fontSize:13,cursor:"pointer"}}>
+                Accept & Continue
+              </button>
+              <button onClick={()=>setStep("intro")}
+                style={{background:"transparent",border:`1px solid ${C.border}`,color:C.muted,
+                  borderRadius:8,padding:"8px 14px",fontSize:13,cursor:"pointer"}}>
+                Essential Only
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HEADER */}
+      <div style={{background:"rgba(10,22,40,0.95)",backdropFilter:"blur(10px)",
+        borderBottom:`1px solid ${C.border}`,padding:"13px 18px",
+        display:"flex",alignItems:"center",justifyContent:"space-between",
+        position:"sticky",top:0,zIndex:20}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,cursor:"pointer"}} onClick={restart}>
+          <img src="/logo.png" loading="lazy" aria-hidden="true" alt="Logo" style={{width:28,height:28,borderRadius:"50%",objectFit:"cover"}}/>
+          <Bars active={step==="questions"}/>
+          <span style={{fontSize:16,fontWeight:900,letterSpacing:"-0.5px"}}>
+            ADHD<span style={{color:C.teal}}>clearfocus</span>
+          </span>
+        </div>
+        <a href="/app.html" style={{fontSize:11,color:C.teal,fontWeight:700,
+          textDecoration:"none",background:C.teal+"15",border:`1px solid ${C.teal}40`,
+          borderRadius:99,padding:"4px 12px"}}>
+          🔐 Secret Resources →
+        </a>
+        {step==="questions"&&(
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{background:C.navyLight,borderRadius:99,height:3,width:80,overflow:"hidden"}}>
+              <div style={{width:`${progress}%`,height:"100%",
+                background:`linear-gradient(to right,${C.teal},${C.blue})`,
+                transition:"width 0.3s ease"}}/>
+            </div>
+            <span style={{fontSize:11,color:C.muted}}>{qIndex+1}/{QS.length}</span>
+          </div>
+        )}
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          {(step==="paywall"||step==="unlocked")&&(
+            <span style={{fontSize:11,color:C.teal,fontWeight:700}}>Profile Complete ✓</span>
+          )}
+          <button onClick={()=>document.body.classList.toggle("focus-mode")}
+            title="Toggle focus mode"
+            style={{background:"transparent",border:`1px solid ${C.border}`,
+              borderRadius:8,padding:"4px 10px",fontSize:11,color:C.muted,
+              cursor:"pointer",display:step==="questions"?"flex":"none",alignItems:"center",gap:4}}>
+            🎯 Focus
+          </button>
+        </div>
+      </div>
+
+      <div ref={topRef} style={{maxWidth:700,margin:"0 auto",padding:"0 16px 100px"}}>
+
+        {/* ── INTRO ─────────────────────────────────────────────────────── */}
+        {step==="intro"&&(
+          <div style={fade}>
+            {/* Resume banner */}
+            {showResume&&resumeData&&(
+              <div style={{background:"linear-gradient(135deg,#0A2535,#0A1628)",
+                border:`1px solid ${C.teal}60`,borderRadius:14,padding:"16px 18px",
+                marginTop:16,marginBottom:4,display:"flex",justifyContent:"space-between",
+                alignItems:"center",flexWrap:"wrap",gap:10}}>
+                <div>
+                  <div style={{fontWeight:700,fontSize:14,marginBottom:3}}>
+                    ↩ Continue where you left off?
+                  </div>
+                  <div style={{fontSize:12,color:C.muted}}>
+                    You completed {resumeData.qIndex} of {QS.length} questions last time.
+                  </div>
+                </div>
+                <div style={{display:"flex",gap:8}}>
+                  <button onClick={()=>{
+                    setAnswers(resumeData.answers);
+                    setQIndex(resumeData.qIndex);
+                    setIsTeen(resumeData.isTeen);
+                    setShowResume(false);
+                    tr(()=>setStep("questions"));
+                  }} style={{background:C.teal,color:C.navy,border:"none",borderRadius:8,
+                    padding:"8px 14px",fontWeight:700,fontSize:13,cursor:"pointer"}}>
+                    Resume →
+                  </button>
+                  <button onClick={()=>{
+                    try{localStorage.removeItem("acf_progress");}catch(e){}
+                    setShowResume(false);
+                  }} style={{background:"transparent",border:`1px solid ${C.border}`,
+                    color:C.muted,borderRadius:8,padding:"8px 12px",fontSize:12,cursor:"pointer"}}>
+                    Start fresh
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* Hero */}
+            <div style={{
+              background:"linear-gradient(135deg,#0F2847 0%,#0A1628 50%,#1A0A35 100%)",
+              borderRadius:20,padding:"32px 24px",margin:"20px 0 20px",
+              border:`1px solid ${C.border}`,position:"relative",overflow:"hidden"}}>
+              {/* Decorative orbs */}
+              <div style={{position:"absolute",top:-40,right:-40,width:150,height:150,
+                borderRadius:"50%",background:`radial-gradient(circle,${C.teal}15,transparent 70%)`}}/>
+              <div style={{position:"absolute",bottom:-30,left:-30,width:120,height:120,
+                borderRadius:"50%",background:`radial-gradient(circle,${C.purple}15,transparent 70%)`}}/>
+
+              <div style={{position:"relative"}}>
+                <div style={{display:"inline-flex",alignItems:"center",gap:6,
+                  background:`${C.teal}15`,border:`1px solid ${C.teal}40`,
+                  borderRadius:99,padding:"5px 14px",fontSize:11,color:C.teal,
+                  fontWeight:700,letterSpacing:1.2,marginBottom:16,textTransform:"uppercase"}}>
+                  🧠 The Most Complete ADHD Profile & Personalised Recommendations Available Online
+                </div>
+
+                <h1 style={{fontSize:"clamp(24px,6vw,38px)",fontWeight:900,lineHeight:1.15,
+                  letterSpacing:"-1.5px",margin:"0 0 16px"}}>
+                  The most complete ADHD profile<br/><span style={{
+                    background:`linear-gradient(135deg,${C.teal},${C.blue})`,
+                    WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+                    and recommendations that work.</span>
+                </h1>
+
+                <p style={{color:"#A8C4D8",fontSize:15,lineHeight:1.7,maxWidth:520,marginBottom:16}}>
+                  Most ADHD screeners ask 6 questions and give you a number. ADHDclearfocus measures
+                  <strong style={{color:C.white}}> 10 distinct neurological dimensions</strong> — then
+                  generates a <strong style={{color:C.teal}}>fully personalised action plan</strong> built
+                  around your specific profile. Not generic ADHD advice. Not a one-size-fits-all checklist.
+                  A targeted strategy for <em>your</em> brain, your highest-impact dimensions, and your
+                  daily life — backed by the strongest available clinical evidence.
+                </p>
+                <div style={{display:"flex",flexDirection:"column",gap:6,marginBottom:20,maxWidth:480}}>
+                  {["Your personalised plan targets your specific elevated dimensions — not all ADHD in general",
+                    "Evidence-based strategies cited to NICE NG87, JAMA RCTs, and WHO guidelines",
+                    "Prioritised by impact — what to tackle first, second, and third for your profile",
+                    "Delivered as a 14-page PDF report within 24 hours of assessment"
+                  ].map(t=>(
+                    <div key={t} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                      <span style={{color:C.teal,fontSize:13,flexShrink:0,marginTop:2}}>✓</span>
+                      <span style={{fontSize:13,color:"#A8C4D8",lineHeight:1.5}}>{t}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Social proof */}
+                <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:20,flexWrap:"wrap"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6}}>
+                    <div style={{display:"flex",gap:-2}}>
+                      {"⭐⭐⭐⭐⭐".split("").map((s,i)=>(
+                        <span key={i} style={{fontSize:13}}>{s}</span>
+                      ))}
+                    </div>
+                    <span style={{fontSize:12,color:C.muted}}>Developed by a chartered DPsych psychologist with lived ADHD experience</span>
+                  </div>
+                </div>
+
+                <button onClick={()=>{gtag("event","screener_start");tr(()=>setStep("consent"));}}
+                  style={{background:`linear-gradient(135deg,${C.teal},${C.blue})`,
+                    color:C.navy,border:"none",borderRadius:12,padding:"16px 28px",
+                    fontSize:17,fontWeight:900,cursor:"pointer",
+                    boxShadow:`0 8px 32px ${C.teal}40`,letterSpacing:"-0.3px"}}>
+                  Discover Your Full ADHD Profile →
+                </button>
+                <p style={{fontSize:12,color:C.muted,marginTop:10}}>
+                  35 questions · 14 minutes · Results available immediately
+                </p>
+                <div style={{display:"inline-flex",alignItems:"center",gap:6,
+                  background:"#00E67610",border:"1px solid #00E67630",
+                  borderRadius:99,padding:"5px 14px",fontSize:11,color:C.green,
+                  fontWeight:700,marginTop:8}}>
+                  🎁 14-day Pro trial available after assessment — no card required
+                </div>
+              </div>
+            </div>
+
+            {/* 10 Dimensions grid */}
+            <div style={{marginBottom:20}}>
+              <h2 style={{fontSize:16,fontWeight:800,marginBottom:4,textAlign:"center"}}>
+                10 Neurological Dimensions Measured
+              </h2>
+              <p style={{fontSize:13,color:C.muted,textAlign:"center",marginBottom:14,lineHeight:1.5}}>
+                Standard ADHD tools measure 2–3 dimensions. ADHDclearfocus measures all 10 areas
+                where ADHD affects the brain — giving you a complete neurocognitive map.
+              </p>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+                {Object.entries(DOMAINS).map(([key,d])=>(
+                  <div key={key} style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                    borderRadius:12,padding:"12px 14px",display:"flex",gap:10,alignItems:"flex-start"}}>
+                    <span style={{fontSize:18,flexShrink:0}}>{d.icon}</span>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:12,color:d.color,marginBottom:2}}>{d.label}</div>
+                      <div style={{color:C.muted,fontSize:11,lineHeight:1.4}}>{d.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Evidence base */}
+            <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+              borderRadius:14,padding:"18px 20px",marginBottom:16}}>
+              <div style={{fontSize:13,fontWeight:800,color:C.teal,marginBottom:10,
+                textTransform:"uppercase",letterSpacing:0.8}}>
+                🔬 Built on the strongest evidence available
+              </div>
+              <div style={{display:"grid",gap:8}}>
+                {[
+                  {fw:"WHO ASRS-v1.1",desc:"World Health Organisation validated screen — sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005). The gold standard brief ADHD assessment tool."},
+                  {fw:"Brown ADD Rating Scale",desc:"Thomas Brown's six-cluster executive function model (Brown, 2001) — activation, focus, effort, emotion, memory and action."},
+                  {fw:"DIVA-5.0 Protocol",desc:"Diagnostic Interview for ADHD in Adults developmental history framework (Kooij & Francken, 2010) — used in formal clinical assessments worldwide."},
+                  {fw:"Barkley Executive Function Model",desc:"Russell Barkley's self-regulation model (2012) — the most comprehensive neurological account of ADHD executive impairment."},
+                  {fw:"European ADHD Guidelines 2019",desc:"Kooij et al. (2019) updated consensus statement representing 80+ European ADHD specialists."},
+                  {fw:"Faraone et al. World Federation Consensus",desc:"The most comprehensive ADHD evidence synthesis ever published — 208 consensus statements (Faraone et al., 2021)."},
+                ].map(e=>(
+                  <div key={e.fw} style={{display:"flex",gap:10,alignItems:"flex-start"}}>
+                    <span style={{color:C.teal,fontSize:12,flexShrink:0,marginTop:2}}>✓</span>
+                    <div>
+                      <span style={{fontWeight:700,fontSize:12,color:C.white}}>{e.fw}: </span>
+                      <span style={{fontSize:12,color:C.muted,lineHeight:1.5}}>{e.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Clinical team bio */}
+            <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+              borderRadius:14,padding:"18px",marginBottom:16}}>
+              <div style={{display:"flex",gap:14,alignItems:"flex-start",marginBottom:12}}>
+                <img src="/logo_sm.png" alt="ADHDclearfocus"
+                  style={{width:52,height:52,borderRadius:"50%",objectFit:"cover",
+                    flexShrink:0,border:`2px solid ${C.teal}`}}/>
+                <div>
+                  <div style={{fontWeight:800,fontSize:14,marginBottom:3}}>Built by experts at the forefront of ADHD understanding</div>
+                  <div style={{color:C.muted,fontSize:12,lineHeight:1.65}}>
+                    ADHDclearfocus is developed by a multidisciplinary team of chartered psychologists,
+                    neurodevelopmental specialists, and researchers with over 15 years of combined clinical
+                    experience across NHS, inpatient, and specialist care settings in Ireland and the UK.
+                    Our team combines rigorous scientific expertise with lived ADHD experience — because
+                    understanding ADHD from the inside changes everything.
+                  </div>
+                </div>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+                {[
+                  {icon:"🔬",t:"Evidence-first",s:"Every recommendation cites peer-reviewed research"},
+                  {icon:"🧠",t:"Lived experience",s:"Our team includes people with ADHD diagnoses"},
+                  {icon:"🏥",t:"Clinically grounded",s:"NHS and specialist care background"},
+                  {icon:"🌍",t:"Always evolving",s:"Updated as ADHD science advances"},
+                ].map(i=>(
+                  <div key={i.t} style={{background:C.navy,borderRadius:10,padding:"10px 12px",
+                    display:"flex",gap:8,alignItems:"flex-start"}}>
+                    <span style={{fontSize:14,flexShrink:0}}>{i.icon}</span>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:11,color:C.white,marginBottom:2}}>{i.t}</div>
+                      <div style={{fontSize:10,color:C.muted,lineHeight:1.4}}>{i.s}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Pro subscription preview */}
+            <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+              borderRadius:16,padding:"20px",marginBottom:16}}>
+              <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:14}}>
+                <div>
+                  <div style={{fontSize:11,color:C.purple,fontWeight:700,textTransform:"uppercase",
+                    letterSpacing:1,marginBottom:4}}>ADHDclearfocus Pro</div>
+                  <div style={{fontWeight:900,fontSize:18}}>
+                    Everything you need to manage ADHD daily
+                  </div>
+                </div>
+                <div style={{textAlign:"right",flexShrink:0}}>
+                  <div style={{fontSize:22,fontWeight:900,color:C.teal}}>€5<span style={{fontSize:12,fontWeight:400,color:C.muted}}>/mo</span></div>
+                  <div style={{fontSize:10,color:C.muted}}>yearly · €10 monthly</div>
+                </div>
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
+                {[
+                  {icon:"🧠",t:"Full ADHD Profile",s:"10-dimension neurological report"},
+                  {icon:"👥",t:"Body Doubling",s:"Virtual silent co-working rooms"},
+                  {icon:"🚨",t:"Crisis Mode",s:"Binaural beats, breathing, grounding"},
+                  {icon:"🎙️",t:"Voice Diary",s:"AI coach knows your full profile"},
+                  {icon:"📚",t:"47 Strategies",s:"Evidence-based coping tools"},
+                  {icon:"🏷️",t:"15% Off Assessments",s:"ADHD & ASD clinical partners"},
+                  {icon:"📈",t:"Progress Tracking",s:"Monthly re-assessments"},
+                  {icon:"❓",t:"Live Q&A Sessions",s:"Monthly with clinical psychologist"},
+                ].map(f=>(
+                  <div key={f.t} style={{display:"flex",gap:8,alignItems:"flex-start",
+                    background:C.navy,borderRadius:10,padding:"10px 12px"}}>
+                    <span style={{fontSize:16,flexShrink:0}}>{f.icon}</span>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:12,color:C.white,marginBottom:1}}>{f.t}</div>
+                      <div style={{fontSize:10,color:C.muted,lineHeight:1.4}}>{f.s}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div style={{background:`${C.teal}10`,border:`1px solid ${C.teal}30`,
+                borderRadius:10,padding:"10px 14px",fontSize:12,color:C.muted,
+                lineHeight:1.6,marginBottom:12}}>
+                🎁 <strong style={{color:C.white}}>Complete the assessment today</strong> and receive
+                a lifetime discount code for €5/month Pro — locked forever, even when the price rises.
+                Plus a <strong style={{color:C.white}}>14-day free trial</strong> when Pro launches.
+              </div>
+              <button onClick={()=>{gtag("event","screener_start");tr(()=>setStep("consent"));}}
+                style={{width:"100%",background:`linear-gradient(135deg,${C.teal},${C.blue})`,
+                  color:C.navy,border:"none",borderRadius:12,padding:"14px",
+                  fontSize:15,fontWeight:900,cursor:"pointer"}}>
+                Start Your Assessment — It's Free →
+              </button>
+            </div>
+
+            {/* Disclaimer */}
+            <div style={{background:"#080F1A",border:`1px solid ${C.border}`,
+              borderRadius:10,padding:"11px 14px",fontSize:11,color:C.muted,lineHeight:1.65}}>
+              <strong style={{color:C.white}}>Important: </strong>
+              Educational self-awareness tool only. Results do not constitute a diagnosis of ADHD
+              or any other condition and do not establish a clinical relationship.
+              If you are in crisis contact the Samaritans free on{" "}
+              <strong style={{color:C.white}}>116 123</strong> (Ireland and UK, 24/7).
+            </div>
+          </div>
+        )}
+
+        {/* ── CONSENT ───────────────────────────────────────────────────── */}
+        {step==="consent"&&(
+          <div style={fade}>
+            <div style={{padding:"28px 0"}}>
+              <h2 style={{fontSize:22,fontWeight:900,marginBottom:8,letterSpacing:"-0.5px"}}>
+                Before we begin
+              </h2>
+              <p style={{color:C.muted,fontSize:14,lineHeight:1.65,marginBottom:20}}>
+                ADHDclearfocus measures health-related information under EU GDPR Article 9 
+                (special category data). We need your explicit consent before you start.
+              </p>
+
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:14,padding:18,marginBottom:16}}>
+                <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>This assessment will:</div>
+                {["Collect your responses to 35 questions about ADHD-related experiences",
+                  "Process your responses to generate a personalised ADHD neurological profile",
+                  "Store your email address (if provided) for report delivery and updates",
+                  "Use anonymised analytics to improve the platform (Google Analytics)"].map(t=>(
+                  <div key={t} style={{display:"flex",gap:10,marginBottom:8}}>
+                    <span style={{color:C.teal,flexShrink:0}}>✓</span>
+                    <span style={{fontSize:13,color:C.muted,lineHeight:1.5}}>{t}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:20,
+                background:C.navyLight,borderRadius:12,padding:14,
+                border:`1px solid ${consentChecked?C.teal:C.border}`,cursor:"pointer"}}
+                onClick={()=>setConsentChecked(!consentChecked)}>
+                <div style={{width:20,height:20,borderRadius:5,border:`2px solid ${consentChecked?C.teal:C.muted}`,
+                  background:consentChecked?C.teal:"transparent",flexShrink:0,
+                  display:"flex",alignItems:"center",justifyContent:"center",marginTop:1}}>
+                  {consentChecked&&<span style={{color:C.navy,fontSize:12,fontWeight:900}}>✓</span>}
+                </div>
+                <div style={{fontSize:13,color:C.muted,lineHeight:1.6}}>
+                  I consent to ADHDclearfocus processing my responses as health-related data
+                  to generate my personalised ADHD profile. I understand this is an educational
+                  tool, not a clinical diagnosis. I have read the{" "}
+                  <a href="/legal.html" style={{color:C.teal}}>Privacy Policy</a>.
+                </div>
+              </div>
+
+              <button onClick={()=>{if(consentChecked)tr(()=>setStep("age"));}}
+                style={{width:"100%",
+                  background:consentChecked?`linear-gradient(135deg,${C.teal},${C.blue})`:"#1A2E4A",
+                  color:consentChecked?C.navy:C.muted,border:"none",borderRadius:12,
+                  padding:"15px",fontSize:16,fontWeight:900,
+                  cursor:consentChecked?"pointer":"not-allowed",marginBottom:10,
+                  transition:"all 0.2s"}}>
+                {consentChecked?"Continue to Assessment →":"Please tick the consent box above"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ── AGE ───────────────────────────────────────────────────────── */}
+        {step==="age"&&(
+          <div style={fade}>
+            <div style={{padding:"28px 0"}}>
+              <h2 style={{fontSize:22,fontWeight:900,marginBottom:6}}>One quick question</h2>
+              <p style={{color:C.muted,marginBottom:22,fontSize:14,lineHeight:1.6}}>
+                This helps us use age-appropriate language throughout your assessment.
+              </p>
+              <div style={{display:"grid",gap:10}}>
+                {[{l:"I am 13–17 years old",s:"Adolescent version — school and home context",teen:true},
+                  {l:"I am 18 or older",s:"Adult version — work, relationships and daily life",teen:false}].map(o=>(
+                  <button key={o.l} onClick={()=>{setIsTeen(o.teen);tr(()=>setStep("questions"));}}
+                    style={{background:C.navyLight,border:`2px solid ${C.border}`,borderRadius:14,
+                      padding:"20px 18px",textAlign:"left",cursor:"pointer",color:C.white,
+                      display:"flex",justifyContent:"space-between",alignItems:"center",
+                      transition:"border-color 0.2s"}}
+                    onMouseEnter={e=>e.currentTarget.style.borderColor=C.teal}
+                    onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
+                    <div>
+                      <div style={{fontWeight:700,fontSize:15,marginBottom:4}}>{o.l}</div>
+                      <div style={{color:C.muted,fontSize:12}}>{o.s}</div>
+                    </div>
+                    <span style={{color:C.teal,fontSize:20}}>→</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── QUESTIONS ─────────────────────────────────────────────────── */}
+        {step==="questions"&&currentQ&&(
+          <div style={fade}>
+            <div style={{paddingTop:20}}>
+              {/* Domain label */}
+              <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}>
+                <div style={{display:"flex",alignItems:"center",gap:6}}>
+                  <span style={{fontSize:14}}>{DOMAINS[currentQ.d]?.icon}</span>
+                  <span style={{fontSize:11,color:DOMAINS[currentQ.d]?.color||C.teal,
+                    fontWeight:700,textTransform:"uppercase",letterSpacing:1}}>
+                    {DOMAINS[currentQ.d]?.label}
+                  </span>
+                </div>
+                <span style={{fontSize:11,color:C.muted}}>{progress}%</span>
+              </div>
+
+              {/* Question card */}
+              <div style={{background:`linear-gradient(135deg,${C.navyLight},${C.navyMid})`,
+                border:`1px solid ${DOMAINS[currentQ.d]?.color||C.teal}40`,
+                borderRadius:16,padding:"24px 20px",marginBottom:16,
+                boxShadow:`0 4px 24px ${DOMAINS[currentQ.d]?.color||C.teal}10`}}>
+                <p style={{fontSize:"clamp(15px,3.5vw,18px)",fontWeight:600,lineHeight:1.6,margin:0}}>
+                  {isTeen?currentQ.teen:currentQ.a}
+                </p>
+              </div>
+
+              {/* Answer options */}
+              <div style={{display:"grid",gap:8}}>
+                {(currentQ.t==="agree"?AGREE:FREQ).map(opt=>{
+                  const sel=answers[currentQ.id]===opt.v;
+                  const col=DOMAINS[currentQ.d]?.color||C.teal;
+                  return(
+                    <button key={opt.v} onClick={()=>{if(navigator.vibrate)navigator.vibrate(25);handleAnswer(opt.v);}}
+                      style={{background:sel?col:C.navyLight,
+                        border:`2px solid ${sel?col:C.border}`,
+                        borderRadius:11,padding:"13px 16px",textAlign:"left",cursor:"pointer",
+                        color:sel?C.navy:C.white,fontWeight:sel?700:400,fontSize:14,
+                        transition:"all 0.15s",display:"flex",justifyContent:"space-between",
+                        alignItems:"center"}}>
+                      <span>{opt.l}</span>
+                      {sel&&<span style={{fontWeight:900}}>✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {qIndex>0&&(
+                <button onClick={()=>tr(()=>setQIndex(qIndex-1))}
+                  style={{background:"transparent",border:"none",color:C.muted,
+                    cursor:"pointer",fontSize:12,marginTop:14,padding:"4px 0"}}>
+                  ← Previous question
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── PAYWALL ───────────────────────────────────────────────────── */}
+        {step==="paywall"&&result&&(
+          <div style={fade}>
+            <div style={{paddingTop:20,animation:"slideInUp 0.5s ease"}}>
+              {/* Result card */}
+              <div style={{
+                background:`linear-gradient(135deg,${C.navyMid},${C.navyLight})`,
+                border:`2px solid ${result.color}50`,borderRadius:18,
+                padding:"24px 20px",marginBottom:16,textAlign:"center",
+                boxShadow:`0 8px 32px ${result.color}20`}}>
+                <div style={{display:"inline-block",
+                  background:`${result.color}20`,border:`1px solid ${result.color}`,
+                  borderRadius:99,padding:"4px 16px",fontSize:11,fontWeight:700,
+                  color:result.color,letterSpacing:1.2,textTransform:"uppercase",marginBottom:12,animation:"slideInUp 0.5s ease"}}>
+                  ✓ Your 10-Dimension Profile is Ready
+                </div>
+                <h2 style={{fontSize:"clamp(17px,4vw,24px)",fontWeight:900,lineHeight:1.3,
+                  margin:"0 0 10px",letterSpacing:"-0.5px"}}>
+                  {result.level==="Elevated"?"Your profile shows a significant ADHD neurological pattern":
+                   result.level==="Moderate"?"Your profile shows meaningful ADHD-related patterns":
+                   "Your profile shows lower ADHD indicators at this time"}
+                </h2>
+                <p style={{color:C.muted,fontSize:13,lineHeight:1.65}}>
+                  {result.level==="Elevated"?
+                    "Your responses across 10 neurological dimensions are consistent with clinically meaningful ADHD. The full profile, evidence-based strategies and next steps are locked below.":
+                   result.level==="Moderate"?
+                    "Your responses indicate ADHD-related patterns across several dimensions. Understanding your full profile will give you targeted, evidence-based strategies.":
+                    "Your responses suggest lower ADHD indicators, though some dimension patterns were identified. Your full profile contains important detail."}
+                </p>
+              </div>
+
+              {/* ASRS flag — show teaser only, not details */}
+              {result.asrsFlag&&(
+                <div style={{background:"#1A1000",border:"1px solid #FFB34780",
+                  borderRadius:12,padding:"14px 16px",marginBottom:16,display:"flex",gap:12}}>
+                  <span style={{fontSize:18,flexShrink:0}}>⚠️</span>
+                  <div>
+                    <div style={{fontWeight:700,color:C.amber,fontSize:13,marginBottom:3}}>
+                      Clinical screening threshold triggered
+                    </div>
+                    <div style={{color:C.muted,fontSize:12,lineHeight:1.55}}>
+                      A validated clinical screening threshold was met in your responses.
+                      The full clinical interpretation, what this means for you specifically,
+                      and your recommended next steps are included in your Clarity Report.
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Social proof + population context */}
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:12,padding:"14px 16px",marginBottom:12}}>
+                <div style={{display:"flex",justifyContent:"space-between",
+                  marginBottom:10,flexWrap:"wrap",gap:8}}>
+                  {[
+                    {n:"39",l:"questions answered"},
+                    {n:"10",l:"dimensions profiled"},
+                    {n:"668K+",l:"on UK NHS waitlist"},
+                  ].map(s=>(
+                    <div key={s.l} style={{textAlign:"center",flex:1,minWidth:80}}>
+                      <div style={{fontSize:18,fontWeight:900,color:C.teal}}>{s.n}</div>
+                      <div style={{fontSize:10,color:C.muted,lineHeight:1.3}}>{s.l}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                <span style={{fontSize:22,flexShrink:0}}>📊</span>
+                <div>
+                  <div style={{fontWeight:700,fontSize:13,marginBottom:3}}>
+                    How you compare
+                  </div>
+                  <div style={{fontSize:12,color:C.muted,lineHeight:1.55}}>
+                    {result.totalPct>=65
+                      : "Your profile shows patterns consistent with elevated neurological load across multiple ADHD dimensions — a pattern seen in approximately 5–8% of adults (Faraone et al., 2021). Your full breakdown unlocks with your report."
+                      : result.totalPct>=40
+                      ? "Your profile shows moderate neurological load across ADHD dimensions — above the general population average. Common in adults with partially compensated ADHD. Your full breakdown is in your report."
+                      : "Your profile shows lower overall neurological load, though specific domain patterns were identified worth reviewing in detail. Full breakdown unlocks with your report."
+                    }
+                  </div>
+                </div>
+                </div>
+              </div>
+
+              {/* Locked dimensions preview */}
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:14,padding:"16px",marginBottom:16}}>
+                <div style={{fontSize:13,fontWeight:700,marginBottom:8,color:C.muted}}>
+                  🔒 Your personalised plan is locked
+                </div>
+                <div style={{fontSize:12,color:C.muted,marginBottom:12,lineHeight:1.55}}>
+                  Your report contains a <strong style={{color:C.white}}>targeted strategy plan built
+                  specifically for your neurological profile</strong> — prioritised by your highest-impact
+                  dimensions, with step-by-step evidence-based actions. Not generic ADHD advice.
+                  Your plan, for your brain.
+                </div>
+                <div style={{display:"grid",gap:8}}>
+                  {Object.entries(DOMAINS).map(([key,d])=>(
+                    <div key={key} style={{display:"flex",justifyContent:"space-between",
+                      alignItems:"center",padding:"6px 0",
+                      borderBottom:`1px solid ${C.border}`}}>
+                      <div style={{display:"flex",alignItems:"center",gap:8}}>
+                        <span style={{fontSize:14}}>{d.icon}</span>
+                        <span style={{fontSize:13,color:C.muted}}>{d.label}</span>
+                      </div>
+                      <div style={{background:C.navyMid,borderRadius:6,padding:"2px 10px",
+                        fontSize:12,color:C.muted}}>🔒 Locked</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Email capture */}
+              {!emailSubmitted?(
+                <div style={{background:C.navyLight,border:`1px solid ${C.teal}40`,
+                  borderRadius:16,padding:"20px",marginBottom:16}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}>
+                    <div style={{width:8,height:8,borderRadius:"50%",background:C.teal,
+                      animation:"pulse 2s infinite"}}/>
+                    <div style={{fontWeight:800,fontSize:15}}>Your profile is ready</div>
+                  </div>
+                  <div style={{color:C.muted,fontSize:13,marginBottom:14,lineHeight:1.6}}>
+                    Enter your email to unlock your complete 10-dimension profile and access your personalised report.
+                  </div>
+                  <div style={{display:"flex",gap:8,marginBottom:8}}>
+                    <input type="email" value={email}
+                      onChange={e=>{setEmail(e.target.value);setEmailError("");}}
+                      onKeyDown={e=>e.key==="Enter"&&handleEmailSubmit()}
+                      placeholder="your@email.com"
+                      style={{flex:1,background:C.navy,
+                        border:`1px solid ${emailError?C.red:C.border}`,
+                        borderRadius:10,padding:"13px 14px",color:C.white,fontSize:14,outline:"none"}}/>
+                    <button onClick={handleEmailSubmit} disabled={emailLoading}
+                      style={{background:emailLoading?"#333":`linear-gradient(135deg,${C.teal},${C.blue})`,
+                        color:C.navy,border:"none",borderRadius:10,padding:"13px 18px",
+                        fontWeight:800,fontSize:14,cursor:emailLoading?"not-allowed":"pointer",minWidth:90}}>
+                      {emailLoading?"...":"Unlock →"}
+                    </button>
+                  </div>
+                  {emailError&&<div style={{fontSize:12,color:C.red,marginBottom:8}}>{emailError}</div>}
+                  <label style={{display:"flex",alignItems:"flex-start",gap:8,cursor:"pointer"}}>
+                    <input type="checkbox" checked={emailConsent}
+                      onChange={e=>setEmailConsent(e.target.checked)}
+                      style={{marginTop:3,flexShrink:0,accentColor:C.teal}}/>
+                    <span style={{fontSize:11,color:C.muted,lineHeight:1.55}}>
+                      I agree to receive my results and evidence-based ADHD content from ADHDclearfocus.
+                      Unsubscribe any time.
+                    </span>
+                  </label>
+                </div>
+              ):(
+                <div>
+                  {/* Report CTA */}
+                  <div style={{background:C.navyLight,border:`2px solid ${C.teal}`,
+                    borderRadius:16,padding:"20px",marginBottom:12,position:"relative"}}>
+                    <div style={{position:"absolute",top:-12,right:16,
+                      background:C.teal,color:C.navy,fontSize:10,fontWeight:900,
+                      padding:"3px 12px",borderRadius:99}}>AVAILABLE NOW</div>
+                    <div style={{display:"flex",justifyContent:"space-between",
+                      alignItems:"flex-start",marginBottom:12}}>
+                      <div>
+                        <div style={{fontSize:11,color:C.teal,fontWeight:700,
+                          textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>
+                          Full Clarity Report
+                        </div>
+                        <div style={{fontSize:30,fontWeight:900}}>
+                          €49 <span style={{fontSize:13,fontWeight:400,color:C.muted}}>one-off</span>
+                        </div>
+                      </div>
+                      <span style={{fontSize:26}}>📋</span>
+                    </div>
+                    {["Complete 10-dimension neurological profile with % scores",
+                      "14-page personalised evidence-based PDF report",
+                      "Strategies for each of your elevated dimensions",
+                      "Next steps guide and formal assessment pathway",
+                      "Delivered to your inbox within 24 hours"].map(f=>(
+                      <div key={f} style={{display:"flex",gap:8,marginBottom:7}}>
+                        <span style={{color:C.teal,fontSize:13,flexShrink:0}}>✓</span>
+                        <span style={{fontSize:13,color:C.muted,lineHeight:1.4}}>{f}</span>
+                      </div>
+                    ))}
+                    <button onClick={()=>{
+                      gtag("event","purchase_click",{product:"clarity_report",value:49});
+                      createCheckout(result,email,isTeen);
+                      tr(()=>setStep("unlocked"));
+                    }} style={{width:"100%",
+                      background:`linear-gradient(135deg,${C.teal},${C.blue})`,
+                      color:C.navy,border:"none",borderRadius:12,padding:"15px",
+                      fontWeight:900,fontSize:16,cursor:"pointer",marginTop:14,
+                      boxShadow:`0 6px 24px ${C.teal}40`}}>
+                      Get My Full Report — €49
+                    </button>
+                  </div>
+
+                  <FoundingCTA daysLeft={daysLeft} showDetail={showDetail}
+                    setShowDetail={setShowDetail} proEmail={proEmail}
+                    setProEmail={setProEmail} proJoined={proJoined}
+                    onJoin={handleProJoin} inPaywall={true}/>
+
+                  <div style={{display:"flex",justifyContent:"center",gap:16,marginTop:12,flexWrap:"wrap"}}>
+                    {["🔒 Secure checkout","📧 Delivered within 24 hours","↩ 7-day refund policy"].map(s=>(
+                      <span key={s} style={{fontSize:11,color:C.muted}}>{s}</span>
+                    ))}
+                  </div>
+
+                  {/* 15% discount on clinical assessments */}
+                  <div style={{background:"linear-gradient(135deg,#0A1A10,#0A1628)",
+                    border:"1px solid #00E67640",borderRadius:14,padding:"16px",marginTop:12}}>
+                    <div style={{display:"flex",alignItems:"flex-start",gap:10,marginBottom:8}}>
+                      <span style={{fontSize:18,flexShrink:0}}>🏥</span>
+                      <div>
+                        <div style={{fontWeight:800,fontSize:13,color:C.green,marginBottom:3}}>
+                          15% Off Formal ADHD & ASD Assessments
+                        </div>
+                        <div style={{fontSize:12,color:C.muted,lineHeight:1.6}}>
+                          ADHDclearfocus subscribers receive a <strong style={{color:C.white}}>15% discount
+                          on formal ADHD and ASD clinical assessments</strong> through our registered clinical
+                          partners in Ireland and the UK. Your assessment code is generated automatically
+                          on subscription.
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:6,marginBottom:8}}>
+                      {[
+                        {icon:"🧠",t:"ADHD Assessment",s:"Full diagnostic assessment"},
+                        {icon:"🎯",t:"ASD Assessment",s:"Autism spectrum evaluation"},
+                        {icon:"📋",t:"Combined ADHD+ASD",s:"Dual pathway assessment"},
+                        {icon:"🔄",t:"Review Appointments",s:"Follow-up clinical sessions"},
+                      ].map(i=>(
+                        <div key={i.t} style={{background:"#00E67608",border:"1px solid #00E67625",
+                          borderRadius:8,padding:"8px 10px",display:"flex",gap:6,alignItems:"flex-start"}}>
+                          <span style={{fontSize:12,flexShrink:0}}>{i.icon}</span>
+                          <div>
+                            <div style={{fontSize:11,fontWeight:700,color:C.white}}>{i.t}</div>
+                            <div style={{fontSize:10,color:C.muted}}>{i.s}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{background:"#00E67610",border:"1px solid #00E67630",
+                      borderRadius:8,padding:"10px 12px",fontSize:11,color:C.muted,lineHeight:1.6}}>
+                      <strong style={{color:C.green}}>How it works:</strong> Subscribe to any ADHDclearfocus
+                      plan to receive your unique 15% discount code. Valid with our registered clinical
+                      partners who meet DSM-5/ICD-11 diagnostic standards — the same standards accepted
+                      by HSE, NHS, and government services. Partners listed in your member dashboard on launch.
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── UNLOCKED ──────────────────────────────────────────────────── */}
+        {step==="unlocked"&&result&&(
+          <div style={fade}>
+            <div style={{paddingTop:20}}>
+              {/* Summary */}
+              <div style={{
+                background:`linear-gradient(135deg,${C.navyMid},${C.navyLight})`,
+                border:`2px solid ${result.color}50`,borderRadius:18,
+                padding:"22px 20px",marginBottom:16,textAlign:"center"}}>
+                <div style={{display:"inline-block",
+                  background:`${result.color}20`,border:`1px solid ${result.color}`,
+                  borderRadius:99,padding:"4px 14px",fontSize:11,fontWeight:700,
+                  color:result.color,letterSpacing:1.2,textTransform:"uppercase",marginBottom:10}}>
+                  ✓ Your 10-Dimension Profile is Ready
+                </div>
+                <p style={{color:C.muted,fontSize:13,lineHeight:1.6}}>
+                  Your complete 10-dimension profile is below. Your personalised PDF report
+                  has been sent to your email.
+                </p>
+              </div>
+
+              {/* ASRS */}
+              {result.asrsFlag&&(
+                <div style={{background:"#1A1000",border:"1px solid #FFB34780",
+                  borderRadius:12,padding:"14px 16px",marginBottom:16,display:"flex",gap:12}}>
+                  <span style={{fontSize:18,flexShrink:0}}>⚠️</span>
+                  <div>
+                    <div style={{fontWeight:700,color:C.amber,fontSize:13,marginBottom:3}}>
+                      WHO ASRS-v1.1: Positive ({result.asrsCount}/6 Part A items)
+                    </div>
+                    <div style={{color:C.muted,fontSize:12,lineHeight:1.55}}>
+                      Sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005).
+                      Formal assessment with a qualified clinician is recommended.
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 10 Dimension bars */}
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:16,padding:"18px 20px",marginBottom:16}}>
+                <div style={{fontWeight:800,fontSize:15,marginBottom:16}}>
+                  Your 10-Dimension Neurological Profile
+                </div>
+                {Object.entries(DOMAINS).map(([key,d])=>(
+                  <DBar key={key} label={d.label} icon={d.icon}
+                    pct={result.pcts[key]||0} color={dc(key)}/>
+                ))}
+                <div style={{fontSize:11,color:C.muted,marginTop:10,lineHeight:1.5}}>
+                  🟡 Amber (65%+) = Clinically significant ·
+                  🔵 Teal (40–64%) = Moderate ·
+                  🟢 Green (&lt;40%) = Lower priority
+                </div>
+              </div>
+
+              {/* Evidence-based recommendations */}
+              <div style={{marginBottom:16}}>
+                <div style={{fontWeight:800,fontSize:15,marginBottom:4}}>
+                  Evidence-Based Recommendations
+                </div>
+                <div style={{color:C.muted,fontSize:12,marginBottom:12,lineHeight:1.5}}>
+                  Tap any dimension to expand your personalised strategies.
+                  All strategies cite peer-reviewed clinical literature.
+                </div>
+                {Object.entries(DOMAINS).map(([key,d])=>{
+                  const pct=result.pcts[key]||0;
+                  if(pct<20)return null;
+                  const isOpen=openDomain===key;
+                  const color=dc(key);
+                  const RECS_DATA={
+                    inattention:{
+                      high:["Use 25-minute focused work blocks with 5-minute breaks (Safren et al., 2010 JAMA RCT — significant inattention reduction).",
+                        "Implement a single external capture system for all tasks. Barkley (2012): 'externalising the future' removes reliance on impaired working memory.",
+                        "Reduce environmental distractors: noise-cancelling headphones, notification blocking, single-tab working (NICE NG87, 2018 — first-line recommendation).",
+                        "Front-load demanding tasks when attentional capacity is highest — typically morning or peak medication effectiveness (NICE NG87, 2018)."],
+                      mod:["Notice when attention drifts rather than forcing sustained focus.",
+                        "Background white noise or instrumental music at moderate volume can raise arousal to optimal levels (Abikoff et al., 1996)."]},
+                    hyperactivity:{
+                      high:["20-30 minutes aerobic exercise before demanding work — improvements comparable to low-dose stimulant medication (Hoza et al., 2015; Pontifex et al., 2013).",
+                        "Extend response latency: 5-second pause before verbal replies, 24-hour pause before new commitments (Barkley, 2012 inhibitory control model).",
+                        "Adapted mindfulness: Zylowska et al. (2008) RCT showed significant ADHD hyperactivity reduction from 8-week adapted programme.",
+                        "Build intentional movement into your working day — standing desk, walking meetings, scheduled breaks (European ADHD Guidelines, Kooij et al., 2019)."],
+                      mod:["Identify environments and times that trigger restlessness.",
+                        "15-minute brisk walk before demanding tasks improves inhibitory control in ADHD (Pontifex et al., 2013)."]},
+                    executive:{
+                      high:["Externalise executive function entirely: visual weekly planner, daily task list with time estimates, physical countdown timer (Barkley, 2012).",
+                        "Implementation intentions: 'On Tuesday at 9am I will sit at my desk and write the introduction for 25 minutes.' Gollwitzer (1999) showed if-then planning significantly reduces initiation failure.",
+                        "Body-doubling — working alongside another person, even silently and virtually. Solanto (2011) documents this as consistently effective.",
+                        "Break every task into smallest possible components. Apply the 2-minute rule: tasks completable in 2 minutes should be done immediately."],
+                      mod:["One consistent morning routine reduces executive demand of recurring decisions (Barkley, 2012).",
+                        "If-then planning: Gollwitzer & Sheeran (2006) meta-analysis of 94 studies showed medium-to-large effect on goal attainment."]},
+                    emotional:{
+                      high:["Emotional dysregulation in ADHD is neurologically driven — reduced prefrontal regulation of amygdala reactivity (Shaw et al., 2014). Not a character trait.",
+                        "Implement a physical pause before emotionally activating responses. Ramsay (2020) identifies response latency extension as primary CBT target for ADHD emotional impulsiveness.",
+                        "Precise affect labelling reduces amygdala activation and increases prefrontal regulatory activity (Lieberman et al., 2007).",
+                        "Address Rejection Sensitive Dysphoria through CBT cognitive restructuring — Ramsay (2020) identifies RSD as most impactful under-addressed dimension of adult ADHD."],
+                      mod:["One-word daily emotion log for 4 weeks reveals patterns linked to sleep, medication timing, and triggers.",
+                        "Identify 3 reliable de-escalation strategies and write them somewhere visible before emotional activation."]},
+                    working_memory:{
+                      high:["Externalise working memory completely — write everything down immediately. The ADHD brain cannot hold multi-step sequences reliably (Barkley, 2012).",
+                        "Read aloud or sub-vocalise complex instructions to strengthen encoding (dual coding theory — Paivio, 1991).",
+                        "Reduce working memory load during tasks by closing irrelevant tabs, apps and conversations."],
+                      mod:["Repeat back instructions to the speaker immediately to consolidate encoding.",
+                        "Use written checklists for all multi-step processes."]},
+                    time:{
+                      high:["Use physical timers for all work blocks — the ADHD brain lacks reliable internal time tracking (Barkley, 2011 time blindness model).",
+                        "Time estimation practice: before every task, estimate duration, then record actual time. 2 weeks of this significantly improves temporal awareness.",
+                        "Set alarms for transitions 10 minutes before they need to happen, not at the transition time."],
+                      mod:["Visible clock in your working environment at all times.",
+                        "Estimate task duration before starting — most ADHD adults underestimate by 30-50%."]},
+                    hyperfocus:{
+                      high:["Use hyperfocus strategically — schedule deep work during periods of natural high interest and use external alarms to exit.",
+                        "Create transition rituals for exiting hyperfocus states: a physical action (standing, making a drink) signals the brain to shift (Monsell, 2003 task switching).",
+                        "Pair uninteresting but necessary tasks with slightly interesting contexts — the interest-based nervous system (Dodson, 2019) requires engagement to activate."],
+                      mod:["Notice your hyperfocus patterns — which topics trigger them, and what time of day.",
+                        "Use interest as a productivity tool deliberately rather than accidentally."]},
+                    rsd:{
+                      high:["RSD in ADHD is neurologically driven — the same prefrontal inhibition failure that creates emotional dysregulation (Dodson, 2019; Barkley, 2010).",
+                        "CBT cognitive restructuring for RSD: identify the distortions (all-or-nothing, catastrophising, mind-reading) and develop evidence-based counter-statements (Ramsay, 2020).",
+                        "24-hour rule before responding to perceived criticism — the RSD response is immediate but often inaccurate. Waiting allows prefrontal reappraisal.",
+                        "Psychoeducation for people in your life about RSD reduces triggering and improves relationship outcomes (Orlov, 2010)."],
+                      mod:["Notice when RSD is activated — the emotional intensity is disproportionate to objective events.",
+                        "One written counter-statement for your most common RSD trigger."]},
+                    developmental:{
+                      high:["ADHD heritability is 70-80% (Faraone et al., 2021). Childhood-onset difficulties are a stable neurological difference, not a character trait.",
+                        "Compile a developmental timeline — school reports, teacher comments, early employment patterns. This provides the informant history required for formal DIVA-5.0 assessment.",
+                        "Late identification is common — compensatory strategies (high intelligence, structure, high stakes) often mask ADHD until their collapse in university, employment or parenthood."],
+                      mod:["Speak with a parent or sibling about childhood behaviour — informant history is clinically valuable for formal assessment.",
+                        "Old school reports often contain teacher observations diagnostically relevant decades later."]},
+                    impact:{
+                      high:["In Ireland: Employment Equality Acts 1998-2015 require reasonable workplace accommodations for ADHD. UK: Equality Act 2010.",
+                        "Automate all recurring financial obligations through direct debit. Batch administrative tasks to a single weekly block.",
+                        "Psychoeducation for close partners and family members significantly improves relationship outcomes (Orlov, 2010; Bramham, 2009).",
+                        "Formal assessment unlocks stimulant medication (Cohen's d = 0.9 for methylphenidate — largest effect size in psychiatric medicine, Faraone et al., 2021) and legal workplace protections."],
+                      mod:["Identify the 1-2 domains causing most friction and focus there first.",
+                        "Keep a friction log for one week — note every ADHD-related moment of difficulty."]},
+                  };
+                  const recs=RECS_DATA[key];
+                  const items=pct>=50?(recs?.high||[]):(recs?.mod||[]);
+                  if(!items.length)return null;
+
+                  return(
+                    <div key={key} style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                      borderRadius:13,marginBottom:8,overflow:"hidden"}}>
+                      <button onClick={()=>setOpenDomain(isOpen?null:key)}
+                        style={{width:"100%",background:"transparent",border:"none",
+                          padding:"14px 16px",textAlign:"left",cursor:"pointer",color:C.white,
+                          display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                        <div style={{display:"flex",alignItems:"center",gap:10}}>
+                          <span style={{fontSize:16}}>{d.icon}</span>
+                          <div>
+                            <div style={{fontWeight:700,fontSize:13,color:d.color}}>{d.label}</div>
+                            <div style={{color:C.muted,fontSize:11,marginTop:1}}>
+                              {result.pcts[key]}% · {pct>=65?"Priority":"Focus"} area
+                            </div>
+                          </div>
+                        </div>
+                        <span style={{color:C.muted,transform:isOpen?"rotate(180deg)":"rotate(0deg)",
+                          transition:"transform 0.2s",display:"inline-block",fontSize:16}}>▾</span>
+                      </button>
+                      {isOpen&&(
+                        <div style={{padding:"0 16px 16px",borderTop:`1px solid ${C.border}`}}>
+                          {items.map((s,i)=>(
+                            <div key={i} style={{display:"flex",gap:10,background:C.navy,
+                              borderRadius:10,padding:"12px 14px",marginBottom:7,marginTop:i===0?12:0}}>
+                              <span style={{color,fontWeight:800,fontSize:13,flexShrink:0,marginTop:1}}>
+                                {i+1}.
+                              </span>
+                              <p style={{color:C.muted,fontSize:12,lineHeight:1.7,margin:0}}>{s}</p>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Strategies link */}
+              <a href="/strategies.html" style={{textDecoration:"none"}}>
+                <div style={{background:"linear-gradient(135deg,#0A1528,#112240)",
+                  border:`1px solid ${C.teal}40`,borderRadius:14,padding:"16px 18px",
+                  marginBottom:10,display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
+                  <span style={{fontSize:28}}>📚</span>
+                  <div>
+                    <div style={{fontWeight:800,fontSize:14,marginBottom:3}}>
+                      47 Evidence-Based Coping Strategies
+                    </div>
+                    <div style={{fontSize:12,color:C.muted,lineHeight:1.55}}>
+                      Full animated strategy guide — includes a built-in focus timer, mood check-in,
+                      and step-by-step guides for every ADHD dimension.
+                    </div>
+                  </div>
+                  <span style={{color:C.teal,fontSize:18,flexShrink:0}}>→</span>
+                </div>
+              </a>
+
+              {/* Coming soon features teaser */}
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:14,padding:"16px 18px",marginBottom:14}}>
+                <div style={{fontSize:11,color:C.amber,fontWeight:700,textTransform:"uppercase",
+                  letterSpacing:1,marginBottom:10}}>🚀 Coming in Pro</div>
+                <div style={{display:"grid",gap:8}}>
+                  {[
+                    {icon:"👥",title:"Body Doubling Rooms",desc:"Virtual silent co-working sessions. Camera-off by default. Pomodoro-synced. The most evidence-backed ADHD productivity tool."},
+                    {icon:"🚨",title:"Crisis Mode",desc:"Pavlovian-conditioned calming sounds + breathing visualiser + biometric integration. Stress intervention that actually works for ADHD brains."},
+                    {icon:"🎙️",title:"Voice Diary & AI Coach",desc:"Speak your day. Your AI coach responds with ADHD-aware guidance built around your specific neurological profile."},
+                    {icon:"📊",title:"Progress Tracking",desc:"Monthly re-assessments across all 10 dimensions using validated scales. See real change over time with your own data."},
+                  ].map(f=>(
+                    <div key={f.title} style={{display:"flex",gap:10,alignItems:"flex-start",
+                      background:C.navy,borderRadius:10,padding:"10px 12px"}}>
+                      <span style={{fontSize:16,flexShrink:0}}>{f.icon}</span>
+                      <div>
+                        <div style={{fontWeight:700,fontSize:12,color:C.white,marginBottom:2}}>{f.title}</div>
+                        <div style={{fontSize:11,color:C.muted,lineHeight:1.5}}>{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Report delivery confirmation */}
+              <div style={{
+                background:`linear-gradient(135deg,${C.navyLight},#0A1A2E)`,
+                border:`1px solid ${C.teal}30`,borderRadius:16,
+                padding:"20px",marginBottom:16,textAlign:"center"}}>
+                <div style={{fontSize:22,marginBottom:8}}>📋</div>
+                <div style={{fontWeight:900,fontSize:15,marginBottom:6}}>
+                  Your 14-page PDF report is on its way
+                </div>
+                <div style={{color:C.muted,fontSize:13,lineHeight:1.6,marginBottom:12}}>
+                  A personalised evidence-based report covering all 10 neurological dimensions
+                  has been sent to your email.
+                </div>
+                <div style={{background:C.navy,border:`1px solid ${C.border}`,borderRadius:8,
+                  padding:"8px 16px",display:"inline-block",fontSize:12,color:C.teal}}>
+                  📧 Check your inbox
+                </div>
+              </div>
+
+
+              {/* Loyalty discount — assessment completers */}
+              <div style={{background:"linear-gradient(135deg,#0A2010,#0A1628)",
+                border:`1px solid ${C.green}50`,borderRadius:16,padding:"20px",marginBottom:16}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+                  <div>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
+                    <div style={{fontSize:11,color:C.green,fontWeight:700,
+                      textTransform:"uppercase",letterSpacing:1}}>
+                      🎁 Assessment Completer Reward
+                    </div>
+                    <div style={{background:"#FF525220",border:"1px solid #FF525240",
+                      borderRadius:99,padding:"2px 8px",fontSize:10,color:"#FF8080",fontWeight:700}}>
+                      {daysLeft} days left · Founding rate
+                    </div>
+                  </div>
+                    <div style={{fontSize:22,fontWeight:900,marginBottom:2}}>
+                      €5<span style={{fontSize:12,fontWeight:400,color:C.muted}}>/month for life</span>
+                    </div>
+                    <div style={{fontSize:11,color:C.muted}}>Regular Pro price: €10/month · Your rate: locked forever</div>
+                  </div>
+                  <span style={{fontSize:24}}>🏷️</span>
+                </div>
+                <div style={{background:`${C.green}10`,border:`1px solid ${C.green}30`,
+                  borderRadius:10,padding:"12px 16px",marginBottom:10,textAlign:"center"}}>
+                  <div style={{fontSize:11,color:C.muted,marginBottom:4}}>Your lifetime discount code</div>
+                  <div style={{fontSize:20,fontWeight:900,color:C.green,letterSpacing:4,fontFamily:"monospace"}}>
+                    ACF-{email.split("@")[0].toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,6)||"EARLY"}-50
+                  </div>
+                  <div style={{fontSize:11,color:C.muted,marginTop:4}}>
+                    Use this code when Pro launches to lock your €5/month rate permanently.
+                    If you cancel and rejoin without the code, the rate will be €10/month.
+                  </div>
+                </div>
+                <div style={{fontSize:12,color:C.muted,lineHeight:1.6}}>
+                  This code is tied to your email address and valid for life. 
+                  Save it now — it will also be included in your report email.
+                </div>
+              </div>
+
+              {/* Pro CTA */}
+              <FoundingCTA daysLeft={daysLeft} showDetail={showDetail}
+                setShowDetail={setShowDetail} proEmail={proEmail}
+                setProEmail={setProEmail} proJoined={proJoined} onJoin={handleProJoin}/>
+
+              {/* Review call */}
+              <div style={{background:"#1A0A35",border:"1px solid #A855F760",
+                borderRadius:16,padding:"18px",marginBottom:16}}>
+                <div style={{fontWeight:900,fontSize:14,marginBottom:6}}>
+                  🎯 Want to go deeper with a specialist?
+                </div>
+                <div style={{color:C.muted,fontSize:13,lineHeight:1.65,marginBottom:12}}>
+                  Book a 30-minute report review call with our clinical psychologist. Walk through
+                  your 10-dimension profile, get specific answers to your questions, and leave
+                  with a clear, personalised action plan.
+                </div>
+                <a href={STRIPE_LINKS.reviewCall} target="_blank" rel="noopener noreferrer"
+                  style={{textDecoration:"none"}}>
+                  <button style={{background:"#A855F7",color:C.white,border:"none",borderRadius:10,
+                    padding:"12px 20px",fontWeight:700,fontSize:13,cursor:"pointer"}}>
+                    Book 30-min Review Call — €79
+                  </button>
+                </a>
+              </div>
+
+              {/* Crisis */}
+              <div style={{background:"#080F1A",border:`1px solid ${C.border}`,
+                borderRadius:10,padding:"10px 14px",marginBottom:16,
+                fontSize:11,color:C.muted,lineHeight:1.55}}>
+                If you are experiencing distress or a mental health crisis:{" "}
+                <strong style={{color:C.white}}>Samaritans 116 123</strong>
+                {" "}(free, 24/7, Ireland & UK) or contact your GP.
+              </div>
+
+              {/* Share result */}
+              <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                borderRadius:14,padding:"16px",marginBottom:12,textAlign:"center"}}>
+                <div style={{fontWeight:700,fontSize:13,marginBottom:6}}>
+                  📤 Share your profile
+                </div>
+                <div style={{fontSize:12,color:C.muted,marginBottom:10,lineHeight:1.55}}>
+                  Share your ADHD profile level — it might help someone you know recognise their own patterns.
+                </div>
+                <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+                  {[
+                    {label:"Share on Twitter/X",icon:"🐦",
+                      url:`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://adhdclearfocus.com`)}`},
+                    {label:"Share on WhatsApp",icon:"💬",
+                      url:`https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://adhdclearfocus.com`)}`},
+                    {label:"Copy link",icon:"🔗",url:null},
+                  ].map(s=>(
+                    <button key={s.label} onClick={()=>{
+                      if(s.url){window.open(s.url,"_blank");}
+                      else{navigator.clipboard?.writeText("https://adhdclearfocus.com");
+                        alert("Link copied!");}
+                    }} style={{background:C.navyMid,border:`1px solid ${C.border}`,
+                      color:C.white,borderRadius:8,padding:"8px 14px",fontSize:12,
+                      cursor:"pointer",display:"flex",alignItems:"center",gap:6}}>
+                      <span>{s.icon}</span><span>{s.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button onClick={restart}
+                style={{background:"transparent",border:`1px solid ${C.border}`,
+                  color:C.muted,borderRadius:10,padding:"11px",width:"100%",
+                  cursor:"pointer",fontSize:13}}>
+                ↺ Start a new assessment
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+,
+    showAuthModal&&React.createElement(AuthModal,{
+      mode:authMode,authEmail,setAuthEmail,authCode,setAuthCode,
+      authError,onRegister:registerUser,onPro:activatePro,
+      onClose:()=>{setShowAuthModal(false);setAuthError('');},
+      daysLeft,C
+    })
+  );
+}
+
+// Auth modal render added at App level
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+  </script>
+
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "name": "ADHDclearfocus",
+  "short_name": "ClearFocus",
+  "description": "ADHD profile assessment, crisis tools, body doubling and AI coaching",
+  "start_url": "/app.html",
+  "display": "standalone",
+  "background_color": "#0A1628",
+  "theme_color": "#00D4DD",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Crisis Mode",
+      "short_name": "Crisis",
+      "description": "Open crisis tools immediately",
+      "url": "/crisis.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Focus Room",
+      "short_name": "Focus",
+      "description": "Start a body doubling session",
+      "url": "/focus.html",
+      "icons": [{ "src": "/favicon.png", "sizes": "32x32" }]
+    },
+    {
+      "name": "Take Assessment",
+      "short_name": "Assess",
+      "description": "Complete your ADHD profile",
+      "url": "/",
+      "icons": [{ "src": "/favicon.png", "sizes": "32x32" }]
+    }
+  ],
+  "categories": ["health", "lifestyle", "medical"],
+  "lang": "en",
+  "dir": "ltr"
+}

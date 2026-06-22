@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>Crisis Mode — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;
+      min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased;
+      overflow-x:hidden;user-select:none;-webkit-user-select:none}
+
+    @media(prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
+    }
+
+    /* HEADER */
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);
+      padding:12px 18px;display:flex;align-items:center;justify-content:space-between;
+      border-bottom:1px solid #1E3A5F;position:sticky;top:0;z-index:50}
+    .logo{font-size:15px;font-weight:900;text-decoration:none;color:#fff}
+    .logo span{color:#00D4DD}
+    .crisis-badge{background:#FF525220;border:1px solid #FF5252;border-radius:99px;
+      padding:4px 12px;font-size:11px;color:#FF5252;font-weight:700;
+      text-transform:uppercase;letter-spacing:1px;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+    /* MAIN */
+    .main{max-width:520px;margin:0 auto;padding:20px 16px 80px}
+
+    /* BREATHING CIRCLE */
+    .breathing-section{text-align:center;padding:24px 0 20px}
+    .breathing-ring{position:relative;width:180px;height:180px;margin:0 auto 16px}
+    .ring-outer{position:absolute;inset:0;border:3px solid #00D4DD;border-radius:50%;
+      animation:breathe-out 4s ease-in-out infinite}
+    .ring-inner{position:absolute;inset:30px;background:radial-gradient(circle,#00D4DD20,transparent);
+      border:1px solid #00D4DD40;border-radius:50%;animation:breathe-in 4s ease-in-out infinite}
+    .ring-center{position:absolute;inset:60px;background:#00D4DD;border-radius:50%;
+      opacity:0.4;animation:breathe-in 4s ease-in-out infinite}
+    .ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:700;color:#00D4DD}
+    @keyframes breathe-out{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+    @keyframes breathe-in{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+    .breathing-label{font-size:18px;font-weight:800;margin-bottom:6px}
+    .breathing-sub{font-size:13px;color:#7B93B4;line-height:1.5}
+
+    /* SECTION */
+    .section-title{font-size:11px;font-weight:700;color:#7B93B4;text-transform:uppercase;
+      letter-spacing:1.5px;margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+    .section-title::after{content:'';flex:1;height:1px;background:#1E3A5F}
+
+    /* TOOLS GRID */
+    .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .tool-btn{background:#1A2E4A;border:1px solid #1E3A5F;border-radius:14px;
+      padding:16px 12px;text-align:center;cursor:pointer;transition:all 0.2s;
+      display:flex;flex-direction:column;align-items:center;gap:6px;
+      font-family:inherit;color:#fff}
+    .tool-btn:active{transform:scale(0.97)}
+    .tool-btn.active{border-color:#00D4DD;background:#00D4DD15}
+    .tool-btn .icon{font-size:26px}
+    .tool-btn .label{font-size:12px;font-weight:700}
+    .tool-btn .sub{font-size:10px;color:#7B93B4;line-height:1.3}
+
+    /* GROUNDING */
+    .grounding-card{background:#1A2E4A;border:1px solid #1E3A5F;border-radius:14px;
+      padding:18px;margin-bottom:10px;display:none}
+    .grounding-card.active{display:block}
+    .grounding-title{font-weight:800;font-size:14px;margin-bottom:12px;
+      display:flex;align-items:center;gap:8px}
+    .grounding-step{background:#0A1628;border-radius:10px;padding:12px 14px;
+      margin-bottom:8px;font-size:13px;color:#A8C4D8;line-height:1.6;
+      display:flex;gap:10px;align-items:flex-start}
+    .step-num{background:#00D4DD;color:#0A1628;border-radius:50%;width:22px;height:22px;
+      display:flex;align-items:center;justify-content:center;font-weight:900;
+      font-size:11px;flex-shrink:0;margin-top:1px}
+
+    /* AUDIO CONTROLS */
+    .audio-panel{background:#1A2E4A;border:1px solid #1E3A5F;border-radius:14px;
+      padding:16px;margin-bottom:16px}
+    .audio-title{font-weight:700;font-size:13px;margin-bottom:12px;
+      display:flex;align-items:center;gap:8px}
+    .audio-btns{display:flex;gap:8px;flex-wrap:wrap}
+    .audio-btn{background:#0A1628;border:2px solid #1E3A5F;border-radius:10px;
+      padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;
+      color:#7B93B4;transition:all 0.2s;font-family:inherit}
+    .audio-btn.active{border-color:#00D4DD;color:#00D4DD;background:#00D4DD10}
+    .volume-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .volume-row label{font-size:11px;color:#7B93B4;flex-shrink:0}
+    .volume-row input{flex:1;accent-color:#00D4DD}
+
+    /* CRISIS ESCALATE */
+    .escalate{background:#FF525210;border:1px solid #FF525240;border-radius:14px;
+      padding:16px;margin-bottom:16px;text-align:center}
+    .escalate-title{font-weight:800;font-size:13px;color:#FF5252;margin-bottom:8px}
+    .escalate-text{font-size:12px;color:#7B93B4;line-height:1.6;margin-bottom:12px}
+    .call-btn{background:#FF5252;color:#fff;border:none;border-radius:10px;
+      padding:12px 24px;font-weight:900;font-size:14px;cursor:pointer;
+      font-family:inherit;width:100%}
+
+    /* CALMER BTN */
+    .calmer-btn{background:linear-gradient(135deg,#00D4DD,#4FC3F7);color:#0A1628;
+      border:none;border-radius:12px;padding:14px;width:100%;font-weight:900;
+      font-size:15px;cursor:pointer;font-family:inherit;margin-bottom:10px}
+
+    /* OFFLINE BADGE */
+    .offline-badge{display:none;background:#00E67610;border:1px solid #00E67630;
+      border-radius:8px;padding:6px 12px;font-size:11px;color:#00E676;
+      text-align:center;margin-bottom:12px}
+
+    /* HAPTIC */
+    @keyframes haptic-ring{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.15);opacity:1}}
+    .haptic-active .ring-outer{animation:haptic-ring 1s ease-in-out infinite!important}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+<div class="header">
+  <a href="/app.html" class="logo">ADHD<span>clearfocus</span></a>
+  <div class="crisis-badge">🚨 Crisis Mode</div>
+</div>
+
+<div class="main">
+
+  <div class="offline-badge" id="offline-badge">
+    ✓ Working offline — all crisis tools available
+  </div>
+
+  <!-- BREATHING CIRCLE -->
+  <div class="breathing-section">
+    <div class="breathing-ring" id="breathingRing">
+      <div class="ring-outer"></div>
+      <div class="ring-inner"></div>
+      <div class="ring-center"></div>
+      <div class="ring-text" id="breathText">Breathe</div>
+    </div>
+    <div class="breathing-label" id="breathLabel">Follow the circle</div>
+    <div class="breathing-sub">Breathe in as it expands · Breathe out as it contracts</div>
+  </div>
+
+  <!-- AUDIO -->
+  <div class="audio-panel">
+    <div class="audio-title">🎵 Auditory Calming Sound <span style="font-size:10px;color:#7B93B4;font-weight:400">(generated in your browser — no download needed)</span></div>
+    <div class="audio-btns">
+      <button class="audio-btn" onclick="playBinaural('alpha')">10Hz Tone (Alpha)</button>
+      <button class="audio-btn" onclick="playBinaural('theta')">6Hz Tone (Theta)</button>
+      <button class="audio-btn" onclick="playBinaural('delta')">2Hz Tone (Delta)</button>
+      <button class="audio-btn" onclick="stopBinaural()">Stop Sound</button>
+    </div>
+    <div class="volume-row">
+      <label>Volume</label>
+      <input type="range" id="volumeSlider" min="0" max="100" value="30" oninput="setVolume(this.value)"/>
+      <span id="volLabel" style="font-size:11px;color:#7B93B4;min-width:30px">30%</span>
+    </div>
+    <div style="font-size:11px;color:#7B93B4;margin-top:8px;line-height:1.5">
+      <strong style="color:#fff">Evidence:</strong> An RCT of adult ADHD patients found significant improvement in subjective 
+      study performance using 15Hz beats vs placebo (Malandrone et al., 2022, European Psychiatry). 
+      A 2024 systematic review found binaural beats reduce anxiety better than silence or noise-cancelling headphones alone 
+      (Baseanu et al., 2024, Applied Sciences). A 2025 Scientific Reports parametric study (n=80) confirmed brain entrainment 
+      occurs reliably, but cognitive benefits depend on the right frequency-carrier combination. 
+      Evidence remains preliminary and effects vary by person — use headphones and try each frequency to find what works for you.
+    </div>
+  </div>
+
+  <!-- QUICK TOOLS -->
+  <div class="section-title">⚡ Grounding Tools</div>
+  <div class="tools-grid">
+    <button class="tool-btn" onclick="showGrounding('54321')">
+      <span class="icon">5️⃣</span>
+      <span class="label">5-4-3-2-1</span>
+      <span class="sub">Senses grounding</span>
+    </button>
+    <button class="tool-btn" onclick="showGrounding('box')">
+      <span class="icon">⬜</span>
+      <span class="label">Box Breathing</span>
+      <span class="sub">4-4-4-4 pattern</span>
+    </button>
+    <button class="tool-btn" onclick="showGrounding('rain')">
+      <span class="icon">🌊</span>
+      <span class="label">RAIN Technique</span>
+      <span class="sub">Mindful processing</span>
+    </button>
+    <button class="tool-btn" onclick="showGrounding('body')">
+      <span class="icon">🦶</span>
+      <span class="label">Body Scan</span>
+      <span class="sub">Feel your feet</span>
+    </button>
+    <button class="tool-btn" onclick="startHaptic()">
+      <span class="icon">📳</span>
+      <span class="label">Haptic Rhythm</span>
+      <span class="sub">Breathing vibration</span>
+    </button>
+    <button class="tool-btn" onclick="showGrounding('rsd')">
+      <span class="icon">💔</span>
+      <span class="label">RSD Response</span>
+      <span class="sub">Rejection sensitivity</span>
+    </button>
+  </div>
+
+  <!-- GROUNDING CARDS -->
+  <div class="grounding-card" id="g-54321">
+    <div class="grounding-title">5️⃣ 5-4-3-2-1 Senses</div>
+    <div class="grounding-step"><div class="step-num">5</div><p>Name 5 things you can <strong>see</strong> right now. Look slowly around the room.</p></div>
+    <div class="grounding-step"><div class="step-num">4</div><p>Name 4 things you can <strong>touch</strong>. Feel the texture of each one.</p></div>
+    <div class="grounding-step"><div class="step-num">3</div><p>Name 3 things you can <strong>hear</strong>. Listen for sounds in the background.</p></div>
+    <div class="grounding-step"><div class="step-num">2</div><p>Name 2 things you can <strong>smell</strong>. Or breathe slowly and notice the air.</p></div>
+    <div class="grounding-step"><div class="step-num">1</div><p>Name 1 thing you can <strong>taste</strong>. Or notice the sensation in your mouth.</p></div>
+  </div>
+
+  <div class="grounding-card" id="g-box">
+    <div class="grounding-title">⬜ Box Breathing — 4-4-4-4</div>
+    <div class="grounding-step"><div class="step-num">1</div><p><strong>Breathe in</strong> through your nose for 4 counts. Fill your lungs completely.</p></div>
+    <div class="grounding-step"><div class="step-num">2</div><p><strong>Hold</strong> at the top for 4 counts. Stay still.</p></div>
+    <div class="grounding-step"><div class="step-num">3</div><p><strong>Breathe out</strong> slowly through your mouth for 4 counts. Empty fully.</p></div>
+    <div class="grounding-step"><div class="step-num">4</div><p><strong>Hold</strong> at the bottom for 4 counts. Then repeat from step 1.</p></div>
+    <div style="font-size:12px;color:#7B93B4;margin-top:10px;line-height:1.5">Repeat 4-6 times. US Navy SEALs use this technique for acute stress control.</div>
+  </div>
+
+  <div class="grounding-card" id="g-rain">
+    <div class="grounding-title">🌊 RAIN Technique</div>
+    <div class="grounding-step"><div class="step-num">R</div><p><strong>Recognise</strong> — What am I feeling right now? Name it precisely. Not "stressed" — "I feel overwhelmed and afraid."</p></div>
+    <div class="grounding-step"><div class="step-num">A</div><p><strong>Allow</strong> — Let the feeling be there without fighting it. "This is here. That's okay."</p></div>
+    <div class="grounding-step"><div class="step-num">I</div><p><strong>Investigate</strong> — Where do you feel this in your body? What triggered it? What does it need?</p></div>
+    <div class="grounding-step"><div class="step-num">N</div><p><strong>Non-identify</strong> — "I am not this feeling. I am the awareness noticing it."</p></div>
+  </div>
+
+  <div class="grounding-card" id="g-body">
+    <div class="grounding-title">🦶 Feel Your Feet</div>
+    <div class="grounding-step"><div class="step-num">1</div><p>Press your feet flat on the floor. Feel the pressure.</p></div>
+    <div class="grounding-step"><div class="step-num">2</div><p>Notice the weight of your body in your chair or against the surface beneath you.</p></div>
+    <div class="grounding-step"><div class="step-num">3</div><p>Press your palms together firmly for 5 seconds. Release slowly.</p></div>
+    <div class="grounding-step"><div class="step-num">4</div><p>Take 3 slow breaths. With each exhale, consciously relax your jaw, shoulders, and hands.</p></div>
+    <div style="font-size:12px;color:#7B93B4;margin-top:10px;line-height:1.5">Physical grounding activates the parasympathetic nervous system. Proprioceptive input (pressure, resistance) counteracts the fight-or-flight response.</div>
+  </div>
+
+  <div class="grounding-card" id="g-rsd">
+    <div class="grounding-title">💔 RSD — Rejection Sensitivity Response</div>
+    <div class="grounding-step"><div class="step-num">1</div><p><strong>Recognise it:</strong> "This intense pain is my ADHD nervous system generating a disproportionate response. It is not an accurate measure of what happened."</p></div>
+    <div class="grounding-step"><div class="step-num">2</div><p><strong>24-hour rule:</strong> Do not respond to what triggered this for 24 hours. The RSD response is immediate but almost always inaccurate. Time allows prefrontal reappraisal.</p></div>
+    <div class="grounding-step"><div class="step-num">3</div><p><strong>Counter-statement:</strong> "My worth is not determined by this person's opinion or this moment's outcome."</p></div>
+    <div class="grounding-step"><div class="step-num">4</div><p><strong>Physical reset:</strong> Cold water on your wrists or face. Physical sensation breaks the emotional loop.</p></div>
+    <div style="font-size:12px;color:#7B93B4;margin-top:10px;line-height:1.5">RSD affects ~99% of adults with ADHD. The pain is neurologically real — and neurologically generated, not situationally proportionate (Dodson, 2019).</div>
+  </div>
+
+  <!-- I'M CALMER -->
+  <button class="calmer-btn" onclick="calmResolved()" style="margin-top:16px">
+    ✓ I'm feeling calmer
+  </button>
+
+  <!-- ESCALATE -->
+  <div class="escalate">
+    <div class="escalate-title">Need more help?</div>
+    <div class="escalate-text">
+      If you are in crisis or having thoughts of self-harm, please reach out immediately.
+      You are not alone and support is available right now.
+    </div>
+    <button class="call-btn" onclick="window.location.href='tel:116123'">
+      📞 Call Samaritans — 116 123 (Free, 24/7)
+    </button>
+    <div style="font-size:11px;color:#7B93B4;margin-top:8px">
+      Also: Text HELLO to 50808 (Ireland) · Text SHOUT to 85258 (UK)
+    </div>
+  </div>
+
+  <a href="/app.html" style="display:block;text-align:center;color:#7B93B4;
+    font-size:13px;text-decoration:none;padding:8px">← Back to Secret Resources</a>
+
+</div>
+
+<script>
+// ── PWA REGISTRATION ──────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+
+// ── OFFLINE DETECTION ─────────────────────────────────────────────
+function updateOnlineStatus(){
+  document.getElementById('offline-badge').style.display=navigator.onLine?'none':'block';
+}
+window.addEventListener('online',updateOnlineStatus);
+window.addEventListener('offline',updateOnlineStatus);
+updateOnlineStatus();
+
+// ── BINAURAL BEATS ────────────────────────────────────────────────
+let audioCtx=null, leftOsc=null, rightOsc=null, gainNode=null;
+
+function playBinaural(type){
+  stopBinaural();
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  const carrier=200;
+  const beatFreqs={alpha:10,theta:6,delta:2};
+  const beat=beatFreqs[type]||10;
+
+  leftOsc=audioCtx.createOscillator();
+  rightOsc=audioCtx.createOscillator();
+  gainNode=audioCtx.createGain();
+  const panL=audioCtx.createStereoPanner();
+  const panR=audioCtx.createStereoPanner();
+
+  leftOsc.frequency.value=carrier;
+  rightOsc.frequency.value=carrier+beat;
+  panL.pan.value=-1;
+  panR.pan.value=1;
+
+  leftOsc.connect(panL);
+  rightOsc.connect(panR);
+  panL.connect(gainNode);
+  panR.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  const vol=document.getElementById('volumeSlider').value/100*0.4;
+  gainNode.gain.setValueAtTime(0,audioCtx.currentTime);
+  gainNode.gain.linearRampToValueAtTime(vol,audioCtx.currentTime+2);
+
+  leftOsc.start();
+  rightOsc.start();
+
+  document.querySelectorAll('.audio-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function stopBinaural(){
+  if(gainNode&&audioCtx){
+    gainNode.gain.linearRampToValueAtTime(0,audioCtx.currentTime+1);
+    setTimeout(()=>{
+      try{leftOsc&&leftOsc.stop();rightOsc&&rightOsc.stop();}catch(e){}
+      audioCtx=null;leftOsc=null;rightOsc=null;gainNode=null;
+    },1100);
+  }
+  document.querySelectorAll('.audio-btn').forEach(b=>b.classList.remove('active'));
+}
+
+function setVolume(val){
+  document.getElementById('volLabel').textContent=val+'%';
+  if(gainNode&&audioCtx){
+    gainNode.gain.linearRampToValueAtTime(val/100*0.4,audioCtx.currentTime+0.1);
+  }
+}
+
+// ── GROUNDING TOOLS ───────────────────────────────────────────────
+function showGrounding(id){
+  document.querySelectorAll('.grounding-card').forEach(c=>c.classList.remove('active'));
+  document.querySelectorAll('.tool-btn').forEach(b=>b.classList.remove('active'));
+  const card=document.getElementById('g-'+id);
+  if(card){
+    card.classList.add('active');
+    card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  event.currentTarget.classList.add('active');
+}
+
+// ── HAPTIC BREATHING ──────────────────────────────────────────────
+let hapticInterval=null;
+function startHaptic(){
+  if(!navigator.vibrate){
+    alert('Haptic feedback not supported on this device.');
+    return;
+  }
+  if(hapticInterval){
+    clearInterval(hapticInterval);
+    hapticInterval=null;
+    navigator.vibrate(0);
+    event.currentTarget.classList.remove('active');
+    document.getElementById('breathingRing').classList.remove('haptic-active');
+    return;
+  }
+  // 4-7-8 breathing pattern: inhale 4s, hold 7s, exhale 8s
+  const pattern=[400,4000,100,7000,800,8000];
+  const repeat=()=>{
+    navigator.vibrate(pattern);
+  };
+  repeat();
+  hapticInterval=setInterval(repeat,20000);
+  event.currentTarget.classList.add('active');
+  document.getElementById('breathingRing').classList.add('haptic-active');
+}
+
+// ── BREATHING TEXT CYCLE ──────────────────────────────────────────
+const breathPhases=['Breathe in...','Hold...','Breathe out...','Hold...'];
+let phaseIdx=0;
+const phaseDurations=[4000,7000,8000,2000];
+function cycleBreath(){
+  document.getElementById('breathText').textContent=breathPhases[phaseIdx];
+  document.getElementById('breathLabel').textContent=
+    ['Inhale slowly','Hold gently','Exhale fully','Pause'][phaseIdx];
+  const duration=phaseDurations[phaseIdx];
+  phaseIdx=(phaseIdx+1)%4;
+  setTimeout(cycleBreath,duration);
+}
+cycleBreath();
+
+// ── RESOLVED ──────────────────────────────────────────────────────
+function calmResolved(){
+  localStorage.setItem('crisis_resolved',Date.now());
+  stopBinaural();
+  if(hapticInterval){clearInterval(hapticInterval);navigator.vibrate&&navigator.vibrate(0);}
+  // Save to IndexedDB
+  try{
+    const req=indexedDB.open('ADHDclearfocusDB',1);
+    req.onsuccess=(e)=>{
+      const db=e.target.result;
+      if(db.objectStoreNames.contains('crisis-log')){
+        const tx=db.transaction('crisis-log','readwrite');
+        tx.objectStore('crisis-log').put({id:Date.now(),resolved:true,timestamp:new Date().toISOString()});
+      }
+    };
+  }catch(err){}
+  window.location.href='/app.html?crisis=resolved';
+}
+
+// ── HR CHECK (manual mode) ────────────────────────────────────────
+// Try Web Bluetooth if available
+async function tryConnectHR(){
+  if(!navigator.bluetooth)return;
+  try{
+    const device=await navigator.bluetooth.requestDevice({
+      filters:[{services:['heart_rate']}]
+    });
+    const server=await device.gatt.connect();
+    const service=await server.getPrimaryService('heart_rate');
+    const char=await service.getCharacteristic('heart_rate_measurement');
+    await char.startNotifications();
+    char.addEventListener('characteristicvaluechanged',(e)=>{
+      const hr=e.target.value.getUint8(1);
+      document.title=`HR: ${hr} — Crisis Mode`;
+    });
+  }catch(e){
+    // No wearable — that's fine, manual mode works
+  }
+}
+</script>
+</body>
+</html>

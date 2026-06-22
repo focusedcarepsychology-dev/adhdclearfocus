@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="47 evidence-based ADHD coping strategies across 10 neurological dimensions. Built-in focus timer, mood check-in, and step-by-step guides."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>ADHD Strategies — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}.reveal{opacity:1;transform:none}.float,.pulse{animation:none}}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--pink:#FF6B9D;--blue:#4FC3F7;--navy:#0A1628;--navyMid:#112240;--navyLight:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.7;transform:scale(0.95)}}
+    @keyframes breathe-out{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+    @keyframes breathe-in{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+    .float{animation:float 3s ease-in-out infinite}
+    .pulse{animation:pulse 2s ease-in-out infinite}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}
+    .logo span{color:var(--teal)}
+    .back-btn{background:var(--navyLight);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;text-decoration:none;font-family:inherit;transition:all 0.2s}
+    .back-btn:hover{color:#fff;border-color:var(--teal)}
+    .hero{background:linear-gradient(135deg,#0F2847 0%,#0A1628 50%,#1A0A35 100%);padding:40px 20px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+    .hero::before{content:'';position:absolute;top:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,var(--teal)08,transparent 70%)}
+    .hero::after{content:'';position:absolute;bottom:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,var(--purple)10,transparent 70%)}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,221,0.1);border:1px solid rgba(0,212,221,0.3);border-radius:99px;padding:6px 16px;font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px}
+    .hero h1{font-size:clamp(24px,5vw,38px);font-weight:900;line-height:1.15;letter-spacing:-1.5px;margin-bottom:12px}
+    .hero h1 span{background:linear-gradient(135deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{color:#A8C4D8;font-size:14px;line-height:1.7;max-width:540px;margin:0 auto 20px}
+    .hero-stats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+    .hero-stat{background:var(--navyLight);border:1px solid var(--border);border-radius:12px;padding:10px 18px;text-align:center}
+    .hero-stat-num{font-size:20px;font-weight:900;color:var(--teal)}
+    .hero-stat-label{font-size:11px;color:var(--muted);margin-top:2px}
+    .filter-wrap{padding:16px;overflow-x:auto;white-space:nowrap;border-bottom:1px solid var(--border);background:var(--navyMid)}
+    .filter-tabs{display:inline-flex;gap:8px}
+    .filter-tab{background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);transition:all 0.2s;white-space:nowrap;font-family:inherit}
+    .filter-tab.active,.filter-tab:hover{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+    .main{max-width:800px;margin:0 auto;padding:20px 16px 80px}
+    .section-title{font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin:24px 0 12px;display:flex;align-items:center;gap:8px}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    .card{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:10px;transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-color,var(--teal))}
+    .card:hover{transform:translateY(-2px);border-color:var(--card-color,var(--teal));box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+    .card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:0}
+    .card-icon{font-size:26px;flex-shrink:0}
+    .card-title{font-weight:800;font-size:14px;margin-bottom:4px;line-height:1.3}
+    .card-tag{display:inline-block;border-radius:99px;padding:2px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;background:var(--card-color,var(--teal));color:var(--navy);margin-bottom:5px}
+    .card-teaser{font-size:13px;color:var(--muted);line-height:1.6}
+    .card-body{display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+    .card.open .card-body{display:block}
+    .card-body p{font-size:13px;color:#A8C4D8;line-height:1.75;margin-bottom:10px}
+    .card-body .evidence{font-size:11px;color:var(--teal);font-style:italic;background:rgba(0,212,221,0.05);border-left:3px solid var(--teal);padding:8px 12px;border-radius:0 8px 8px 0;margin-top:8px}
+    .steps{margin:10px 0}
+    .step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+    .step-num{background:var(--card-color,var(--teal));color:var(--navy);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:11px;flex-shrink:0;margin-top:1px}
+    .step p{font-size:13px;color:#A8C4D8;line-height:1.6;margin:0}
+    .card-chevron{position:absolute;top:18px;right:16px;color:var(--muted);font-size:16px;transition:transform 0.25s}
+    .card.open .card-chevron{transform:rotate(180deg)}
+    .quick-win{background:linear-gradient(135deg,#0A2010,#0A1628);border:1px solid rgba(0,230,118,0.3);border-radius:14px;padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start}
+    .quick-win-icon{font-size:20px;flex-shrink:0}
+    .quick-win-title{font-weight:700;font-size:13px;color:var(--green);margin-bottom:3px}
+    .quick-win-text{font-size:12px;color:var(--muted);line-height:1.6}
+    .timer-tool{background:var(--navyMid);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px}
+    .timer-display{font-size:48px;font-weight:900;color:var(--teal);font-variant-numeric:tabular-nums;letter-spacing:-2px;margin:10px 0}
+    .timer-btns{display:flex;gap:8px;justify-content:center;margin-top:10px}
+    .timer-btn{border:none;border-radius:10px;padding:10px 20px;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;transition:all 0.2s}
+    .timer-btn.start{background:var(--teal);color:var(--navy)}
+    .timer-btn.reset{background:var(--navyLight);color:var(--muted);border:1px solid var(--border)}
+    .timer-presets{display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+    .preset{background:var(--navyLight);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+    .preset:hover{border-color:var(--teal);color:var(--teal)}
+    .mood-check{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px}
+    .mood-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:10px}
+    .mood-btn{background:var(--navyMid);border:2px solid var(--border);border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;transition:all 0.2s;font-family:inherit}
+    .mood-btn:hover,.mood-btn.selected{border-color:var(--teal);background:rgba(0,212,221,0.1)}
+    .mood-emoji{font-size:22px;display:block;margin-bottom:3px}
+    .mood-label{font-size:10px;color:var(--muted)}
+    .crisis-box{background:#0A0810;border:1px solid rgba(255,82,82,0.3);border-radius:12px;padding:14px 16px;margin:20px 0;font-size:12px;color:var(--muted);line-height:1.6}
+    .pro-callout{background:linear-gradient(135deg,#1A0A35,#0A1628);border:1px solid rgba(168,85,247,0.4);border-radius:14px;padding:16px;margin:16px 0;text-align:center}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.5s ease,transform 0.5s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .sub-badge{display:inline-flex;align-items:center;gap:4px;background:#A855F720;border:1px solid #A855F740;border-radius:99px;padding:3px 10px;font-size:10px;color:#C084FC;font-weight:700;text-transform:uppercase;margin-left:6px}
+  </style>
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<div class="header">
+  <a href="/" class="logo">ADHD<span>clearfocus</span></a>
+  <a href="/" class="back-btn">← Assessment</a>
+</div>
+
+<div class="hero">
+  <div class="hero-badge">🧠 Evidence-Based Resource</div>
+  <h1>ADHD Coping<br/><span>Strategies That Work</span></h1>
+  <p>Every strategy cites peer-reviewed clinical research. Tap any card to expand the full evidence, step-by-step guide, and difficulty rating. Pro subscribers get personalised strategy plans targeting their specific elevated dimensions.</p>
+  <div class="hero-stats">
+    <div class="hero-stat float"><div class="hero-stat-num">47</div><div class="hero-stat-label">Strategies</div></div>
+    <div class="hero-stat float" style="animation-delay:0.3s"><div class="hero-stat-num">10</div><div class="hero-stat-label">ADHD Dimensions</div></div>
+    <div class="hero-stat float" style="animation-delay:0.6s"><div class="hero-stat-num">6</div><div class="hero-stat-label">Evidence Frameworks</div></div>
+  </div>
+</div>
+
+<div class="filter-wrap">
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterCards('all',this)">All Strategies</button>
+    <button class="filter-tab" onclick="filterCards('attention',this)">🎯 Attention</button>
+    <button class="filter-tab" onclick="filterCards('executive',this)">🧩 Executive</button>
+    <button class="filter-tab" onclick="filterCards('emotional',this)">🌊 Emotional</button>
+    <button class="filter-tab" onclick="filterCards('memory',this)">💾 Memory</button>
+    <button class="filter-tab" onclick="filterCards('time',this)">⏳ Time</button>
+    <button class="filter-tab" onclick="filterCards('body',this)">🏃 Body</button>
+    <button class="filter-tab" onclick="filterCards('relationships',this)">💬 Relationships</button>
+    <button class="filter-tab" onclick="filterCards('rsd',this)">💔 RSD</button>
+    <button class="filter-tab" onclick="filterCards('hyperfocus',this)">🔥 Hyperfocus</button>
+    <button class="filter-tab" onclick="filterCards('quick',this)">⚡ Quick Wins</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- PRO CALLOUT -->
+<div class="pro-callout reveal">
+  <div style="font-size:11px;color:#C084FC;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🚀 ADHDclearfocus Pro</div>
+  <div style="font-weight:800;font-size:15px;margin-bottom:6px">Get a personalised strategy plan for your specific profile</div>
+  <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px">Complete the assessment to discover your 10 dimension scores, then Pro subscribers receive targeted strategy recommendations for their highest-impact dimensions — not generic ADHD advice.</div>
+  <a href="/" style="display:inline-block;background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy);border-radius:10px;padding:10px 20px;font-weight:900;font-size:13px;text-decoration:none">Take Assessment → Get Your Plan</a>
+</div>
+
+<!-- TOOLS -->
+<div class="section-title">⚡ Tools You Can Use Right Now</div>
+
+<div class="timer-tool reveal">
+  <div style="font-size:13px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🍅 Focus Timer (Pomodoro)</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Safren et al. (2010 JAMA RCT): structured time blocks significantly reduce inattention. 25 minutes focus, 5 minute break.</div>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div style="height:6px;background:var(--navyLight);border-radius:99px;overflow:hidden;margin-bottom:10px">
+    <div id="timerBar" style="height:100%;background:linear-gradient(to right,var(--teal),var(--blue));width:100%;transition:width 1s linear;border-radius:99px"></div>
+  </div>
+  <div class="timer-btns">
+    <button class="timer-btn start" id="timerBtn" onclick="toggleTimer()">▶ Start Focus</button>
+    <button class="timer-btn reset" onclick="resetTimer()">↺ Reset</button>
+  </div>
+  <div class="timer-presets">
+    <button class="preset" onclick="setTimer(5)">5 min</button>
+    <button class="preset" onclick="setTimer(15)">15 min</button>
+    <button class="preset" onclick="setTimer(25)">25 min ★</button>
+    <button class="preset" onclick="setTimer(45)">45 min</button>
+    <button class="preset" onclick="setTimer(60)">60 min</button>
+  </div>
+</div>
+
+<div class="mood-check reveal">
+  <div style="font-weight:700;font-size:14px;margin-bottom:3px">📊 Quick Mood Check-In</div>
+  <div style="font-size:12px;color:var(--muted)">Daily emotion tracking reveals ADHD patterns linked to sleep, medication timing, and environment (Ramsay, 2020).</div>
+  <div class="mood-grid">
+    <button class="mood-btn" onclick="selectMood(this,'Overwhelmed')"><span class="mood-emoji">😵</span><span class="mood-label">Overwhelmed</span></button>
+    <button class="mood-btn" onclick="selectMood(this,'Frustrated')"><span class="mood-emoji">😤</span><span class="mood-label">Frustrated</span></button>
+    <button class="mood-btn" onclick="selectMood(this,'Okay')"><span class="mood-emoji">😐</span><span class="mood-label">Okay</span></button>
+    <button class="mood-btn" onclick="selectMood(this,'Focused')"><span class="mood-emoji">🎯</span><span class="mood-label">Focused</span></button>
+    <button class="mood-btn" onclick="selectMood(this,'Energised')"><span class="mood-emoji">⚡</span><span class="mood-label">Energised</span></button>
+  </div>
+  <div id="moodResponse" style="display:none;margin-top:10px;background:var(--navyMid);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--muted);line-height:1.6"></div>
+</div>
+
+<!-- QUICK WINS -->
+<div class="section-title" data-category="quick">⚡ Quick Wins — Under 2 Minutes</div>
+<div class="quick-win reveal" data-category="quick attention"><div class="quick-win-icon">🎧</div><div><div class="quick-win-title">Put on noise-cancelling headphones</div><div class="quick-win-text">Even without music. Creates a physical signal to the brain that focus mode is starting. Environmental distraction reduction is first-line under NICE NG87 (2018).</div></div></div>
+<div class="quick-win reveal" data-category="quick executive"><div class="quick-win-icon">📝</div><div><div class="quick-win-title">Write your 3 most important tasks right now</div><div class="quick-win-text">Not a list of 20. Exactly 3. Barkley (2012): externalising priorities removes working memory demand and triggers initiation. Do it now — takes 60 seconds.</div></div></div>
+<div class="quick-win reveal" data-category="quick body"><div class="quick-win-icon">🚶</div><div><div class="quick-win-title">Stand up and walk for 2 minutes</div><div class="quick-win-text">Pontifex et al. (2013): even brief movement produces measurable improvements in inhibitory control. Right now — before the next task.</div></div></div>
+<div class="quick-win reveal" data-category="quick emotional"><div class="quick-win-icon">💬</div><div><div class="quick-win-title">Name exactly what you're feeling</div><div class="quick-win-text">"I am frustrated because I feel behind" — not "I'm stressed". Precise affect labelling reduces amygdala activation immediately (Lieberman et al., 2007).</div></div></div>
+<div class="quick-win reveal" data-category="quick time"><div class="quick-win-icon">⏰</div><div><div class="quick-win-title">Set a visible timer before every task</div><div class="quick-win-text">The ADHD brain has no internal clock. Make time visible and external — Barkley's (2011) time blindness model identifies this as the primary accommodation.</div></div></div>
+<div class="quick-win reveal" data-category="quick rsd"><div class="quick-win-icon">💔</div><div><div class="quick-win-title">24-hour rule on perceived criticism</div><div class="quick-win-text">Don't respond to what feels like rejection for 24 hours. The RSD response is immediate but almost always inaccurate. Time allows prefrontal reappraisal (Dodson, 2019).</div></div></div>
+<div class="quick-win reveal" data-category="quick hyperfocus"><div class="quick-win-icon">🔥</div><div><div class="quick-win-title">Set an exit alarm before starting absorbing tasks</div><div class="quick-win-text">Hyperfocus is an asset when bounded. Set a timer before starting anything absorbing so you can exit on purpose rather than by accident.</div></div></div>
+
+<!-- ATTENTION -->
+<div class="section-title" data-category="attention">🎯 Attention Regulation</div>
+
+<div class="card reveal" data-category="attention" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🍅</span><div><span class="card-tag">Attention</span><div class="card-title">Pomodoro / Time-Block Method</div><div class="card-teaser">25 minutes focused work, 5-minute break. The most evidence-supported attention management technique for ADHD.</div></div></div>
+  <div class="card-body">
+    <p>The Pomodoro technique works for ADHD because it converts an open-ended attentional demand into a bounded, finite task. The ADHD brain can sustain attention when there is a clear end point.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Choose one specific task before starting the timer.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Set timer for 25 minutes (use the timer above). Work on only that task.</p></div>
+      <div class="step"><div class="step-num">3</div><p>When timer rings, stop immediately — even mid-sentence. Take a 5-minute break.</p></div>
+      <div class="step"><div class="step-num">4</div><p>After 4 rounds, take a longer 15-20 minute break.</p></div>
+      <div class="step"><div class="step-num">5</div><p>Track your completed rounds — the accumulation creates its own motivation loop.</p></div>
+    </div>
+    <div class="evidence">Safren et al. (2010 JAMA RCT): structured time blocks produced significant improvements in inattention as a core component of CBT for adult ADHD. Effect size d=0.7.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="attention" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🔕</span><div><span class="card-tag">Attention</span><div class="card-title">Environmental Distraction Removal</div><div class="card-teaser">Systematically eliminate attentional competitors before demanding work begins.</div></div></div>
+  <div class="card-body">
+    <p>ADHD inattention is worsened by competing attentional stimuli. Unlike neurotypical brains, the ADHD brain has reduced ability to suppress irrelevant information — every notification, conversation, and visual distractor competes for attentional resource equally.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Phone: Do Not Disturb mode. Face down or in another room.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Computer: single application, full screen. Browser: one tab only.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Notifications: off on all devices for the work block.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Headphones: noise-cancelling, with brown noise, rain sounds, or instrumental music.</p></div>
+      <div class="step"><div class="step-num">5</div><p>Clear desk — visual clutter is attentional competition in ADHD.</p></div>
+    </div>
+    <div class="evidence">NICE NG87 (2018): environmental modification is first-line non-pharmacological recommendation. Abikoff et al. (1996): auditory environment manipulation shows measurable benefit for ADHD attention.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="attention" style="--card-color:var(--purple)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🧘</span><div><span class="card-tag">Attention</span><div class="card-title">ADHD-Adapted Mindfulness</div><div class="card-teaser">Mindfulness specifically adapted for ADHD brains — shorter, movement-based, and highly practical.</div></div></div>
+  <div class="card-body">
+    <p>Standard mindfulness is difficult for ADHD because it requires sustained attention to a single stimulus. ADHD-adapted mindfulness uses shorter sessions, movement, and variety to work with the ADHD nervous system rather than against it.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Start with 5 minutes only. Do not attempt 20-minute sessions initially.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Use movement: walking mindfulness, body scan while moving, or breathing during stretching.</p></div>
+      <div class="step"><div class="step-num">3</div><p>When attention wanders (it will), note it without judgement and return. This IS the practice.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Build to 10 minutes over 2 weeks, then 15. Never force longer than comfortable.</p></div>
+    </div>
+    <div class="evidence">Zylowska et al. (2008 Journal of Attention Disorders): 8-week adapted mindfulness RCT showed significant reductions in inattention and hyperactivity. 78% rated it beneficial.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="attention" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🎵</span><div><span class="card-tag">Attention</span><div class="card-title">Optimal Arousal Audio</div><div class="card-teaser">Background sound raises ADHD brain arousal to the level needed for sustained attention.</div></div></div>
+  <div class="card-body">
+    <p>The ADHD brain often operates below optimal arousal levels for attention. Background music or noise at the right volume and type can raise arousal to the level needed for focus without creating additional distraction.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Try brown noise or rain sounds first — lower frequency than white noise, easier to maintain.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Instrumental music only — lyrics create a competing language processing demand.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Volume: 40-50% — loud enough to mask environmental sounds, quiet enough to not dominate.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Experiment with binaural beats (beta frequency ~14-20Hz) for focus states — use headphones. An RCT of adult ADHD patients showed significant improvement in subjective study performance using 15Hz binaural beats vs placebo (Malandrone et al., 2022). A 2025 parametric study confirmed brain entrainment occurs but benefits depend on frequency, carrier tone, and background noise combination. Effects vary individually — emerging but promising evidence.</p></div>
+    </div>
+    <div class="evidence">Abikoff et al. (1996): auditory stimulation at moderate levels improves on-task behaviour in ADHD. Pelham et al. (2011): optimal stimulation theory — ADHD brains seek additional stimulation to reach arousal threshold.</div>
+  </div>
+</div>
+
+<!-- EXECUTIVE FUNCTION -->
+<div class="section-title" data-category="executive">🧩 Executive Function</div>
+
+<div class="card reveal" data-category="executive" style="--card-color:var(--purple)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🗓️</span><div><span class="card-tag">Executive</span><div class="card-title">Externalise Everything</div><div class="card-teaser">Replace internal self-regulation with visible, external tools. The most important ADHD executive intervention.</div></div></div>
+  <div class="card-body">
+    <p>Barkley's (2012) central clinical recommendation: the ADHD brain's executive functions are impaired, not absent. The solution is not to try harder internally — it is to replace internal processes with external, visible, tangible systems.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>One capture system:</strong> Everything that needs doing goes immediately into one place — paper notebook, app, or voice memo. Non-negotiable.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Visual weekly planner:</strong> Physical whiteboard or paper planner where the whole week is visible at once.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Physical timer:</strong> Visible countdown for all work blocks — not a phone timer you have to unlock to see.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Daily card:</strong> One index card each morning with exactly 3 tasks for the day. Nothing else.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Checklists for recurring processes:</strong> Morning routine, work startup, end-of-day shutdown — all written.</p></div>
+    </div>
+    <div class="evidence">Barkley (2012) Executive Functions: externalisation of the future is the foundational ADHD management principle. Solanto (2011) metacognitive therapy: externalised systems produced significant functional improvement in Level I RCT.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="executive" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">📌</span><div><span class="card-tag">Executive</span><div class="card-title">Implementation Intentions</div><div class="card-teaser">"When X happens, I will do Y." A 30-second planning technique with large effect on follow-through.</div></div></div>
+  <div class="card-body">
+    <p>Implementation intentions convert vague goal intentions ("I'll exercise this week") into specific if-then plans ("When I finish dinner on Monday at 7pm, I will put on my trainers and walk for 20 minutes"). This specificity dramatically reduces initiation failure.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>For any task you are avoiding, write: "On [day] at [time] I will [specific action] for [specific duration]."</p></div>
+      <div class="step"><div class="step-num">2</div><p>Include the exact location: "...at my desk with my laptop open to [specific document]."</p></div>
+      <div class="step"><div class="step-num">3</div><p>Set a calendar reminder for the exact time. The plan alone is insufficient — the prompt is essential.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Review your implementation intentions each morning. Seeing them reinforces the neural preparation for action.</p></div>
+    </div>
+    <div class="evidence">Gollwitzer & Sheeran (2006 Advances in Experimental Social Psychology): meta-analysis of 94 studies showed implementation intentions produce medium-to-large effect on goal attainment (d=0.65).</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="executive" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">👥</span><div><span class="card-tag">Executive</span><span class="sub-badge">Pro</span><div class="card-title">Body Doubling</div><div class="card-teaser">Work alongside another person — physically or virtually. Activates social regulatory mechanisms that compensate for weak internal executive control.</div></div></div>
+  <div class="card-body">
+    <p>Body doubling works because ADHD motivation is partly social — the presence of another person activates regulatory circuits that internal willpower cannot. The other person does not need to help, supervise, or interact. Silent co-working is equally effective.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>In person:</strong> Work in a library, café, or with a friend/colleague present.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>ADHDclearfocus Focus Room:</strong> Pro subscribers get access to structured body doubling rooms with Pomodoro sync. <a href="/focus.html" style="color:var(--teal)">Try it now →</a></p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Virtual:</strong> Focusmate.com provides free structured 50-minute sessions with strangers.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>YouTube:</strong> "Study with me" videos provide simulated body doubling — look for 2-4 hour focus sessions.</p></div>
+    </div>
+    <div class="evidence">Solanto (2011) Cognitive-Behavioral Therapy for Adult ADHD: body doubling was one of the most universally endorsed self-management strategies across ADHD adult participants.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="executive" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">✂️</span><div><span class="card-tag">Executive</span><div class="card-title">Task Decomposition</div><div class="card-teaser">Break every task into the smallest possible steps. Initiation failure in ADHD often comes from task complexity, not laziness.</div></div></div>
+  <div class="card-body">
+    <p>ADHD initiation failure — the inability to start tasks despite knowing they are important — is neurological, not motivational. It is driven by impaired activation of the prefrontal cortex's task-initiation circuits. Reducing task size reduces the activation threshold required.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Take any task you are avoiding. Write it at the top of a page.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Break it into steps. Then break each step into smaller steps until each step takes under 5 minutes.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Apply the 2-minute rule: any step completable in 2 minutes should be done immediately.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Start with the physically smallest first action — opening a document, writing a title, sending one email.</p></div>
+    </div>
+    <div class="evidence">Barkley (2012): task initiation is a core executive function impaired in ADHD. Reducing task size reduces the threshold of prefrontal activation required for initiation.</div>
+  </div>
+</div>
+
+<!-- EMOTIONAL REGULATION -->
+<div class="section-title" data-category="emotional">🌊 Emotional Regulation</div>
+
+<div class="card reveal" data-category="emotional" style="--card-color:var(--pink)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🏷️</span><div><span class="card-tag">Emotional</span><div class="card-title">Precise Affect Labelling</div><div class="card-teaser">Name exactly what you feel — not just "stressed". Reduces amygdala activation within seconds.</div></div></div>
+  <div class="card-body">
+    <p>Affect labelling works through a specific neurological mechanism: naming an emotion activates the prefrontal cortex, which inhibits the amygdala response. Precision matters — "I feel frustrated because I feel dismissed" is significantly more effective than "I'm angry".</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>When emotionally activated, pause and ask: "What am I feeling exactly?"</p></div>
+      <div class="step"><div class="step-num">2</div><p>Name the emotion as precisely as possible — use an emotion wheel if needed.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Add the cause: "I feel [emotion] because [specific situation/interpretation]."</p></div>
+      <div class="step"><div class="step-num">4</div><p>Write it down if the emotion is intense. Externalising increases the regulatory effect.</p></div>
+    </div>
+    <div class="evidence">Lieberman et al. (2007 Psychological Science): affect labelling disrupts amygdala activity in response to emotional stimuli, with measurable prefrontal activation increase.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="emotional" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">⏸️</span><div><span class="card-tag">Emotional</span><div class="card-title">Response Latency Extension</div><div class="card-teaser">The pause before responding. The primary CBT target for ADHD emotional impulsiveness.</div></div></div>
+  <div class="card-body">
+    <p>ADHD emotional impulsiveness — responding to emotional stimuli before the prefrontal cortex has time to regulate — can be directly addressed by building a consistent pause into emotionally activating situations.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Identify your personal emotional triggers — situations, people, or contexts that reliably activate emotional responses.</p></div>
+      <div class="step"><div class="step-num">2</div><p>For verbal responses: implement a 5-second pause before speaking. For written: 24-hour rule before sending.</p></div>
+      <div class="step"><div class="step-num">3</div><p>During the pause, breathe deliberately — 4 counts in, 4 counts out. This activates the parasympathetic nervous system.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Ask: "What is actually happening here?" — separating event from interpretation reduces emotional intensity.</p></div>
+    </div>
+    <div class="evidence">Ramsay (2020) CBT for ADHD: response latency extension is identified as the primary behavioural target for ADHD emotional impulsiveness. Shaw et al. (2014): reduced prefrontal regulation of amygdala reactivity is the neurological mechanism.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="emotional" style="--card-color:var(--pink)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🧊</span><div><span class="card-tag">Emotional</span><div class="card-title">Physical Grounding for Emotional Dysregulation</div><div class="card-teaser">Cold water, movement, and physical pressure activate the parasympathetic nervous system rapidly.</div></div></div>
+  <div class="card-body">
+    <p>When emotional dysregulation is intense, cognitive strategies may not be accessible — the prefrontal cortex is too overwhelmed to process. Physical grounding bypasses cognitive processing to activate the parasympathetic response directly.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Cold water:</strong> Cold water on the face or wrists activates the dive reflex, slowing heart rate within seconds.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>5-4-3-2-1:</strong> Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Grounds attention in the present moment.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Feet on floor:</strong> Press both feet flat on the floor and notice the pressure. Basic proprioceptive input activates calming circuits.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Box breathing:</strong> 4 counts in, 4 hold, 4 out, 4 hold. Repeat 4-6 times.</p></div>
+    </div>
+    <div class="evidence">Porges (2011) polyvagal theory: physical grounding techniques directly activate the parasympathetic nervous system via vagal pathways, bypassing the need for cortical processing.</div>
+  </div>
+</div>
+
+<!-- RSD -->
+<div class="section-title" data-category="rsd">💔 Rejection Sensitivity (RSD)</div>
+
+<div class="card reveal" data-category="rsd emotional" style="--card-color:var(--pink)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">💔</span><div><span class="card-tag">RSD</span><div class="card-title">Understanding and Managing RSD</div><div class="card-teaser">RSD is neurological, not a character trait. Specific strategies reduce its impact significantly.</div></div></div>
+  <div class="card-body">
+    <p>Rejection Sensitive Dysphoria (RSD) — the intense emotional pain triggered by perceived rejection, criticism, failure, or teasing — affects approximately 99% of adults with ADHD. The pain is neurologically real and often more distressing than major life events.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Neurological reframe:</strong> "This pain is my ADHD nervous system generating a disproportionate response. It is not an accurate measure of what happened."</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>24-hour rule:</strong> Never respond to perceived rejection or criticism for 24 hours. The initial RSD response is almost always inaccurate.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Pre-written counter-statements:</strong> For your most common RSD triggers, develop one written evidence-based counter-statement prepared in advance.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Psychoeducation for close people:</strong> Tell people about RSD so they can deliver feedback more explicitly and warmly.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>CBT cognitive restructuring:</strong> Identify distortions (all-or-nothing, catastrophising, mind-reading) and challenge them systematically.</p></div>
+    </div>
+    <div class="evidence">Dodson (2019): RSD present in ~99% of ADHD adults, often more distressing than major life events. Ramsay (2020) CBT for ADHD: RSD-targeted CBT produces significant reductions in avoidance behaviour.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="rsd" style="--card-color:var(--purple)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🛡️</span><div><span class="card-tag">RSD</span><div class="card-title">RSD Communication Contracts</div><div class="card-teaser">Explicit agreements about how feedback is delivered dramatically reduce RSD activation.</div></div></div>
+  <div class="card-body">
+    <p>The most effective environmental modification for RSD is removing ambiguity from evaluative communication. When feedback is delivered clearly and warmly, with explicit positive framing, the RSD nervous system has less to misinterpret.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Share information about RSD with your closest relationships — partners, managers, close friends.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Request explicit positive framing before criticism: "I want to mention something, and I want you to know it comes from care."</p></div>
+      <div class="step"><div class="step-num">3</div><p>For work: request written feedback where possible — written is slower and easier to reappraise than verbal.</p></div>
+      <div class="step"><div class="step-num">4</div><p>After any activating event, ask explicitly: "I'm struggling with how that landed — can you help me understand what you meant?"</p></div>
+    </div>
+    <div class="evidence">Orlov (2010 The ADHD Effect on Marriage): explicit communication contracts significantly reduce RSD-driven relationship conflict in ADHD partnerships.</div>
+  </div>
+</div>
+
+<!-- MEMORY -->
+<div class="section-title" data-category="memory">💾 Working Memory</div>
+
+<div class="card reveal" data-category="memory" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">📱</span><div><span class="card-tag">Memory</span><div class="card-title">Voice Memo Capture System</div><div class="card-teaser">Capture every thought, task, and idea immediately before working memory drops it.</div></div></div>
+  <div class="card-body">
+    <p>ADHD working memory cannot hold information reliably. The solution is immediate externalisation — before the working memory buffer clears. Voice memos are the fastest capture method: no unlocking, no typing, no friction.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Set your phone's voice memo shortcut as the fastest accessible function — one button, no unlock.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Capture everything immediately: tasks, ideas, follow-ups, things you need to remember. No filtering.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Set a daily 5-minute review time to process your captured memos into your task system.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Never trust yourself to "remember that later". In ADHD, later means gone.</p></div>
+    </div>
+    <div class="evidence">Barkley (2012): 'externalising the future' is the foundational accommodation for ADHD working memory impairment. Alloway & Alloway (2011): working memory more predictive of functional outcomes than IQ.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="memory" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">📋</span><div><span class="card-tag">Memory</span><div class="card-title">Chunking and Sequence Cards</div><div class="card-teaser">Break multi-step processes into written sequential steps. Externalises the sequencing function that ADHD working memory cannot maintain internally.</div></div></div>
+  <div class="card-body">
+    <p>Multi-step tasks place high demands on working memory — each step must be held in mind while executing the previous one. For ADHD brains, this regularly breaks down. Written sequence cards remove the working memory requirement entirely.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>For any recurring multi-step process (morning routine, work startup, cooking), write out every step in order.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Make it physical — index card, laminated card, or sticky note on a visible surface.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Follow the card each time, even when you think you remember. The point is to remove cognitive load, not test memory.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Create cards for: morning routine, work startup, meal preparation, packing for travel, weekly admin.</p></div>
+    </div>
+    <div class="evidence">Barkley (2012): chunking and externalised sequencing directly replaces the impaired working memory sequencing function in ADHD. Martinussen et al. (2005) meta-analysis: working memory most consistently impaired cognitive function in ADHD.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="memory" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🔁</span><div><span class="card-tag">Memory</span><div class="card-title">Dual Coding for Retention</div><div class="card-teaser">Reading aloud or sub-vocalising activates both verbal and auditory encoding — significantly strengthening retention.</div></div></div>
+  <div class="card-body">
+    <p>ADHD working memory often fails to transfer information to long-term memory reliably. Dual coding — engaging two different encoding systems simultaneously — strengthens the memory trace and increases the chance of retrieval.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>For important information: read it, say it aloud, then write it. Three modalities create three retrieval pathways.</p></div>
+      <div class="step"><div class="step-num">2</div><p>For verbal instructions: repeat them back to the speaker immediately after receiving them.</p></div>
+      <div class="step"><div class="step-num">3</div><p>For study material: draw diagrams alongside text — visual and verbal coding together significantly outperform either alone.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Sub-vocalise while reading complex documents — move your lips slightly. This activates auditory processing alongside visual.</p></div>
+    </div>
+    <div class="evidence">Paivio (1991) dual coding theory: encoding information through both verbal and visual/auditory channels creates stronger, more retrievable memory traces than single-channel encoding alone.</div>
+  </div>
+</div>
+
+<!-- TIME PERCEPTION -->
+<div class="section-title" data-category="time">⏳ Time Perception</div>
+
+<div class="card reveal" data-category="time" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">⏱️</span><div><span class="card-tag">Time</span><div class="card-title">Time Estimation Practice</div><div class="card-teaser">Train your brain to accurately predict how long tasks take. Most ADHD adults underestimate by 30-50%.</div></div></div>
+  <div class="card-body">
+    <p>ADHD time blindness produces chronic underestimation of task duration. Time estimation practice builds an accurate personal database of actual task durations that overrides the chronically optimistic ADHD estimate.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Before every task, write down your time estimate.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Time the actual task with a stopwatch.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Record both: Estimated vs Actual.</p></div>
+      <div class="step"><div class="step-num">4</div><p>After 2 weeks, review your patterns. Most ADHD adults find a consistent multiplier (e.g. everything takes 2x longer than I think).</p></div>
+      <div class="step"><div class="step-num">5</div><p>Apply your personal multiplier to all future estimates automatically.</p></div>
+    </div>
+    <div class="evidence">Barkley (2011) Deficits in Executive Functioning Scale: time estimation impairment is one of the most diagnostically distinctive ADHD features. Calibration training produces reliable improvement in temporal accuracy within 2-4 weeks.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="time" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">📅</span><div><span class="card-tag">Time</span><div class="card-title">Backwards Planning from Deadlines</div><div class="card-teaser">Plan from the deadline backwards, making time concrete and visible rather than abstract.</div></div></div>
+  <div class="card-body">
+    <p>ADHD time blindness means future events feel equally remote whether they are 3 weeks or 3 days away — until they suddenly feel immediate. Backwards planning makes the time structure concrete and explicit, overriding the "NOT NOW" response.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Write the deadline date and time at the top of a page.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Work backwards: "To meet this deadline, I must finish by [date]. To finish by then, I must start by [date]."</p></div>
+      <div class="step"><div class="step-num">3</div><p>Mark each milestone on a visible calendar as a hard commitment, not a suggestion.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Set a reminder for each milestone 48 hours before it's due — not on the day.</p></div>
+    </div>
+    <div class="evidence">Barkley (2011): ADHD time blindness creates a binary "NOW/NOT NOW" temporal experience. Externalising time structure through backwards planning counters this by making temporal relationships concrete.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="time" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">⏰</span><div><span class="card-tag">Time</span><div class="card-title">Pre-Departure Alarm System</div><div class="card-teaser">Set alarms for 15 and 5 minutes before departure — not at departure time.</div></div></div>
+  <div class="card-body">
+    <p>ADHD chronic lateness is almost always a time blindness problem, not a disrespect problem. The brain genuinely does not register that time is passing until the moment of crisis. Pre-departure alarms create artificial temporal awareness.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>For every appointment or commitment, set three alarms: 30 minutes before, 15 minutes before, 5 minutes before.</p></div>
+      <div class="step"><div class="step-num">2</div><p>The 30-minute alarm: begin preparation (getting dressed, gathering items).</p></div>
+      <div class="step"><div class="step-num">3</div><p>The 15-minute alarm: everything should be ready. Begin moving toward the door.</p></div>
+      <div class="step"><div class="step-num">4</div><p>The 5-minute alarm: final check and leave. Non-negotiable.</p></div>
+    </div>
+    <div class="evidence">Barkley (2011): the ADHD nervous system does not track time passing internally. External alarms are the primary accommodation for time blindness — they replace the missing internal clock with an external one.</div>
+  </div>
+</div>
+
+<!-- HYPERFOCUS -->
+<div class="section-title" data-category="hyperfocus">🔥 Hyperfocus & Interest Drive</div>
+
+<div class="card reveal" data-category="hyperfocus" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🎯</span><div><span class="card-tag">Hyperfocus</span><div class="card-title">Strategic Hyperfocus Deployment</div><div class="card-teaser">Use hyperfocus as a productivity asset rather than an unpredictable liability.</div></div></div>
+  <div class="card-body">
+    <p>Hyperfocus is the paradoxical ADHD capacity for intense, absorbed concentration on topics of high interest. When deliberately deployed, it is one of the most powerful cognitive states available to any human brain.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Identify your hyperfocus triggers — topics, formats, environments, and conditions that reliably activate deep engagement.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Schedule your most important deep work during periods when interest naturally peaks.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Always set an external alarm before entering a hyperfocus state — exit on purpose, not by accident.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Create a "hyperfocus conditions" list — what setup (environment, time, music, task type) makes deep work most likely.</p></div>
+    </div>
+    <div class="evidence">Dodson (2019): ADHD is an interest-based nervous system — attention is regulated by interest, novelty, challenge, urgency, and passion rather than importance or priority. Understanding this reframes hyperfocus as an asset to be engineered.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="hyperfocus" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">✨</span><div><span class="card-tag">Hyperfocus</span><div class="card-title">Interest Engineering for Uninteresting Tasks</div><div class="card-teaser">Pair mandatory but uninteresting tasks with interest-increasing contexts.</div></div></div>
+  <div class="card-body">
+    <p>The ADHD interest-based nervous system cannot be overridden by importance or urgency alone. Instead of fighting this system, work with it by artificially increasing the interest level of necessary but unappealing tasks.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Music pairing:</strong> Associate specific tasks with specific playlists — the music becomes a conditioned cue for that task.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Novelty introduction:</strong> Do the task in a new location, with a new tool, or in a different format than usual.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Competitive element:</strong> Race against a timer. "Can I finish this in 15 minutes?" activates the ADHD urgency-interest response.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Social element:</strong> Do the task alongside someone else, even if they're working on something different.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Reward pairing:</strong> Pair the task with something genuinely enjoyable — a specific drink, a comfortable environment, a preferred background sound.</p></div>
+    </div>
+    <div class="evidence">Dodson (2019): even mild interest increases can activate the ADHD motivational system sufficiently for task initiation. Novelty is one of the primary ADHD interest activators alongside urgency, challenge, passion, and competition.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="hyperfocus" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🔄</span><div><span class="card-tag">Hyperfocus</span><div class="card-title">Transition Rituals for Hyperfocus Exit</div><div class="card-teaser">Create a consistent physical ritual for exiting hyperfocus states.</div></div></div>
+  <div class="card-body">
+    <p>The primary difficulty when exiting a hyperfocus state is the high cognitive cost of switching attentional set. A consistent physical transition signal significantly reduces this cost.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>When your exit alarm goes off, immediately perform a specific physical action: stand up, close your laptop, make a drink.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Make this action consistent — the same action every time creates a conditioned response that signals "hyperfocus over".</p></div>
+      <div class="step"><div class="step-num">3</div><p>Before exiting, spend 2 minutes writing down exactly where you are in the task — this makes re-entry fast and reduces the cost of stopping.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Walk around for at least 2 minutes before beginning the next task — physical movement assists the attentional transition.</p></div>
+    </div>
+    <div class="evidence">Monsell (2003) task-switching research: consistent transition signals significantly reduce the cognitive cost of shifting attentional set — the primary difficulty when exiting a hyperfocus state in ADHD.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="attention" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🎧</span><div><span class="card-tag">Attention</span><div class="card-title">Binaural Beats for Focus & Calm</div><div class="card-teaser">Auditory beat stimulation shows emerging evidence for anxiety reduction and study performance in ADHD — with important caveats about how to use it.</div></div></div>
+  <div class="card-body">
+    <p>Binaural beats occur when two slightly different frequencies are played separately into each ear — the brain perceives a third "beat" at the difference frequency. The proposed mechanism is brainwave entrainment: nudging brain oscillations toward frequencies associated with focus (beta, ~15-20Hz) or calm (alpha, ~10Hz; theta, ~6Hz).</p>
+    <p><strong style="color:#fff">What the evidence says:</strong> A 2022 RCT of adult ADHD university students found significant improvement in subjective study performance using 15Hz binaural beats versus placebo over 4 weeks (Malandrone et al., European Psychiatry). A 2024 systematic review found binaural beats reduce anxiety symptoms better than silence or noise-cancelling headphones. A large 2025 Scientific Reports study (n=80, 16 conditions) confirmed that brainwave entrainment does occur reliably — but cognitive performance benefits appeared only with specific frequency, carrier tone, and background noise combinations. A 2023 PLOS One review found inconsistent EEG entrainment evidence across 14 studies. One 2023 study found home use worsened performance — possibly due to mismatched frequencies.</p>
+    <p><strong style="color:#fff">Verdict:</strong> Suggestive, not conclusive. Worth trying. Best evidence is for anxiety reduction and subjective focus improvement — not objectively measured attention. Does not replace medication or behavioural strategies.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Use proper stereo headphones — earbuds work, speakers do not (requires separate delivery to each ear).</p></div>
+      <div class="step"><div class="step-num">2</div><p>For focus: try beta frequency (15-20Hz). For calming: try alpha (10Hz) or theta (6Hz). Use the tones in Crisis Mode to try each.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Add white or pink noise as background — the 2025 parametric study found background masking noise significantly improved the effect.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Start the audio 5-10 minutes before your task, not at task onset — the 2025 study found pre-task onset timing produced better results.</p></div>
+      <div class="step"><div class="step-num">5</div><p>Use consistently over 2+ weeks if possible — a 2024 study found P300 EEG markers (attention) improved after 2 weeks of daily use.</p></div>
+    </div>
+    <div class="evidence">Malandrone et al. (2022 European Psychiatry RCT): 15Hz binaural beats improved study performance vs placebo in adult ADHD patients. Melnichuk et al. (2025 Scientific Reports, n=80): entrainment confirmed but benefits parameter-dependent. Baseanu et al. (2024 Applied Sciences systematic review): anxiety reduction better than control conditions. Ingendoh et al. (2023 PLOS One): entrainment evidence inconsistent across EEG studies — use with realistic expectations.</div>
+  </div>
+</div>
+
+<!-- BODY & EXERCISE -->
+<div class="section-title" data-category="body">🏃 Body, Exercise & Sleep</div>
+
+<div class="card reveal" data-category="body" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🏃</span><div><span class="card-tag">Exercise</span><div class="card-title">Aerobic Exercise Before Cognitive Work</div><div class="card-teaser">20-30 minutes aerobic exercise produces ADHD symptom reductions comparable to low-dose stimulant medication.</div></div></div>
+  <div class="card-body">
+    <p>Exercise is the most evidence-supported non-pharmacological intervention for ADHD. The mechanism is dopaminergic — aerobic exercise increases dopamine and norepinephrine availability in the prefrontal cortex, directly addressing the neurotransmitter deficit that drives ADHD symptoms.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Schedule 20-30 minutes of aerobic exercise before your most cognitively demanding work block.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Maintain heart rate at 60-70% of maximum during exercise for optimal cognitive effects.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Begin cognitive work within 60-90 minutes of exercise completion to capture the dopaminergic window.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Consistency over intensity — 3-4 sessions per week produces greater cumulative benefit than occasional intense sessions.</p></div>
+    </div>
+    <div class="evidence">Hoza et al. (2015 Journal of Abnormal Child Psychology): significant ADHD symptom reductions from 20-minute aerobic sessions. Pontifex et al. (2013): cognitive performance improvements following acute exercise equivalent to low-dose methylphenidate.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="body" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">😴</span><div><span class="card-tag">Sleep</span><div class="card-title">ADHD Sleep Protocol</div><div class="card-teaser">75% of adults with ADHD have significant sleep difficulties. Poor sleep dramatically worsens all ADHD symptoms.</div></div></div>
+  <div class="card-body">
+    <p>Sleep dysfunction in ADHD is neurological — delayed circadian rhythm, difficulty with sleep onset, and night-time hyperfocus are documented features of ADHD neurology. Poor sleep worsens attention, executive function, emotional regulation, and impulse control.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Fixed wake time:</strong> Same alarm every day including weekends. The most effective circadian anchor.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Hard stop for screens:</strong> All screens off 60 minutes before bed. Blue light suppresses melatonin more severely in ADHD brains.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Brain dump before bed:</strong> Write everything on your mind onto paper before sleep. Removes the working memory loop that ADHD brains run at night.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Bedtime alarm:</strong> Set an alarm for your intended bedtime — ADHD time blindness means bedtime gets pushed unless externally triggered.</p></div>
+    </div>
+    <div class="evidence">Cortese et al. (2020 Lancet Psychiatry): sleep disturbances in 75% of ADHD adults. Gruber et al. (2012): sleep extension alone produced significant ADHD symptom improvements equivalent to behavioural intervention.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="body" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🥗</span><div><span class="card-tag">Body</span><div class="card-title">Nutrition Timing for ADHD</div><div class="card-teaser">Blood sugar stability has a measurable effect on ADHD attention and impulse control throughout the day.</div></div></div>
+  <div class="card-body">
+    <p>ADHD brains are particularly sensitive to blood glucose fluctuations. Hunger suppresses dopamine availability, worsening all ADHD symptoms. Regular meal timing and protein-rich breakfast significantly stabilise cognitive performance.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Never work in a hungry state — keep snacks accessible to avoid unintentional blood sugar drops during demanding tasks.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Protein-rich breakfast within 1 hour of waking — protein provides precursors for dopamine and norepinephrine synthesis.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Avoid high-sugar foods before demanding cognitive tasks — the subsequent blood sugar drop impairs attention.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Set a meal alarm if you regularly forget to eat — hunger in ADHD is often masked by hyperfocus or task absorption.</p></div>
+    </div>
+    <div class="evidence">Harding et al. (2003): dietary modifications produced significant improvements in ADHD symptoms. Protein-rich meals increase tyrosine availability, the amino acid precursor to dopamine and norepinephrine.</div>
+  </div>
+</div>
+
+<!-- RELATIONSHIPS -->
+<div class="section-title" data-category="relationships">💬 Relationships & Communication</div>
+
+<div class="card reveal" data-category="relationships" style="--card-color:var(--pink)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">💑</span><div><span class="card-tag">Relationships</span><div class="card-title">ADHD Psychoeducation for Partners</div><div class="card-teaser">Sharing accurate ADHD information with partners and family members is one of the most impactful relationship interventions available.</div></div></div>
+  <div class="card-body">
+    <p>Many ADHD relationship difficulties stem from partners attributing ADHD behaviours to character flaws — laziness, selfishness, carelessness. Replacing these attributions with accurate neurodevelopmental understanding changes the entire relational dynamic.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p>Share your ADHDclearfocus report with your partner — let them see the neurological evidence behind the behaviours.</p></div>
+      <div class="step"><div class="step-num">2</div><p>Read Melissa Orlov's "The ADHD Effect on Marriage" together — the most evidence-informed resource on ADHD in intimate relationships.</p></div>
+      <div class="step"><div class="step-num">3</div><p>Establish explicit communication agreements: how feedback is delivered, how to flag when one person is dysregulated.</p></div>
+      <div class="step"><div class="step-num">4</div><p>Identify ADHD-related relationship patterns specifically: task-blindness, hyperfocus withdrawal, time management impact.</p></div>
+    </div>
+    <div class="evidence">Orlov (2010 The ADHD Effect on Marriage): psychoeducation-based couples intervention produced significant improvements in relationship satisfaction and ADHD symptom management.</div>
+  </div>
+</div>
+
+<div class="card reveal" data-category="relationships" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">💼</span><div><span class="card-tag">Relationships</span><div class="card-title">Workplace Accommodations</div><div class="card-teaser">Legal rights and practical strategies for managing ADHD in the workplace.</div></div></div>
+  <div class="card-body">
+    <p>ADHD is a protected disability under the Employment Equality Acts 1998-2015 (Ireland) and the Equality Act 2010 (UK). Employers are legally required to make reasonable adjustments. Knowing your rights enables you to access accommodations without conflict.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Formal diagnosis:</strong> A formal diagnosis is the legal foundation for reasonable accommodation requests. Your ADHDclearfocus report supports but does not replace formal diagnosis.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Common accommodations to request:</strong> Quiet workspace, written instructions for verbal meetings, flexible deadlines, ability to use headphones, task management software.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Ireland:</strong> The Workplace Relations Commission (WRC) handles accommodation disputes. Contact your HR department in writing with a reasonable adjustment request.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>UK:</strong> Access to Work scheme provides financial support for ADHD workplace accommodations — apply via gov.uk/access-to-work.</p></div>
+    </div>
+    <div class="evidence">Employment Equality Acts 1998-2015 (Ireland) and Equality Act 2010 (UK): ADHD qualifies as a disability when it has a substantial, long-term adverse effect on the ability to carry out normal day-to-day activities.</div>
+  </div>
+</div>
+
+<!-- FORMAL ASSESSMENT -->
+<div class="section-title">🧠 New Evidence-Based Additions</div>
+
+<!-- CBT -->
+<div class="card reveal" data-category="executive emotional" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🧩</span><div><span class="card-tag">CBT</span><div class="card-title">Cognitive Behavioural Therapy for ADHD</div><div class="card-teaser">The most evidence-supported psychological intervention for adult ADHD after medication. A 2025 meta-analysis of 82 studies confirms significant improvements across symptoms, anxiety and depression.</div></div></div>
+  <div class="card-body">
+    <p>CBT for ADHD is specifically adapted from standard CBT to address the neurological — not just cognitive — features of ADHD. It targets initiation failure, time management, disorganisation, emotional dysregulation, and the secondary depression and anxiety that commonly accompany ADHD. Unlike generic CBT, ADHD-specific CBT uses externalised systems, behavioural activation, and psychoeducation alongside cognitive restructuring.</p>
+    <p><strong style="color:#fff">What the evidence says:</strong> A 2025 meta-analysis of 82 studies including 48 RCTs with nearly 2,900 participants confirmed CBT and related interventions significantly improve ADHD core symptoms, comorbid anxiety and depression. Effect sizes are comparable to non-stimulant medications. CBT is now included in NICE NG87 (2018) as a recommended intervention for adults with ADHD who decline medication or for whom medication is insufficient.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>What to look for:</strong> A psychologist or therapist with specific ADHD-CBT training. Ask explicitly: "Have you trained in ADHD-specific CBT?" Standard CBT is not the same.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Ireland:</strong> PSI-registered psychologists in Waterford and Cork with ADHD expertise and CBT specialisation offer assessment and therapy — including <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075" target="_blank" rel="noopener" style="color:var(--teal)">via Psychology Today</a>. Free 15-minute initial consultation available.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>UK:</strong> IAPT services offer CBT on the NHS. Waiting times vary — private ADHD-specialist CBT via UKAAN-certified practitioners is faster.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>What to expect:</strong> Typically 12-16 sessions. First 2-3 sessions focus on psychoeducation and assessment. Homework is central — ADHD-CBT requires active practice between sessions.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>ADHDclearfocus Pro subscribers</strong> receive 15% off formal assessments and therapy sessions through registered clinical partner networks.</p></div>
+    </div>
+    <div class="evidence">Safren et al. (2010 JAMA RCT): CBT significantly reduced ADHD symptoms vs relaxation control (d=0.7). 2025 meta-analysis (82 studies, 48 RCTs, n≈2,900): CBT effective across ADHD symptoms, anxiety and depression. NICE NG87 (2018): CBT recommended for adult ADHD as first-line psychological intervention.</div>
+  </div>
+</div>
+
+<!-- DBT -->
+<div class="card reveal" data-category="emotional rsd" style="--card-color:var(--purple)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🌊</span><div><span class="card-tag">DBT Skills</span><div class="card-title">DBT Skills for Emotional Dysregulation & Impulsivity</div><div class="card-teaser">A multicenter RCT of 121 adults found DBT-based treatment produced large, sustained improvements in executive functioning and ADHD symptoms — effects held at 6 months.</div></div></div>
+  <div class="card-body">
+    <p>Dialectical Behaviour Therapy (DBT) was originally developed for borderline personality disorder but has been adapted for ADHD given the significant overlap in emotional dysregulation and impulsivity. Many DBT skills are directly self-teachable without full DBT therapy — particularly distress tolerance and radical acceptance, which directly address ADHD emotional impulsiveness.</p>
+    <p><strong style="color:#fff">What the evidence says:</strong> A multicenter RCT of 121 adults with ADHD found DBT-based group treatment produced significantly larger reductions in executive dysfunction vs treatment as usual (effect size d=0.64), with all improvements persisting at 6-month follow-up. A 2025 meta-analysis confirmed DBT's effectiveness in reducing ADHD core symptoms and comorbid depression.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>TIPP skill (immediate distress):</strong> Temperature (cold water on face), Intense exercise (60 seconds), Paced breathing (slow out-breath), Progressive relaxation. Activates parasympathetic system within 90 seconds.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Radical acceptance:</strong> "This is what is happening right now. Fighting reality increases suffering without changing it." Practice accepting the current moment — not approving it, just acknowledging it as real.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>STOP skill:</strong> Stop. Take a step back. Observe what is happening inside and outside. Proceed mindfully. Use before any impulsive action.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Opposite action:</strong> When an emotion is driving a behaviour that makes things worse, do the opposite. Feeling like withdrawing? Reach out. Feeling like snapping? Speak gently.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Access DBT:</strong> <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075" target="_blank" rel="noopener" style="color:var(--teal)">DBT-trained psychologist in Waterford and Cork</a> — free 15-minute consultation. DBT workbooks by Marsha Linehan are also excellent for self-guided skill building.</p></div>
+    </div>
+    <div class="evidence">Halmøy et al. (2022 Multicenter RCT, n=121): DBT-based group treatment superior to TAU for executive functioning (d=0.64), all improvements held at 6-month follow-up. 2025 meta-analysis (ScienceDirect): DBT effective for ADHD core symptoms and comorbid depression. COMPAS trial: DBT+methylphenidate combination showed strong long-term acceptability.</div>
+  </div>
+</div>
+
+<!-- COLD WATER -->
+<div class="card reveal" data-category="body" style="--card-color:var(--blue)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🧊</span><div><span class="card-tag">Body · Emerging</span><div class="card-title">Cold Water Exposure for Focus & Emotional Reset</div><div class="card-teaser">Mechanistically compelling — cold exposure increases norepinephrine by up to 530%, directly targeting the same neurotransmitter deficit that ADHD medications address. No ADHD-specific RCTs yet.</div></div></div>
+  <div class="card-body">
+    <p>Cold water exposure is neurochemically plausible as an ADHD strategy because it directly activates the same neurotransmitter pathways targeted by ADHD medications. The brief window of norepinephrine and dopamine elevation following cold exposure may provide a natural, short-duration cognitive reset — particularly useful before demanding tasks or after emotional dysregulation episodes.</p>
+    <p><strong style="color:#fff">Evidence status:</strong> Mechanistically strong. No ADHD-specific RCTs yet. Evidence base is in cold exposure generally (norepinephrine/dopamine elevation confirmed) and ADHD neurochemistry (catecholamine deficit confirmed). The intersection is logical but not yet directly tested in controlled trials. This is a promising emerging strategy, not an established treatment.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Cold shower protocol:</strong> End any shower with 30-90 seconds of cold water. Build up gradually — start with 15 seconds and increase over two weeks.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Timing:</strong> Morning cold exposure produces the largest catecholamine response and longest-lasting alertness benefit. Before cognitively demanding work is optimal.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>After emotional dysregulation:</strong> Cold water on the face or wrists within 60 seconds of emotional activation directly engages the dive reflex, slowing heart rate and interrupting the dysregulation cycle.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Contraindications:</strong> Not suitable for people with cardiac conditions, Raynaud's disease, or cold urticaria. Consult your GP if unsure.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Realistic expectation:</strong> Effects are short-term (30-90 minutes). Use as part of a morning routine, not as a replacement for medication or behavioural strategies.</p></div>
+    </div>
+    <div class="evidence">Søberg et al. (2021 Cell Metabolism): cold exposure produces sustained increases in norepinephrine (up to 530%) and dopamine (up to 250%). These are the same neurotransmitters targeted by methylphenidate and atomoxetine (MacDonald et al., 2024 Frontiers in Psychiatry). No ADHD-specific RCTs to date — emerging evidence only. Do not discontinue existing ADHD treatment based on this strategy.</div>
+  </div>
+</div>
+
+<!-- OMEGA-3 -->
+<div class="card reveal" data-category="body" style="--card-color:var(--green)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🐟</span><div><span class="card-tag">Nutrition · Long-term</span><div class="card-title">Omega-3 Supplementation (EPA/DHA)</div><div class="card-teaser">Overall evidence is mixed for short-term use. Studies of 4+ months show significant benefit. ADHD populations consistently show lower EPA and DHA levels than controls.</div></div></div>
+  <div class="card-body">
+    <p>Omega-3 polyunsaturated fatty acids (EPA and DHA) are involved in neuronal membrane function, neurotransmitter signalling, and inflammatory regulation — all relevant to ADHD neurology. The adult evidence base is complicated by dosage differences, duration variation, and formulation inconsistency across trials.</p>
+    <p><strong style="color:#fff">What the evidence says:</strong> A meta-analysis of 22 RCTs with 1,789 participants found omega-3s did not significantly improve ADHD symptoms overall — but in studies lasting at least 4 months, the effect was significant (SMD −0.35). A separate meta-analysis found omega-3 supplementation improves attention-related cognition (g=1.09) and ADHD symptom scores (g=0.38). Notably, ADHD individuals consistently show lower DHA and EPA levels than non-ADHD controls, suggesting a genuine nutritional gap.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Dosage:</strong> 1-2g EPA+DHA daily. Look for supplements with higher EPA than DHA ratio — EPA appears to be the active component for mood and attention.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Duration:</strong> Give it at least 4 months before evaluating. Short-term trials consistently fail to show benefit — the long-term data is where the signal emerges.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Food sources:</strong> Oily fish (salmon, mackerel, sardines, herring) 2-3 times per week provides meaningful EPA/DHA. Most Western diets are substantially deficient.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Quality:</strong> Look for molecularly distilled, third-party tested supplements. Avoid cheap fish oil capsules — oxidation renders them ineffective or potentially harmful.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Discuss with your GP</strong> before starting if you take blood-thinning medications — omega-3s have mild antiplatelet effects at higher doses.</p></div>
+    </div>
+    <div class="evidence">Journal of Clinical Psychiatry meta-analysis (22 RCTs, n=1,789): non-significant overall but significant at ≥4 months (SMD −0.35). Neuropsychopharmacology meta-analysis: g=0.38 for symptoms, g=1.09 for attention cognition. ADHD populations show consistently lower DHA (g=−0.76) and EPA (g=−0.38) vs controls (Bloch & Qawasmi, 2017). Safe, inexpensive, worth trying long-term.</div>
+  </div>
+</div>
+
+<!-- GRATITUDE JOURNALING -->
+<div class="card reveal" data-category="emotional" style="--card-color:var(--amber)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">📓</span><div><span class="card-tag">Emotional · Daily Practice</span><div class="card-title">Gratitude Journaling & Reflective Writing</div><div class="card-teaser">Activates the prefrontal cortex — the exact area underactivated in ADHD. 3 minutes daily produces measurable improvements in emotional regulation and wellbeing.</div></div></div>
+  <div class="card-body">
+    <p>Gratitude practice is neurologically relevant to ADHD because it specifically activates the prefrontal cortex — the region primarily responsible for emotional regulation, executive function, and reward processing, all of which are underactivated in ADHD. It also directly counteracts the negativity bias and low frustration tolerance that commonly accompany the ADHD experience.</p>
+    <p><strong style="color:#fff">The book:</strong> <em>The Gratitude Prescription</em> — written by a DPsych psychologist with 17 years of clinical experience — provides a structured, evidence-based 21-day gratitude programme grounded in neuroscience and positive psychology. It takes seconds per day and is designed for people who find sustained habits difficult. Available globally on Amazon.</p>
+    <p style="text-align:center;margin:12px 0">
+      <a href="https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL" target="_blank" rel="noopener"
+        style="display:inline-block;background:linear-gradient(135deg,var(--amber),#FF8C00);color:#0A1628;border-radius:10px;padding:10px 20px;font-weight:900;font-size:13px;text-decoration:none">
+        📚 Get The Gratitude Prescription on Amazon →
+      </a>
+    </p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>3-minute daily practice:</strong> Write 3 specific things you are grateful for each morning. Specific beats generic — "my coffee was hot and quiet this morning" activates more gratitude circuitry than "I'm grateful for my health".</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Why specificity matters:</strong> The ADHD brain habituates quickly to repeated stimuli. Vary your entries daily — the same three things each morning stop producing neurochemical benefit within a week.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>Evening reflection:</strong> Add one sentence about what went well today and why. This trains the brain to notice positive events — the ADHD negativity bias means these are systematically under-noticed.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>Use the voice diary:</strong> If writing feels like a barrier, use the ADHDclearfocus voice diary in Secret Resources. Speak your gratitude — the transcription handles the rest.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Consistency over intensity:</strong> 3 minutes daily for 4 weeks produces more lasting neural change than 30 minutes occasionally. ADHD brains respond to frequency, not duration.</p></div>
+    </div>
+    <div class="evidence">Emmons & McCullough (2003 Journal of Personality and Social Psychology): gratitude journaling produced significant increases in wellbeing, optimism, and positive affect vs control conditions. Gratitude activates prefrontal cortex — the region underactivated in ADHD (Zahn et al., 2009 Frontiers in Human Neuroscience). Hall et al. (2024 Clemson University): daily gratitude practice produces significant wellbeing improvements within weeks. The Gratitude Prescription programme applies this evidence in a structured, ADHD-accessible format.</div>
+  </div>
+</div>
+
+<!-- NEUROFEEDBACK — HONEST DISMISSAL -->
+<div class="card reveal" style="--card-color:var(--muted)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🧬</span><div>
+    <span class="card-tag" style="background:var(--muted);color:#0A1628">Insufficient Evidence</span>
+    <div class="card-title">Neurofeedback — Why We Don't Recommend It</div>
+    <div class="card-teaser">Frequently discussed in ADHD communities. The current evidence from the most rigorous trials does not support its use. Here's why — and what to do instead.</div>
+  </div></div>
+  <div class="card-body">
+    <p>Neurofeedback (NFB) uses real-time EEG feedback to train individuals to self-regulate their brainwave patterns. It has been discussed as an ADHD intervention for over 50 years and is widely promoted in ADHD communities. We include it here because not mentioning it — given how frequently it comes up — would leave a gap. Our clinical assessment is that the current evidence does not support recommending it.</p>
+    <p><strong style="color:#fff">What the evidence says:</strong> A 2025 JAMA Psychiatry systematic review of 38 RCTs with 2,472 participants found no significant improvement in ADHD total symptoms with neurofeedback when probably-blinded assessments were used (SMD 0.04, not significant). A small effect appeared only in a subset of 9 RCTs using established standard protocols. A 2026 preprint RCT in Finnish adults found little evidence for NFB-specific change. The anecdotal clinical evidence is more positive, but this is consistent with a strong placebo effect rather than a specific treatment mechanism.</p>
+    <p><strong style="color:#fff">The cost problem:</strong> A full course of neurofeedback typically costs €1,500-3,000+ and involves 30-40 sessions. Given the current evidence, this represents poor value compared to medication (cost: prescription cost) or CBT (cost: 12-16 sessions).</p>
+    <p><strong style="color:#fff">Our recommendation:</strong> Do not prioritise neurofeedback until the evidence base improves. If you have tried medication and CBT and are looking for adjunctive approaches, the strategies on this page represent better-evidenced, lower-cost alternatives.</p>
+    <div class="evidence">Westwood et al. (2025 JAMA Psychiatry, 38 RCTs, n=2,472): no significant improvement with neurofeedback on probably-blinded outcomes (SMD 0.04). Finnish adult ADHD RCT preprint (April 2026): little evidence for NFB-specific change over time. Consistent with the most recent Cochrane-style synthesis. Evidence may change — this assessment reflects the current literature.</div>
+  </div>
+</div>
+
+<div class="section-title">🏥 Formal Assessment & Treatment</div>
+
+<div class="card reveal" style="--card-color:var(--teal)" onclick="toggleCard(this)">
+  <span class="card-chevron">▾</span>
+  <div class="card-header"><span class="card-icon">🩺</span><div><span class="card-tag">Assessment</span><div class="card-title">Pathways to Formal ADHD Assessment</div><div class="card-teaser">Formal assessment unlocks medication (Cohen's d = 0.9) and legal workplace protections. Here's how to access it.</div></div></div>
+  <div class="card-body">
+    <p>Stimulant medication for ADHD has a Cohen's d of 0.9 in adults — the largest effect size of any medication in all of psychiatric medicine. Formal assessment is the gateway to this and to legal workplace accommodations.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><p><strong>Ireland — Public:</strong> Ask your GP for a referral to HSE Adult ADHD Services. Waiting time: 12-18 months typically.</p></div>
+      <div class="step"><div class="step-num">2</div><p><strong>Ireland — Private:</strong> PSI-registered psychologists or IMC-registered psychiatrists with UKAAN certification. Cost: €400-800 assessment. ADHDclearfocus Pro subscribers receive 15% off with our clinical partners.</p></div>
+      <div class="step"><div class="step-num">3</div><p><strong>UK — NHS:</strong> GP referral to CMHT. Right to Choose pathway can significantly reduce waiting times.</p></div>
+      <div class="step"><div class="step-num">4</div><p><strong>UK — Private:</strong> UKAAN-certified psychiatrists. Cost: £500-1500. Shared care with NHS GP possible for medication.</p></div>
+      <div class="step"><div class="step-num">5</div><p><strong>Prepare:</strong> Bring your ADHDclearfocus report to your GP appointment. Gather school reports, early employment records, and a developmental history from a parent if possible.</p></div>
+    </div>
+    <div class="evidence">Faraone et al. (2021 World Federation of ADHD Consensus): methylphenidate Cohen's d = 0.9, amphetamines d = 1.1 in adult ADHD. Largest pharmacological effect sizes in all of psychiatry.</div>
+  </div>
+</div>
+
+<!-- CRISIS -->
+<div class="crisis-box reveal">
+  <strong style="color:#FF5252">If you are in crisis:</strong> Contact the Samaritans free on <strong style="color:#fff">116 123</strong> (Ireland and UK, available 24/7). You can also text "HELLO" to <strong style="color:#fff">50808</strong> (Ireland) or contact your GP. ADHDclearfocus is an educational resource — if you are experiencing a mental health emergency, please contact emergency services or a qualified healthcare professional immediately.
+  <br/><br/>
+  <a href="/crisis.html" style="color:var(--teal);font-weight:700">→ Open Crisis Mode (breathing tools, grounding techniques, binaural beats)</a>
+</div>
+
+<!-- BACK CTA -->
+<div style="background:linear-gradient(135deg,var(--navyMid),var(--navyLight));border:1px solid rgba(0,212,221,0.3);border-radius:16px;padding:24px;text-align:center;margin-top:20px" class="reveal">
+  <div style="font-size:22px;margin-bottom:10px">🧠</div>
+  <div style="font-weight:900;font-size:16px;margin-bottom:6px">Know which strategies matter most for you</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.6">These strategies are most powerful when targeted to your specific neurological dimensions. Complete the 10-dimension assessment to find out exactly which areas to prioritise — then Pro subscribers get a personalised plan.</div>
+  <a href="/" style="display:inline-block;background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy);border-radius:12px;padding:14px 28px;font-weight:900;font-size:15px;text-decoration:none;">Take the Assessment →</a>
+</div>
+
+</div><!-- end main -->
+
+<div style="background:var(--navyMid);border-top:1px solid var(--border);padding:20px;text-align:center;font-size:12px;color:var(--muted)">
+  <div style="margin-bottom:6px"><a href="/" style="color:var(--teal);text-decoration:none">ADHDclearfocus</a> · <a href="/legal.html" style="color:var(--teal);text-decoration:none">Privacy Policy</a> · <a href="/app.html" style="color:var(--teal);text-decoration:none">Secret Resources</a></div>
+  <div>Focused Care Psychology Limited · Waterford, Ireland</div>
+  <div style="margin-top:4px;font-size:11px">All strategies cite peer-reviewed clinical literature. This page is for educational purposes only and does not constitute clinical advice.</div>
+</div>
+
+<script>
+function toggleCard(card){
+  const wasOpen=card.classList.contains('open');
+  document.querySelectorAll('.card.open').forEach(c=>c.classList.remove('open'));
+  if(!wasOpen)card.classList.add('open');
+}
+function filterCards(cat,btn){
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('[data-category]').forEach(el=>{
+    const cats=el.dataset.category||'';
+    el.style.display=(cat==='all'||cats.includes(cat))?'':'none';
+  });
+  document.querySelectorAll('.section-title').forEach(el=>{
+    const cats=el.dataset.category||'';
+    el.style.display=(cat==='all'||cats.includes(cat)||cats==='')?'':'none';
+  });
+}
+let timerSeconds=25*60,timerTotal=25*60,timerRunning=false,timerInterval=null;
+function updateTimerDisplay(){
+  const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
+  document.getElementById('timerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  const pct=(timerSeconds/timerTotal)*100;
+  document.getElementById('timerBar').style.width=pct+'%';
+  document.getElementById('timerBar').style.background=pct>60?'linear-gradient(to right,#00D4DD,#4FC3F7)':pct>30?'linear-gradient(to right,#FFB347,#FF8C00)':'linear-gradient(to right,#FF5252,#FF0000)';
+}
+function toggleTimer(){
+  if(timerRunning){
+    clearInterval(timerInterval);timerRunning=false;
+    document.getElementById('timerBtn').textContent='▶ Resume Focus';
+    document.getElementById('timerBtn').style.background='#FFB347';
+  }else{
+    timerRunning=true;
+    document.getElementById('timerBtn').textContent='⏸ Pause';
+    document.getElementById('timerBtn').style.background='#00D4DD';
+    timerInterval=setInterval(()=>{
+      timerSeconds--;updateTimerDisplay();
+      if(timerSeconds<=0){
+        clearInterval(timerInterval);timerRunning=false;
+        document.getElementById('timerBtn').textContent='▶ Start Focus';
+        document.getElementById('timerBtn').style.background='#00D4DD';
+        document.getElementById('timerDisplay').style.color='#00E676';
+        setTimeout(()=>document.getElementById('timerDisplay').style.color='var(--teal)',3000);
+        if('Notification' in window&&Notification.permission==='granted'){new Notification('ADHDclearfocus','Focus session complete! Take a 5-minute break.');}
+      }
+    },1000);
+    if('Notification' in window&&Notification.permission==='default'){Notification.requestPermission();}
+  }
+}
+function resetTimer(){
+  clearInterval(timerInterval);timerRunning=false;timerSeconds=timerTotal;updateTimerDisplay();
+  document.getElementById('timerBtn').textContent='▶ Start Focus';
+  document.getElementById('timerBtn').style.background='#00D4DD';
+}
+function setTimer(minutes){
+  clearInterval(timerInterval);timerRunning=false;timerTotal=minutes*60;timerSeconds=timerTotal;updateTimerDisplay();
+  document.getElementById('timerBtn').textContent='▶ Start Focus';
+  document.getElementById('timerBtn').style.background='#00D4DD';
+}
+const moodResponses={
+  'Overwhelmed':'When overwhelmed, try the 5-4-3-2-1 grounding technique: name 5 things you see, 4 you can touch, 3 you hear, 2 you smell, 1 you taste. Then write down only 3 tasks for today. Open Crisis Mode if you need more support.',
+  'Frustrated':'Frustration in ADHD often signals a blocked goal. Name the exact cause: "I feel frustrated because..." — then either address it, accept it, or schedule it. Precise affect labelling reduces amygdala activation immediately.',
+  'Okay':'Good baseline to work from. Front-load your most demanding tasks before the day erodes your energy. Use the Pomodoro timer above for your first work block.',
+  'Focused':'Excellent — protect this state. Close unnecessary tabs and notifications. Use this window for your highest-priority, most cognitively demanding task.',
+  'Energised':'High-energy state: ideal for creative work, exercise, social tasks, or tackling something you\'ve been avoiding. ADHD energy states are valuable and finite — use this one deliberately.',
+};
+function selectMood(btn,mood){
+  document.querySelectorAll('.mood-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const resp=document.getElementById('moodResponse');
+  resp.style.display='block';
+  resp.innerHTML='<strong style="color:var(--teal)">'+mood+'</strong><br/>'+moodResponses[mood];
+}
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
+</body>
+</html>
