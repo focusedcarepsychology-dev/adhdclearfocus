@@ -1,0 +1,78 @@
+═══════════════════════════════════════════════════════════════
+  ADHDclearfocus — UPLOAD INSTRUCTIONS (read this first)
+═══════════════════════════════════════════════════════════════
+
+WHY YOUR LAST CHANGES DIDN'T SHOW:
+Your live site is serving an OLD build (it still has 35 questions).
+This build has 39 questions + animations + forum + fixes.
+The problem was never the code — it was that files weren't
+fully reaching GitHub. Follow these steps EXACTLY.
+
+───────────────────────────────────────────────────────────────
+STEP 1 — EXTRACT (do not upload the .zip itself)
+───────────────────────────────────────────────────────────────
+1. Right-click the downloaded zip → Extract All
+2. Open the extracted "flat_deploy" folder
+3. You should see index.html, app.html, the "api" folder, etc.
+
+───────────────────────────────────────────────────────────────
+STEP 2 — SHOW HIDDEN FILES (critical)
+───────────────────────────────────────────────────────────────
+The file ".python-version" is hidden. If it doesn't upload,
+Vercel fails. Turn on hidden files:
+  • Windows: File Explorer → View → Show → Hidden items (tick)
+  • Mac: press Cmd + Shift + . (period) in Finder
+
+───────────────────────────────────────────────────────────────
+STEP 3 — COPY EVERYTHING INTO YOUR REPO
+───────────────────────────────────────────────────────────────
+1. Inside flat_deploy, select ALL files (Ctrl+A / Cmd+A)
+2. Copy (Ctrl+C / Cmd+C)
+3. Open your local GitHub repo folder
+4. Paste (Ctrl+V / Cmd+V) → choose "Replace all" if asked
+
+───────────────────────────────────────────────────────────────
+STEP 4 — CONFIRM THE COPY WORKED (this is the key check)
+───────────────────────────────────────────────────────────────
+Open GitHub Desktop. Look at "Changes" on the left.
+  ✓ GOOD: you see MANY changed files (10-29 files)
+  ✗ BAD:  you see only 1-2 files → the copy failed, redo Step 3
+
+───────────────────────────────────────────────────────────────
+STEP 5 — COMMIT & PUSH
+───────────────────────────────────────────────────────────────
+1. Summary box: type "full build with animations + 39 questions"
+2. Click "Commit to main"
+3. Click "Push origin"
+
+───────────────────────────────────────────────────────────────
+STEP 6 — WATCH VERCEL DEPLOY
+───────────────────────────────────────────────────────────────
+1. Go to vercel.com → your project → Deployments
+2. A new deployment should start within 30 seconds
+3. Wait for "Ready" (green). If "Error" — tell Claude the error.
+
+───────────────────────────────────────────────────────────────
+STEP 7 — VERIFY IT'S THE NEW BUILD
+───────────────────────────────────────────────────────────────
+Visit adhdclearfocus.com on your phone. Take the assessment.
+  ✓ If you count 39 questions and see the friendly animated
+    character in the hero → SUCCESS, new build is live.
+  ✗ If you still see 35 questions → old build still cached,
+    hard-refresh (Ctrl+Shift+R) or wait 2 min for Vercel.
+
+───────────────────────────────────────────────────────────────
+ENVIRONMENT VARIABLES (needed for payments/email to work)
+───────────────────────────────────────────────────────────────
+Vercel → Settings → Environment Variables. Add these 8:
+  SENDGRID_API_KEY        (from SendGrid)
+  ANTHROPIC_API_KEY       (from console.anthropic.com)
+  STRIPE_SECRET_KEY       (sk_live_... from Stripe)
+  STRIPE_WEBHOOK_SECRET   (whsec_... from Stripe webhooks)
+  STRIPE_PRICE_ID         (price_... from Stripe product)
+  MAILCHIMP_API_KEY       (from Mailchimp)
+  MAILCHIMP_LIST_ID       3f6c1e163c
+  ADMIN_EMAIL             conalldonegan@outlook.com
+After adding: Deployments → Redeploy.
+
+═══════════════════════════════════════════════════════════════
