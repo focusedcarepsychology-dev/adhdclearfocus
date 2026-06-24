@@ -117,7 +117,9 @@
     /* HAPTIC */
     @keyframes haptic-ring{0%,100%{transform:scale(1);opacity:0.6}50%{transform:scale(1.15);opacity:1}}
     .haptic-active .ring-outer{animation:haptic-ring 1s ease-in-out infinite!important}
-  </style>
+  
+@media(prefers-reduced-motion:reduce){svg animate,svg animateTransform{animation-play-state:paused}*[aria-hidden="true"] svg *{animation:none!important}}
+</style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
   <!-- Vercel Analytics -->
@@ -131,6 +133,30 @@
 </div>
 
 <div class="main">
+<div style="display:flex;justify-content:center;margin:16px 0 8px" aria-hidden="true">
+  <svg viewBox="0 0 140 140" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="calmg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD"/><stop offset="100%" stop-color="#7B9FE0"/></linearGradient></defs>
+    <circle cx="70" cy="70" r="50" fill="#00D4DD" opacity="0.10"><animate attributeName="r" values="44;58;44" dur="8s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.06;0.16;0.06" dur="8s" repeatCount="indefinite"/></circle>
+    <circle cx="70" cy="70" r="38" fill="#00D4DD" opacity="0.14"><animate attributeName="r" values="34;46;34" dur="8s" repeatCount="indefinite"/></circle>
+    <g>
+      <animateTransform attributeName="transform" type="scale" values="0.92 0.92;1.04 1.04;0.92 0.92" dur="8s" repeatCount="indefinite" additive="sum"/>
+      <g transform="translate(70 70)">
+        <g transform="translate(-32 -32)">
+          <path d="M32 8c-16 0-27 11-27 26 0 8 4 15 9 19 2 2 3 5 3 7v3c0 3 2 4 4 4h22c2 0 4-1 4-4v-3c0-2 1-5 3-7 5-4 9-11 9-19 0-15-11-26-27-26z" fill="url(#calmg)"/>
+          <path d="M24 36c0 0 3 4 8 4s8-4 8-4" stroke="#0A1628" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M44 36c0 0 3 4 8 4s8-4 8-4" stroke="#0A1628" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0"/>
+          <path d="M20 30c2-2 6-2 8 0" stroke="#0A1628" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M36 30c2-2 6-2 8 0" stroke="#0A1628" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M26 44c3 3 11 3 14 0" stroke="#0A1628" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="18" cy="40" r="3" fill="#FF9AA2" opacity="0.5"/>
+          <circle cx="46" cy="40" r="3" fill="#FF9AA2" opacity="0.5"/>
+        </g>
+      </g>
+    </g>
+    <text x="70" y="132" text-anchor="middle" fill="#7B93B4" font-size="11" font-family="system-ui,sans-serif">breathe with me</text>
+  </svg>
+</div>
+
 
   <div class="offline-badge" id="offline-badge">
     ✓ Working offline — all crisis tools available

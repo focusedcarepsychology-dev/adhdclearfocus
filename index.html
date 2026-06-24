@@ -31,7 +31,7 @@
   <link rel="apple-touch-icon" href="/logo.png" />
   <title>ADHDclearfocus — Understand your ADHD brain completely</title>
   <style>
-@keyframes countUp{0%{transform:scale(0.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+@keyframes floatHero{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}} @keyframes countUp{0%{transform:scale(0.4);opacity:0}70%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 @keyframes slideInUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
 @keyframes pulseGlow{0%,100%{box-shadow:0 0 0}50%{box-shadow:0 0 24px rgba(0,212,221,0.35)}}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -63,7 +63,9 @@
     .animate-pulse{animation:pulse 2s infinite}
     .animate-float{animation:float 3s ease-in-out infinite}
     .animate-fadeUp{animation:fadeUp 0.6s ease forwards}
-  </style>
+  
+@media(prefers-reduced-motion:reduce){svg animate,svg animateTransform{animation-play-state:paused}*[aria-hidden="true"] svg *{animation:none!important}}
+</style>
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -896,6 +898,13 @@ function App(){
                 borderRadius:"50%",background:`radial-gradient(circle,${C.teal}15,transparent 70%)`}}/>
               <div style={{position:"absolute",bottom:-30,left:-30,width:120,height:120,
                 borderRadius:"50%",background:`radial-gradient(circle,${C.purple}15,transparent 70%)`}}/>
+
+              {/* Animated friendly character */}
+              <div style={{position:"absolute",top:10,right:10,width:110,height:110}} aria-hidden="true"
+                dangerouslySetInnerHTML={{__html:`<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="110" height="110"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD"/><stop offset="100%" stop-color="#4FC3F7"/></linearGradient></defs><circle cx="60" cy="60" r="42" fill="#00D4DD"><animate attributeName="opacity" values="0.10;0.22;0.10" dur="3.5s" repeatCount="indefinite"/><animate attributeName="r" values="40;46;40" dur="3.5s" repeatCount="indefinite"/></circle><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -6; 0 0" dur="3s" repeatCount="indefinite" additive="sum"/><animateTransform attributeName="transform" type="rotate" values="-2 60 60; 2 60 60; -2 60 60" dur="4s" repeatCount="indefinite" additive="sum"/><path d="M60 24c-19 0-32 13-32 31 0 10 5 18 10 23 3 3 4 6 4 9v4c0 3 2 5 5 5h26c3 0 5-2 5-5v-4c0-3 1-6 4-9 5-5 10-13 10-23 0-18-13-31-32-31z" fill="url(#hg)"/><g><circle cx="50" cy="56" r="4" fill="#0A1628"/><circle cx="70" cy="56" r="4" fill="#0A1628"/><circle cx="51.5" cy="54.5" r="1.3" fill="#fff"/><circle cx="71.5" cy="54.5" r="1.3" fill="#fff"/><animateTransform attributeName="transform" type="scale" values="1 1;1 1;1 0.1;1 1;1 1" dur="4.5s" repeatCount="indefinite" additive="sum"/></g><path d="M51 67c4 5 14 5 18 0" stroke="#0A1628" stroke-width="3" fill="none" stroke-linecap="round"><animate attributeName="d" values="M51 67c4 5 14 5 18 0; M51 67c4 6 14 6 18 0; M51 67c4 5 14 5 18 0" dur="3s" repeatCount="indefinite"/></path><circle cx="45" cy="63" r="3.5" fill="#FF9AA2" opacity="0.55"/><circle cx="75" cy="63" r="3.5" fill="#FF9AA2" opacity="0.55"/></g><circle cx="90" cy="40" r="4" fill="#A855F7"><animate attributeName="cy" values="44;18;44" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.9;0" dur="3.2s" repeatCount="indefinite"/></circle><circle cx="98" cy="36" r="2.5" fill="#00E676"><animate attributeName="cy" values="40;14;40" dur="2.6s" begin="0.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.8;0" dur="2.6s" begin="0.6s" repeatCount="indefinite"/></circle><circle cx="84" cy="44" r="2" fill="#FFB347"><animate attributeName="cy" values="48;22;48" dur="3.8s" begin="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.85;0" dur="3.8s" begin="1.2s" repeatCount="indefinite"/></circle></svg>`}}/>
+
+              
+
 
               <div style={{position:"relative"}}>
                 <div style={{display:"inline-flex",alignItems:"center",gap:6,
@@ -1884,4 +1893,3 @@ root.render(<App/>);
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
 </body>
 </html>
-

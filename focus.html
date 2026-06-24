@@ -48,7 +48,9 @@
     .ambient-btn{background:#0A1628;border:1px solid #1E3A5F;color:#7B93B4;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.2s}
     .ambient-btn.active{border-color:#00D4DD;color:#00D4DD;background:#00D4DD10}
     .how-it-works{background:linear-gradient(135deg,#0A2010,#0A1628);border:1px solid #00E67630;border-radius:14px;padding:16px;margin-bottom:12px}
-  </style>
+  
+@media(prefers-reduced-motion:reduce){svg animate,svg animateTransform{animation-play-state:paused}*[aria-hidden="true"] svg *{animation:none!important}}
+</style>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
   <!-- Vercel Analytics -->
@@ -61,6 +63,28 @@
 </div>
 
 <div class="main">
+<div style="display:flex;justify-content:center;margin:12px 0" aria-hidden="true">
+  <svg viewBox="0 0 200 90" width="180" height="81" xmlns="http://www.w3.org/2000/svg">
+    <defs><linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD"/><stop offset="100%" stop-color="#4FC3F7"/></linearGradient><linearGradient id="fg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C084FC"/></linearGradient></defs>
+    <rect x="20" y="62" width="70" height="6" rx="3" fill="#1E3A5F"/>
+    <rect x="110" y="62" width="70" height="6" rx="3" fill="#1E3A5F"/>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="2.6s" repeatCount="indefinite"/>
+      <circle cx="55" cy="38" r="20" fill="url(#fg1)"/>
+      <circle cx="49" cy="36" r="3" fill="#0A1628"/><circle cx="61" cy="36" r="3" fill="#0A1628"/>
+      <path d="M49 45c3 3 9 3 12 0" stroke="#0A1628" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <rect x="40" y="56" width="30" height="8" rx="4" fill="#00D4DD" opacity="0.4"/>
+    </g>
+    <g><animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="2.6s" begin="1.3s" repeatCount="indefinite"/>
+      <circle cx="145" cy="38" r="20" fill="url(#fg2)"/>
+      <circle cx="139" cy="36" r="3" fill="#0A1628"/><circle cx="151" cy="36" r="3" fill="#0A1628"/>
+      <path d="M139 45c3 3 9 3 12 0" stroke="#0A1628" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <rect x="130" y="56" width="30" height="8" rx="4" fill="#A855F7" opacity="0.4"/>
+    </g>
+    <circle cx="100" cy="30" r="3" fill="#00E676"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+    <text x="100" y="82" text-anchor="middle" fill="#7B93B4" font-size="11" font-family="system-ui,sans-serif">focusing together</text>
+  </svg>
+</div>
+
 
   <!-- HOW IT WORKS -->
   <div class="how-it-works" id="howItWorks">

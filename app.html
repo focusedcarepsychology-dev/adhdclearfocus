@@ -217,7 +217,7 @@
     <img src="/logo.png" alt="ADHDclearfocus"/>
     ADHD<span>clearfocus</span>
   </a>
-  <div style="font-size:12px;color:#7B93B4" id="headerStatus">Secret Resources</div>
+  <div style="font-size:11px;color:#00E676;display:flex;align-items:center;gap:5px" id="headerStatus"><span style="width:7px;height:7px;border-radius:50%;background:#00E676;display:inline-block"></span>Online</div>
 </div>
 
 <div class="main">
@@ -262,7 +262,7 @@
   <!-- TRIAL BANNER -->
   <div class="trial-banner active" id="trialBanner">
     <span id="trialText">🎉 14-day Pro trial active</span>
-    <a href="/">Upgrade</a>
+    <a href="/pricing.html">See Pro plans →</a>
   </div>
 
   <!-- CRISIS RESOLVED MESSAGE -->
@@ -709,8 +709,8 @@ if(document.referrer.includes('strategies')) localStorage.setItem('visited_strat
 // ── HEADER STATUS ─────────────────────────────────────────────────
 document.getElementById('headerStatus').textContent=
   navigator.onLine?'● Online':'○ Offline — crisis tools available';
-window.addEventListener('online',()=>document.getElementById('headerStatus').textContent='● Online — Secret Resources');
-window.addEventListener('offline',()=>document.getElementById('headerStatus').textContent='○ Offline — crisis tools available');
+window.addEventListener('online',()=>document.getElementById('headerStatus').innerHTML='<span style=\"width:7px;height:7px;border-radius:50%;background:#00E676;display:inline-block\"></span> Online');
+window.addEventListener('offline',()=>document.getElementById('headerStatus').innerHTML='<span style=\"width:7px;height:7px;border-radius:50%;background:#FFB347;display:inline-block\"></span> Offline — crisis tools work');
 
 // ── AUTH GATE ─────────────────────────────────────────────────────
 (function(){
