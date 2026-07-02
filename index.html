@@ -4,15 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#0A1628" />
-  <meta name="description" content="ADHDclearfocus — The most comprehensive ADHD profile assessment available online. 10 neurological dimensions, 35 clinically validated questions, personalised evidence-based report. Developed by the ADHDclearfocus clinical team." />
+  <meta name="description" content="ADHDclearfocus — The most comprehensive ADHD profile assessment available online. 10 neurological dimensions, 39 clinically validated questions, personalised evidence-based report. Developed by the ADHDclearfocus clinical team." />
   <meta property="og:title" content="ADHDclearfocus — Understand your ADHD brain completely" />
-  <meta property="og:description" content="10 neurological dimensions. 35 validated questions. Your most complete ADHD profile — developed by the ADHDclearfocus clinical team." />
+  <meta property="og:description" content="10 neurological dimensions. 39 validated questions. Your most complete ADHD profile — developed by the ADHDclearfocus clinical team." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://adhdclearfocus.com" />
   <meta property="og:image" content="https://adhdclearfocus.com/logo.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ADHDclearfocus — Know your ADHD profile completely" />
-  <meta name="twitter:description" content="10 neurological dimensions. 35 validated questions. Developed by the ADHDclearfocus clinical team." />
+  <meta name="twitter:description" content="10 neurological dimensions. 39 validated questions. Developed by the ADHDclearfocus clinical team." />
   <!-- Google tag (gtag.js) -->
   <link rel="canonical" href="https://adhdclearfocus.com/"/>
   
@@ -385,7 +385,7 @@ function scoreResults(answers){
 }
 
 function getFoundingDaysLeft(){
-  const close=new Date("2026-09-30");
+  const close=new Date("2026-07-31T23:59:59");
   const diff=Math.ceil((close-new Date())/(1000*60*60*24));
   return Math.max(0,diff);
 }
@@ -481,8 +481,8 @@ function FoundingCTA({daysLeft,showDetail,setShowDetail,proEmail,setProEmail,pro
         <div>
           <p style={{fontSize:13,color:C.muted,marginBottom:10,lineHeight:1.55}}>
             Join the founding member waitlist. Your €5/month yearly rate is reserved from sign-up.
-            When Pro launches, you'll get a <strong style={{color:C.white}}>14-day free trial</strong> —
-            full access, no payment required. Cancel any time before the trial ends and pay nothing.
+            When Pro launches, you'll get a <strong style={{color:C.white}}>7-day free trial — no credit
+            card required</strong>. Full access to every Pro feature. Cancel any time and pay nothing.
           </p>
           <div style={{display:"flex",gap:8}}>
             <input type="email" value={proEmail} onChange={e=>setProEmail(e.target.value)}
@@ -502,7 +502,7 @@ function FoundingCTA({daysLeft,showDetail,setShowDetail,proEmail,setProEmail,pro
           padding:14,textAlign:"center"}}>
           <div style={{fontSize:18,marginBottom:6}}>🎉</div>
           <div style={{fontWeight:700,fontSize:14,color:"#C084FC",marginBottom:4}}>You are on the list!</div>
-          <div style={{color:C.muted,fontSize:12}}>Your founding rate of €9/month is reserved.</div>
+          <div style={{color:C.muted,fontSize:12}}>Your founding rate of €5/month (billed yearly) is reserved for life.</div>
         </div>
       )}
     </div>
@@ -656,8 +656,6 @@ function App(){
   const[authEmail,setAuthEmail]=useState('');
   const[authCode,setAuthCode]=useState('');
   const[authError,setAuthError]=useState('');
-  const FOUNDING_DEADLINE=new Date("2026-07-31T23:59:59");
-  const daysLeft=Math.max(0,Math.ceil((FOUNDING_DEADLINE-new Date())/(1000*60*60*24)));
   const isRegistered=()=>!!localStorage.getItem('acf_email');
   const isProUser=()=>localStorage.getItem('acf_pro')==='true';
   function registerUser(email){
@@ -963,13 +961,20 @@ function App(){
                   Discover Your Full ADHD Profile →
                 </button>
                 <p style={{fontSize:12,color:C.muted,marginTop:10}}>
-                  35 questions · 14 minutes · Results available immediately
+                  39 questions · 12–15 minutes · Results available immediately
                 </p>
                 <div style={{display:"inline-flex",alignItems:"center",gap:6,
                   background:"#00E67610",border:"1px solid #00E67630",
                   borderRadius:99,padding:"5px 14px",fontSize:11,color:C.green,
                   fontWeight:700,marginTop:8}}>
-                  🎁 14-day Pro trial available after assessment — no card required
+                  🎁 7-day free Pro trial after your assessment — no credit card required
+                </div>
+                <div style={{marginTop:14}}>
+                  <a href="/insights.html"
+                    onClick={()=>gtag("event","blog_nav_click",{location:"intro"})}
+                    style={{color:C.teal,fontSize:13,fontWeight:700,textDecoration:"none"}}>
+                    📚 ADHD Insights — evidence-based articles →
+                  </a>
                 </div>
               </div>
             </div>
@@ -1103,7 +1108,7 @@ function App(){
                 lineHeight:1.6,marginBottom:12}}>
                 🎁 <strong style={{color:C.white}}>Complete the assessment today</strong> and receive
                 a lifetime discount code for €5/month Pro — locked forever, even when the price rises.
-                Plus a <strong style={{color:C.white}}>14-day free trial</strong> when Pro launches.
+                Plus a <strong style={{color:C.white}}>7-day free trial — no credit card required</strong> when Pro launches.
               </div>
               <button onClick={()=>{gtag("event","screener_start");tr(()=>setStep("consent"));}}
                 style={{width:"100%",background:`linear-gradient(135deg,${C.teal},${C.blue})`,
@@ -1140,7 +1145,7 @@ function App(){
               <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
                 borderRadius:14,padding:18,marginBottom:16}}>
                 <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>This assessment will:</div>
-                {["Collect your responses to 35 questions about ADHD-related experiences",
+                {["Collect your responses to 39 questions about ADHD-related experiences",
                   "Process your responses to generate a personalised ADHD neurological profile",
                   "Store your email address (if provided) for report delivery and updates",
                   "Use anonymised analytics to improve the platform (Google Analytics)"].map(t=>(
@@ -1341,7 +1346,7 @@ function App(){
                   </div>
                   <div style={{fontSize:12,color:C.muted,lineHeight:1.55}}>
                     {result.totalPct>=65
-                      : "Your profile shows patterns consistent with elevated neurological load across multiple ADHD dimensions — a pattern seen in approximately 5–8% of adults (Faraone et al., 2021). Your full breakdown unlocks with your report."
+                      ? "Your profile shows patterns consistent with elevated neurological load across multiple ADHD dimensions — a pattern seen in approximately 5–8% of adults (Faraone et al., 2021). Your full breakdown unlocks with your report."
                       : result.totalPct>=40
                       ? "Your profile shows moderate neurological load across ADHD dimensions — above the general population average. Common in adults with partially compensated ADHD. Your full breakdown is in your report."
                       : "Your profile shows lower overall neurological load, though specific domain patterns were identified worth reviewing in detail. Full breakdown unlocks with your report."
@@ -1512,6 +1517,64 @@ function App(){
                       plan to receive your unique 15% discount code. Valid with our registered clinical
                       partners who meet DSM-5/ICD-11 diagnostic standards — the same standards accepted
                       by HSE, NHS, and government services. Partners listed in your member dashboard on launch.
+                    </div>
+                  </div>
+
+                  {/* Professional support — Psychology Today */}
+                  <div style={{background:C.navyLight,border:`1px solid ${C.border}`,
+                    borderRadius:14,padding:"16px",marginTop:12}}>
+                    <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+                      <span style={{fontSize:18,flexShrink:0}}>🧑‍⚕️</span>
+                      <div>
+                        <div style={{fontWeight:800,fontSize:13,marginBottom:3}}>
+                          Concerned about your results?
+                        </div>
+                        <div style={{fontSize:12,color:C.muted,lineHeight:1.6,marginBottom:10}}>
+                          A screener is a starting point, not a diagnosis. If your profile raises
+                          questions you want to talk through, you can speak with a chartered
+                          psychologist experienced in adult ADHD — a free 15-minute initial
+                          consultation is available.
+                        </div>
+                        <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075"
+                          target="_blank" rel="noopener"
+                          onClick={()=>gtag("event","pt_profile_click",{location:"paywall"})}
+                          style={{display:"inline-block",background:C.navyMid,border:`1px solid ${C.teal}60`,
+                          color:C.teal,borderRadius:8,padding:"9px 14px",fontSize:12,fontWeight:700,
+                          textDecoration:"none"}}>
+                          Speak to a psychologist (Psychology Today) →
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Book — The Gratitude Prescription */}
+                  <div style={{background:"linear-gradient(135deg,#1A1206,#0A1628)",
+                    border:"1px solid #FFB34740",borderRadius:14,padding:"16px",marginTop:12}}>
+                    <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
+                      <span style={{fontSize:18,flexShrink:0}}>📓</span>
+                      <div>
+                        <div style={{fontSize:10,color:C.amber,fontWeight:700,
+                          textTransform:"uppercase",letterSpacing:1,marginBottom:3}}>
+                          Recommended reading
+                        </div>
+                        <div style={{fontWeight:800,fontSize:13,marginBottom:3}}>
+                          The Gratitude Prescription
+                        </div>
+                        <div style={{fontSize:12,color:C.muted,lineHeight:1.6,marginBottom:10}}>
+                          A structured, evidence-based 90-day gratitude programme written by a
+                          DPsych psychologist. Gratitude practice activates the prefrontal cortex —
+                          the region underactivated in ADHD — and it takes seconds per day, designed
+                          for people who find habits difficult.
+                        </div>
+                        <a href="https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL"
+                          target="_blank" rel="noopener"
+                          onClick={()=>gtag("event","book_click",{location:"paywall"})}
+                          style={{display:"inline-block",background:C.amber,color:C.navy,
+                          borderRadius:8,padding:"9px 14px",fontSize:12,fontWeight:800,
+                          textDecoration:"none"}}>
+                          📚 Get the book on Amazon →
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

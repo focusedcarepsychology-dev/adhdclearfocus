@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="ADHD Insights — evidence-based articles on adult ADHD prevalence, screening tools, exercise, and late diagnosis. Every claim cited to peer-reviewed research."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>ADHD Insights — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--blue:#4FC3F7;--navy:#0A1628;--navyMid:#112240;--navyLight:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}
+    .logo span{color:var(--teal)}
+    .back-btn{background:var(--navyLight);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;text-decoration:none;font-family:inherit;transition:all 0.2s}
+    .back-btn:hover{color:#fff;border-color:var(--teal)}
+    .hero{background:linear-gradient(135deg,#0F2847 0%,#0A1628 50%,#1A0A35 100%);padding:40px 20px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,221,0.1);border:1px solid rgba(0,212,221,0.3);border-radius:99px;padding:6px 16px;font-size:11px;color:var(--teal);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px}
+    .hero h1{font-size:clamp(24px,5vw,38px);font-weight:900;line-height:1.15;letter-spacing:-1.5px;margin-bottom:12px}
+    .hero h1 span{background:linear-gradient(135deg,var(--teal),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{color:#A8C4D8;font-size:14px;line-height:1.7;max-width:540px;margin:0 auto}
+    .main{max-width:760px;margin:0 auto;padding:24px 16px 80px}
+    .article{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden;transition:border-color 0.25s}
+    .article:hover{border-color:var(--teal)}
+    .article-head{padding:18px;cursor:pointer;display:flex;gap:12px;align-items:flex-start}
+    .article-icon{font-size:26px;flex-shrink:0}
+    .article-title{font-weight:800;font-size:15px;line-height:1.35;margin-bottom:4px}
+    .article-teaser{font-size:13px;color:var(--muted);line-height:1.6}
+    .article-meta{font-size:11px;color:var(--teal);font-weight:700;margin-top:6px}
+    .article-body{display:none;padding:0 18px 18px;border-top:1px solid var(--border)}
+    .article.open .article-body{display:block}
+    .article-body p{font-size:14px;color:#A8C4D8;line-height:1.8;margin-top:14px}
+    .cta-row{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .cta-btn{display:inline-block;background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:800;text-decoration:none}
+    .cta-ghost{display:inline-block;background:var(--navyMid);border:1px solid var(--border);color:var(--muted);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:700;text-decoration:none}
+    .cta-ghost:hover{color:#fff;border-color:var(--teal)}
+    .promo{border-radius:16px;padding:20px;margin-top:28px}
+    .promo-book{background:linear-gradient(135deg,#1A1206,#0A1628);border:1px solid #FFB34740}
+    .promo-pro{background:linear-gradient(135deg,#1A0A35,#0A1825);border:1px solid #A855F760}
+    .promo-pt{background:var(--navyLight);border:1px solid var(--border)}
+    .promo h3{font-size:15px;font-weight:800;margin-bottom:6px}
+    .promo p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px}
+    .tag{display:inline-block;border-radius:99px;padding:2px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px}
+    .footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);line-height:1.8}
+    .footer a{color:var(--teal);text-decoration:none}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="/">ADHD<span>clearfocus</span></a>
+  <a class="back-btn" href="/app.html">← Dashboard</a>
+</header>
+
+<section class="hero">
+  <div class="hero-badge">📚 ADHD Insights</div>
+  <h1>Evidence-based articles, <span>fully cited</span></h1>
+  <p>Short, honest reads on adult ADHD — every claim traced to peer-reviewed research. No hype, no miracle cures.</p>
+</section>
+
+<main class="main">
+
+  <!-- ARTICLE 1 -->
+  <div class="article" id="prevalence">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'prevalence')">
+      <span class="article-icon">🌍</span>
+      <div>
+        <div class="article-title">How common is adult ADHD really?</div>
+        <div class="article-teaser">366 million adults worldwide meet symptomatic criteria — most have never been assessed.</div>
+        <div class="article-meta">3 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>A global systematic review and meta-analysis by Song et al. (2021, Journal of Global Health) estimated that 6.76% of adults worldwide have symptomatic ADHD — approximately 366 million people in 2020 — while 2.58% have persistent ADHD with documented childhood onset.</p>
+      <p>The gap between those two figures matters. Millions of adults experience clinically meaningful ADHD symptoms without ever having been identified in childhood. Faraone et al.'s (2021) International Consensus Statement notes ADHD is frequently missed, particularly in women and in predominantly inattentive presentations — the quiet, disorganised, chronically overwhelmed profile that rarely disrupts a classroom.</p>
+      <p>Prevalence declines with age (from roughly 9% at 18–24 to under 5% over 60, Song et al., 2021), but the functional impact for those affected — occupational instability, relationship strain, financial difficulty — is documented across the lifespan (Barkley et al., 2008).</p>
+      <p>If you have spent years wondering why things that seem simple for others feel disproportionately hard for you, a structured screener is a reasonable, low-cost first step.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'prevalence'})">Take the free 39-question screener →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 2 -->
+  <div class="article" id="screeners">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'screeners')">
+      <span class="article-icon">🔬</span>
+      <div>
+        <div class="article-title">ASRS-v1.1 vs ASRS-5: what ADHD screeners can and cannot tell you</div>
+        <div class="article-teaser">Screening tools are gatekeepers, not verdicts. Here is what the numbers actually mean.</div>
+        <div class="article-meta">4 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>The WHO's ASRS-v1.1 (Kessler et al., 2005) is the most studied adult ADHD screener. Its six-item Part A identifies likely ADHD with 68.7% sensitivity and 99.5% specificity at the classic 4-of-6 threshold, and modern validation shows overall discrimination of AUC 0.90 (Brevik et al., 2020). Its wording is consistent with DSM-5-TR criteria.</p>
+      <p>In 2017 the WHO published a DSM-5-specific successor, the ASRS-5 (Ustun et al., 2017, JAMA Psychiatry), with 91.4% sensitivity and 96% specificity in general population samples. Interestingly, one of its own authors, Ron Kessler, later recommended unweighted scoring because the DSM-5 weighted method substantially overestimates prevalence (Kessler, 2023, Harvard).</p>
+      <p>The honest takeaway: no screener diagnoses ADHD. A positive screen means a formal assessment is warranted; a negative screen does not fully rule ADHD out, particularly in people who mask or compensate. Screeners are decision-support tools — they help you decide whether a €500–€1,500 formal assessment is a justified next step.</p>
+      <p>ADHDclearfocus draws on ASRS-v1.1 items alongside Brown ADD domains and DIVA-5 developmental history questions, and reports the ASRS Part A threshold transparently in your results.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'screeners'})">Map your 10-dimension profile →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 3 -->
+  <div class="article" id="exercise">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'exercise')">
+      <span class="article-icon">🏃</span>
+      <div>
+        <div class="article-title">The most underused ADHD intervention costs nothing</div>
+        <div class="article-teaser">Aerobic exercise has RCT evidence comparable to low-dose medication for symptom reduction.</div>
+        <div class="article-meta">3 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>Stimulant medication has the largest effect size in psychiatric medicine (Cohen's d ≈ 0.9 for methylphenidate in adults, Faraone et al., 2021). But the most accessible evidence-based intervention is free: aerobic exercise.</p>
+      <p>Hoza et al. (2015, Journal of Abnormal Child Psychology) found significant ADHD symptom reductions from regular aerobic activity. Pontifex et al. (2013, Journal of Pediatrics) demonstrated measurable improvements in inhibitory control and academic performance after a single 20-minute session.</p>
+      <p>The practical protocol: 20–30 minutes of moderate aerobic activity — brisk walking counts — immediately before your most cognitively demanding work. The 2019 European ADHD Guidelines (Kooij et al.) endorse structured physical activity as a supported occupational accommodation.</p>
+      <p>Exercise is not a replacement for assessment or treatment where warranted. It is the highest-return habit available while you decide on next steps.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'exercise'})">Start with your profile →</a>
+        <a class="cta-ghost" href="/strategies.html">See all 47 strategies</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 4 -->
+  <div class="article" id="latediagnosis">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'latediagnosis')">
+      <span class="article-icon">🎭</span>
+      <div>
+        <div class="article-title">Why so many people discover their ADHD after 30</div>
+        <div class="article-teaser">Compensation works — until it doesn't. The collapse usually has a trigger.</div>
+        <div class="article-meta">3 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>ADHD is neurodevelopmental: heritability is 70–80% and it does not begin in adulthood (Faraone et al., 2021). Yet late identification is extremely common. The reason is compensation — high intelligence, external structure, supportive environments, and sheer effort can mask executive difficulties for decades.</p>
+      <p>The mask typically slips at predictable transition points: starting university (structure disappears), a promotion into management (executive load multiplies), or parenthood (sleep and routine collapse simultaneously). What looks like sudden adult-onset difficulty is usually the exhaustion of long-running compensatory strategies.</p>
+      <p>Young et al. (2011) documented that adults who finally understand their profile — even before any formal diagnosis — report meaningful improvements in self-concept and wellbeing. Reframing decades of 'personal failure' as an unidentified neurological difference has direct therapeutic value.</p>
+      <p>If this pattern sounds familiar, start by mapping your profile. Old school reports, a conversation with a parent, and a structured screener together form the developmental picture a clinician will ask for anyway.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'latediagnosis'})">Map your developmental picture →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOK PROMO -->
+  <div class="promo promo-book">
+    <span class="tag" style="background:var(--amber);color:var(--navy)">Recommended reading</span>
+    <h3>📓 The Gratitude Prescription</h3>
+    <p>A structured, evidence-based 90-day gratitude programme written by a DPsych psychologist with 17 years of clinical experience. Gratitude practice specifically activates the prefrontal cortex — the region underactivated in ADHD — improving emotional regulation and resilience. Designed for people who find sustained habits difficult: it takes seconds per day. Available globally.</p>
+    <a class="cta-btn" style="background:var(--amber)" href="https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL" target="_blank" rel="noopener" onclick="gtag('event','book_click',{location:'insights'})">📚 Get it on Amazon →</a>
+  </div>
+
+  <!-- PRO PROMO -->
+  <div class="promo promo-pro">
+    <span class="tag" style="background:var(--purple);color:#fff">Pro — Founding Member</span>
+    <h3>🚀 Everything here, working — free for 7 days</h3>
+    <p>Pro includes the tools these articles describe, built and working: body-doubling focus rooms, the evidence-led audio engine, crisis mode, 47 cited strategies, the 7-day focus challenge, and monthly re-assessments. Founding members get a <strong style="color:#fff">7-day free trial — no credit card required</strong> — and the founding rate locked for life.</p>
+    <a class="cta-btn" style="background:var(--purple);color:#fff" href="/pricing.html" onclick="gtag('event','pro_nav_click',{location:'insights'})">See Pro plans →</a>
+  </div>
+
+  <!-- PROFESSIONAL SUPPORT -->
+  <div class="promo promo-pt">
+    <span class="tag" style="background:var(--teal);color:var(--navy)">Professional support</span>
+    <h3>🧑‍⚕️ Want to talk it through with a professional?</h3>
+    <p>Articles and screeners inform — they don't diagnose. If what you've read raises questions about your own experience, you can speak with a chartered psychologist experienced in adult ADHD. A free 15-minute initial consultation is available.</p>
+    <a class="cta-ghost" href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075" target="_blank" rel="noopener" onclick="gtag('event','pt_profile_click',{location:'insights'})">Connect via Psychology Today →</a>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div>ADHDclearfocus is an educational tool operated by Focused Care Psychology Limited. It does not provide diagnosis or clinical services.</div>
+  <div style="margin-top:8px">
+    <a href="/">Screener</a> · <a href="/app.html">Dashboard</a> · <a href="/strategies.html">Strategies</a> · <a href="/resources.html">Research</a> · <a href="/pricing.html">Pricing</a> · <a href="/legal.html">Privacy &amp; Terms</a>
+  </div>
+  <div style="margin-top:8px">In crisis? Samaritans: <a href="tel:116123">116 123</a> (free, 24/7)</div>
+</footer>
+
+<script>
+function toggleArticle(el,id){
+  const wasOpen=el.classList.contains('open');
+  el.classList.toggle('open');
+  if(!wasOpen){gtag('event','blog_read',{article:id});}
+}
+// Deep-link support: /insights.html#exercise opens that article
+if(location.hash){
+  const el=document.getElementById(location.hash.slice(1));
+  if(el&&el.classList.contains('article')){el.classList.add('open');el.scrollIntoView();}
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

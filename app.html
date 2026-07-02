@@ -261,7 +261,7 @@
 
   <!-- TRIAL BANNER -->
   <div class="trial-banner active" id="trialBanner">
-    <span id="trialText">🎉 14-day Pro trial active</span>
+    <span id="trialText">🎉 7-day free Pro trial active — no credit card required</span>
     <a href="/pricing.html">See Pro plans →</a>
   </div>
 
@@ -294,6 +294,11 @@
       <span class="icon">📚</span>
       <span class="title">Strategies</span>
       <span class="sub">47 evidence-based coping tools</span>
+    </a>
+    <a href="/insights.html" class="quick-card strategies">
+      <span class="icon">📰</span>
+      <span class="title">ADHD Insights</span>
+      <span class="sub">Evidence-based articles, fully cited</span>
     </a>
     <a href="/" class="quick-card assess">
       <span class="icon">🧠</span>
@@ -489,11 +494,11 @@ function dismissInstall(){
 
 // ── GREETING ──────────────────────────────────────────────────────
 const hour=new Date().getHours();
-const greet=hour<12?'Good morning':'hour<17?''Good afternoon':'Good evening';
+const greet=hour<12?'Good morning':hour<17?'Good afternoon':'Good evening';
 const greetEmojis={morning:'☀️',afternoon:'⚡',evening:'🌙'};
 const period=hour<12?'morning':hour<17?'afternoon':'evening';
 document.getElementById('welcomeEmoji').textContent=greetEmojis[period];
-document.getElementById('welcomeTitle').textContent=(hour<12?'Good morning':'hour<17?''Good afternoon':'Good evening')+' — your Secret Resources';
+document.getElementById('welcomeTitle').textContent=(hour<12?'Good morning':hour<17?'Good afternoon':'Good evening')+' — your Secret Resources';
 document.getElementById('greeting').textContent=(hour<12?'Good morning':hour<17?'Good afternoon':'Good evening')+' 👋';
 document.getElementById('greetingSub').textContent=
   hour<10?'Morning is often the best time for demanding tasks. What\'s your priority today?':
@@ -515,10 +520,10 @@ function updateTrialBanner(){
   if(!trialStart){
     localStorage.setItem('trial-start',Date.now());
   }
-  const daysLeft=Math.max(0,14-Math.floor((Date.now()-parseInt(trialStart||Date.now()))/(1000*60*60*24)));
-  if(daysLeft>3){
+  const daysLeft=Math.max(0,7-Math.floor((Date.now()-parseInt(trialStart||Date.now()))/(1000*60*60*24)));
+  if(daysLeft>2){
     banner.className='trial-banner active';
-    text.textContent=`🎉 ${daysLeft} days left in your Pro trial — explore everything`;
+    text.textContent=`🎉 ${daysLeft} days left in your free Pro trial — no card needed, explore everything`;
   } else if(daysLeft>0){
     banner.className='trial-banner warning';
     text.textContent=`⏰ ${daysLeft} days left — upgrade to keep full access`;
@@ -630,12 +635,12 @@ async function submitDiary(){
   });
 
   const responses=[
-    score<=−2?`That sounds like a really hard day. Your brain is working harder than most people realise. Three things that might help right now:\n• Open Crisis Mode for a breathing reset\n• Write down just ONE task for tomorrow\n• Drink some water and take 5 minutes away from screens`:
-    score===−1?`Mixed day — that's the reality of ADHD. What you're describing is familiar. The fact that you wrote it down matters.\n\nFor tomorrow: pick ONE thing to do before 10am. Just one. Small wins compound.`:
+    score<=-2?`That sounds like a really hard day. Your brain is working harder than most people realise. Three things that might help right now:\n• Open Crisis Mode for a breathing reset\n• Write down just ONE task for tomorrow\n• Drink some water and take 5 minutes away from screens`:
+    score===-1?`Mixed day — that's the reality of ADHD. What you're describing is familiar. The fact that you wrote it down matters.\n\nFor tomorrow: pick ONE thing to do before 10am. Just one. Small wins compound.`:
     score===0?`Thanks for checking in. Neutral days are actually underrated — they're when habits get built.\n\nHave you tried the 47 strategies page? There might be something in there for exactly what you're navigating.`:
     score===1?`Good to hear there were some wins in there. ADHD brains often discount progress — write down one specific thing you did well today.`:
     `That sounds like a genuinely good day. Notice what conditions made that possible — environment, sleep, task type, time of day. That's data you can use.`
-  ][0]||(score<=−2?`Hard day noted.`:`Good day noted.`);
+  ][0]||(score<=-2?`Hard day noted.`:`Good day noted.`);
 
   resp.textContent=responses;
   saveDiary();

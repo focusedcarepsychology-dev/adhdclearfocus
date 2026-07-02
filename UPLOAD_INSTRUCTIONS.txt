@@ -4,7 +4,8 @@
 
 WHY YOUR LAST CHANGES DIDN'T SHOW:
 Your live site is serving an OLD build (it still has 35 questions).
-This build has 39 questions + animations + forum + fixes.
+This build has 39 questions + ADHD Insights blog + 7-day free trial
+(no credit card) + book & psychologist links + all prior fixes.
 The problem was never the code — it was that files weren't
 fully reaching GitHub. Follow these steps EXACTLY.
 
