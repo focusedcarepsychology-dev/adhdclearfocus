@@ -4,10 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="theme-color" content="#0A1628"/>
-  <meta name="description" content="ADHD Insights — evidence-based articles on adult ADHD prevalence, screening tools, exercise, and late diagnosis. Every claim cited to peer-reviewed research."/>
+  <meta name="description" content="The Focus Files — the most-searched ADHD topics answered with evidence: on adult ADHD prevalence, screening tools, exercise, and late diagnosis. Every claim cited to peer-reviewed research."/>
   <link rel="manifest" href="/manifest.json"/>
   <link rel="icon" type="image/png" href="/favicon.png"/>
-  <title>ADHD Insights — ADHDclearfocus</title>
+  <title>The Focus Files — ADHDclearfocus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
@@ -51,19 +51,52 @@
     .tag{display:inline-block;border-radius:99px;padding:2px 10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:8px}
     .footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);line-height:1.8}
     .footer a{color:var(--teal);text-decoration:none}
+  @keyframes shine{to{background-position:200% center}}
   </style>
 </head>
 <body>
 
+<style>
+  .amb{position:fixed;top:0;bottom:0;width:190px;pointer-events:none;z-index:0;opacity:0.8}
+  .amb.l{left:-40px}.amb.r{right:-40px}
+  @media(max-width:900px){.amb{display:none}}
+  .main,.hero,.header,.footer{position:relative;z-index:1}
+</style>
+<svg class="amb l" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="ig1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.3"/><stop offset="100%" stop-color="#FF6B9D" stop-opacity="0.07"/></linearGradient>
+    <linearGradient id="ig2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A855F7" stop-opacity="0.28"/><stop offset="100%" stop-color="#00D4DD" stop-opacity="0.06"/></linearGradient>
+  </defs>
+  <circle cx="30" cy="150" r="105" fill="url(#ig2)"/>
+  <circle cx="90" cy="480" r="70" fill="url(#ig1)"/>
+  <path d="M35 320 q22 -26 46 -9" stroke="#A855F730" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
+<svg class="amb r" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <circle cx="175" cy="230" r="110" fill="url(#ig1)"/>
+  <circle cx="70" cy="580" r="65" fill="url(#ig2)"/>
+  <g transform="translate(110,400)" opacity="0.85">
+    <circle cx="0" cy="0" r="15" fill="url(#ig1)"/>
+    <circle cx="-5" cy="-2" r="2.2" fill="#0A1628"/><circle cx="5" cy="-2" r="2.2" fill="#0A1628"/>
+    <path d="M-5 5c2.5 2.5 7.5 2.5 10 0" stroke="#0A1628" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+    <animateTransform attributeName="transform" type="translate" values="110 400;110 393;110 400" dur="5s" repeatCount="indefinite"/>
+  </g>
+</svg>
 <header class="header">
   <a class="logo" href="/">ADHD<span>clearfocus</span></a>
   <a class="back-btn" href="/app.html">← Dashboard</a>
 </header>
 
-<section class="hero">
-  <div class="hero-badge">📚 ADHD Insights</div>
-  <h1>Evidence-based articles, <span>fully cited</span></h1>
-  <p>Short, honest reads on adult ADHD — every claim traced to peer-reviewed research. No hype, no miracle cures.</p>
+<section class="hero" style="background:linear-gradient(135deg,#1A0A35 0%,#0A1628 45%,#0F2847 100%)">
+  <div class="hero-badge" style="background:rgba(168,85,247,0.12);border-color:rgba(168,85,247,0.4);color:#C084FC">🗂 THE FOCUS FILES</div>
+  <h1>The most-searched ADHD questions.<br/><span style="background:linear-gradient(90deg,#00D4DD,#A855F7,#FF6B9D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shine 4s linear infinite">Answered with evidence.</span></h1>
+  <p>Nine short, honest reads — every claim traced to peer-reviewed research. No hype, no miracle cures.</p>
+  <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px">
+    <span style="background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;color:var(--muted)">💊 Medication</span>
+    <span style="background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;color:var(--muted)">👩 Women & ADHD</span>
+    <span style="background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;color:var(--muted)">🌀 Anxiety overlap</span>
+    <span style="background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;color:var(--muted)">🌙 Sleep</span>
+    <span style="background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:5px 12px;font-size:11px;color:var(--muted)">🧊 ADHD paralysis</span>
+  </div>
 </section>
 
 <main class="main">
@@ -85,6 +118,7 @@
       <p>If you have spent years wondering why things that seem simple for others feel disproportionately hard for you, a structured screener is a reasonable, low-cost first step.</p>
       <div class="cta-row">
         <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'prevalence'})">Take the free 39-question screener →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('prevalence','How common is adult ADHD really?')">↗ Share</a>
       </div>
     </div>
   </div>
@@ -106,6 +140,7 @@
       <p>ADHDclearfocus draws on ASRS-v1.1 items alongside Brown ADD domains and DIVA-5 developmental history questions, and reports the ASRS Part A threshold transparently in your results.</p>
       <div class="cta-row">
         <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'screeners'})">Map your 10-dimension profile →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('screeners','What ADHD screeners can and cannot tell you')">↗ Share</a>
       </div>
     </div>
   </div>
@@ -127,6 +162,7 @@
       <p>Exercise is not a replacement for assessment or treatment where warranted. It is the highest-return habit available while you decide on next steps.</p>
       <div class="cta-row">
         <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'exercise'})">Start with your profile →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('exercise','The most underused ADHD intervention')">↗ Share</a>
         <a class="cta-ghost" href="/strategies.html">See all 47 strategies</a>
       </div>
     </div>
@@ -149,8 +185,132 @@
       <p>If this pattern sounds familiar, start by mapping your profile. Old school reports, a conversation with a parent, and a structured screener together form the developmental picture a clinician will ask for anyway.</p>
       <div class="cta-row">
         <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'latediagnosis'})">Map your developmental picture →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('latediagnosis','Why ADHD is discovered after 30')">↗ Share</a>
       </div>
     </div>
+  </div>
+
+  <!-- ARTICLE 5 -->
+  <div class="article" id="women">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'women')">
+      <span class="article-icon">👩</span>
+      <div>
+        <div class="article-title">ADHD in women: the most missed presentation</div>
+        <div class="article-teaser">Boys were diagnosed several times more often in childhood — adult rates approach parity. The girls weren't spared; they were missed.</div>
+        <div class="article-meta">4 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>Childhood clinic samples historically diagnosed several boys for every girl, yet by adulthood diagnosis rates move much closer to parity (Faraone et al., 2021). The most plausible explanation is not that girls develop ADHD later — it is neurodevelopmental and does not begin in adulthood — but that girls were systematically missed.</p>
+      <p>An expert consensus statement on females with ADHD (Young et al., 2020, BMC Psychiatry) describes why: girls more often present with the inattentive profile — daydreaming, disorganisation, internalised restlessness — which disrupts no classroom and triggers no referral. Girls are also more likely to mask through effort and social compensation, and their difficulties are more often misattributed to anxiety or mood problems first.</p>
+      <p>The cost of the missed years is documented: lower self-esteem, higher rates of anxiety and depression, and academic and occupational underachievement relative to ability (Young et al., 2020; Hinshaw et al., 2012 longitudinal findings on girls with ADHD).</p>
+      <p>If you are a woman who has spent decades being called "scattered but bright", a structured screener that measures the inattentive and emotional-regulation dimensions — not just hyperactivity — is the right starting point.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'women'})">Take the 10-dimension screener →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('women','ADHD in women')">↗ Share</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 6 -->
+  <div class="article" id="anxiety">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'anxiety')">
+      <span class="article-icon">🌀</span>
+      <div>
+        <div class="article-title">ADHD or anxiety? Why they're so often confused</div>
+        <div class="article-teaser">Roughly half of adults with ADHD also meet criteria for an anxiety disorder — and each can mimic the other.</div>
+        <div class="article-meta">4 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>Anxiety is one of the most common companions of adult ADHD: large surveys and reviews find that around half of adults with ADHD meet criteria for an anxiety disorder at some point (Kessler et al., 2006, National Comorbidity Survey Replication; Katzman et al., 2017, BMC Psychiatry).</p>
+      <p>The confusion runs in both directions. Untreated ADHD generates genuine anxiety — years of missed deadlines, lost items, and social missteps teach the brain to anticipate failure. And anxiety itself impairs concentration and working memory, so an anxious person can look inattentive on the surface.</p>
+      <p>The differentiating questions a clinician asks: did the inattention exist in childhood, before the worry? Does concentration fail even when calm (pointing towards ADHD), or only when worried (pointing towards anxiety)? Is the restlessness driven by racing fearful thoughts, or by an understimulated brain seeking input?</p>
+      <p>A screener cannot make that call — only a proper clinical assessment can untangle which is primary, and it matters, because the effective interventions differ. What a good screener does is map the pattern across dimensions so the conversation with a clinician starts from data rather than adjectives.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'anxiety'})">Map your pattern first →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('anxiety','ADHD or anxiety?')">↗ Share</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 7 -->
+  <div class="article" id="medication">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'medication')">
+      <span class="article-icon">💊</span>
+      <div>
+        <div class="article-title">ADHD medication: what the evidence actually says</div>
+        <div class="article-teaser">The most googled ADHD topic of all. Here is the honest, non-promotional summary.</div>
+        <div class="article-meta">4 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>"ADHD medication" is consistently among the highest-volume ADHD searches worldwide. The evidence base is unusually strong: stimulant medication for ADHD shows some of the largest effect sizes in psychiatric medicine (Cohen's d ≈ 0.9 in adults; Faraone et al., 2021).</p>
+      <p>The largest network meta-analysis to date (Cortese et al., 2018, The Lancet Psychiatry — 133 trials) compared all major options: considering both efficacy and tolerability, methylphenidate performed best in children and adolescents, and amphetamines performed best in adults. Non-stimulants such as atomoxetine are effective for many people who cannot take stimulants, with smaller average effects.</p>
+      <p>Equally honest: medication is not a cure, does not teach skills, and roughly a quarter to a third of people do not respond well to the first agent tried. Effects on long-term outcomes depend on continued use plus behavioural strategies (Safren et al., 2010 showed CBT adds meaningful benefit on top of medication).</p>
+      <p>ADHDclearfocus is an educational platform: we do not prescribe, recommend, or advise on any medication. Decisions about medication belong entirely with you and a qualified prescriber. What we can do is help you build the structured symptom picture that makes that conversation productive.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'medication'})">Build your symptom picture →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('medication','ADHD medication: the evidence')">↗ Share</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 8 -->
+  <div class="article" id="sleep">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'sleep')">
+      <span class="article-icon">🌙</span>
+      <div>
+        <div class="article-title">The ADHD–sleep loop nobody warned you about</div>
+        <div class="article-teaser">A majority of adults with ADHD and sleep-onset problems show a genuinely delayed body clock — not bad habits.</div>
+        <div class="article-meta">3 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>"Revenge bedtime procrastination" is the internet's name for it, but the biology is older: adults with ADHD and chronic sleep-onset insomnia show a measurably delayed circadian rhythm — melatonin release starts later than in non-ADHD adults, in a majority of those studied (Van Veen et al., 2010, Biological Psychiatry; Kooij & Bijlenga, 2013).</p>
+      <p>The loop is vicious: the delayed clock pushes sleep later; short sleep worsens attention, emotional regulation and working memory the next day — the exact ADHD domains already under load; exhaustion then reduces the self-regulation needed to get to bed on time.</p>
+      <p>Evidence-informed levers: fixed wake time anchored with immediate bright light (the strongest circadian signal); dimming screens and lights in the final hour; and moving exercise earlier in the day. Melatonin timing questions belong with a doctor — timing matters more than dose for a delayed clock, and it interacts with other conditions and medicines.</p>
+      <p>If your "night owl" pattern started in adolescence and has never shifted, note it in your developmental history — it is a clinically relevant detail, and our screener's profile gives it context.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'sleep'})">See your full profile →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('sleep','The ADHD-sleep loop')">↗ Share</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE 9 -->
+  <div class="article" id="paralysis">
+    <div class="article-head" onclick="toggleArticle(this.parentElement,'paralysis')">
+      <span class="article-icon">🧊</span>
+      <div>
+        <div class="article-title">"ADHD paralysis": the freeze that isn't laziness</div>
+        <div class="article-teaser">You know exactly what to do and cannot start. The mechanism has a name — and workable levers.</div>
+        <div class="article-meta">3 min read · Tap to read</div>
+      </div>
+    </div>
+    <div class="article-body">
+      <p>"ADHD paralysis" and "time blindness" are social-media terms, not diagnoses — but they describe real, well-studied mechanisms: impaired task initiation and time perception within executive function. Barkley's model (1997) frames ADHD as a disorder of self-regulation: knowledge of what to do is intact; the bridge from intention to action is what fails.</p>
+      <p>Time perception research backs the "blindness" half: people with ADHD systematically misestimate durations, and the future feels less real — Barkley describes it as living in a "temporal now". That is why a deadline three weeks away generates no activation, and the same deadline tomorrow generates panic-fuelled hyperfocus.</p>
+      <p>The levers that survive scrutiny all share one principle — externalise what the brain won't hold internally: visible timers instead of felt time; if-then plans instead of intentions (Gollwitzer, 1999: large effects on goal completion); shrinking the first step until it is trivially small; and body doubling (Solanto, 2011) to borrow regulation from another person's presence.</p>
+      <p>The reframe matters clinically too: Young et al. (2011) found that adults who understand their profile report improved self-concept even before formal diagnosis. "I freeze because my executive system under-activates" is workable; "I'm lazy" is just corrosive.</p>
+      <div class="cta-row">
+        <a class="cta-btn" href="/" onclick="gtag('event','blog_cta',{article:'paralysis'})">Measure your executive profile →</a>
+        <a class="cta-ghost" href="javascript:void(0)" onclick="shareArticle('paralysis','ADHD paralysis')">↗ Share</a>
+        <a class="cta-ghost" href="/focus.html">Try the Focus Room →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="promo" style="background:linear-gradient(135deg,#0F2847,#0A1628);border:1px solid var(--teal)">
+    <span class="tag" style="background:var(--teal);color:var(--navy)">Free — one email a week</span>
+    <h3>📬 One evidence-based ADHD strategy, every week</h3>
+    <p>No spam, no miracle cures — one cited, practical strategy from the research each week, plus new Focus Files first. Unsubscribe any time.</p>
+    <div id="ffForm" style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="ffEmail" type="email" placeholder="your@email.com" style="flex:1;min-width:200px;background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none"/>
+      <button id="ffBtn" class="cta-btn" onclick="subscribeFocusFiles()" style="border:none;cursor:pointer;font-family:inherit">Subscribe →</button>
+    </div>
+    <div id="ffDone" style="display:none;color:var(--green);font-size:13px;font-weight:700">✓ You're in — first strategy arrives this week.</div>
   </div>
 
   <!-- BOOK PROMO -->
@@ -182,12 +342,32 @@
 <footer class="footer">
   <div>ADHDclearfocus is an educational tool operated by Focused Care Psychology Limited. It does not provide diagnosis or clinical services.</div>
   <div style="margin-top:8px">
-    <a href="/">Screener</a> · <a href="/app.html">Dashboard</a> · <a href="/strategies.html">Strategies</a> · <a href="/resources.html">Research</a> · <a href="/pricing.html">Pricing</a> · <a href="/legal.html">Privacy &amp; Terms</a>
+    <a href="/">Screener</a> · <a href="/app.html">Dashboard</a> · <a href="/strategies.html">Strategies</a> · <a href="/resources.html">Research</a> · <a href="/pricing.html">Pricing</a> · <a href="/workplace.html">For Employers</a> · <a href="/legal.html">Privacy &amp; Terms</a>
   </div>
   <div style="margin-top:8px">In crisis? Samaritans: <a href="tel:116123">116 123</a> (free, 24/7)</div>
 </footer>
 
 <script>
+function shareArticle(id,title){
+  const url=location.origin+'/insights.html#'+id;
+  if(navigator.share){navigator.share({title:title+' — The Focus Files',url});}
+  else{navigator.clipboard&&navigator.clipboard.writeText(url);alert('Link copied!');}
+  if(typeof gtag==='function')gtag('event','article_share',{article:id});
+}
+async function subscribeFocusFiles(){
+  const el=document.getElementById('ffEmail');
+  const email=(el.value||'').trim();
+  if(!email.includes('@')){alert('Please enter a valid email');return;}
+  const btn=document.getElementById('ffBtn');btn.textContent='...';
+  try{
+    await fetch('/api/mailchimp-subscribe',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,tags:['focus-files']})});
+    document.getElementById('ffForm').style.display='none';
+    document.getElementById('ffDone').style.display='block';
+    if(typeof gtag==='function')gtag('event','newsletter_signup',{location:'focus_files'});
+  }catch(e){btn.textContent='Subscribe →';alert('Something went wrong — please try again.');}
+}
 function toggleArticle(el,id){
   const wasOpen=el.classList.contains('open');
   el.classList.toggle('open');

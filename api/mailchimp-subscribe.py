@@ -9,8 +9,10 @@ import http.client
 import base64
 from http.server import BaseHTTPRequestHandler
 
-MAILCHIMP_API_KEY = os.environ.get("MAILCHIMP_API_KEY", "")
-MAILCHIMP_LIST_ID = os.environ.get("MAILCHIMP_LIST_ID", "3f6c1e163c")
+MAILCHIMP_API_KEY = (os.environ.get("MAILCHIMP_API_KEY")
+                     or os.environ.get("mailchimp_api_key") or "")
+MAILCHIMP_LIST_ID = (os.environ.get("MAILCHIMP_LIST_ID")
+                     or os.environ.get("mailchimp_list_id") or "3f6c1e163c")
 MAILCHIMP_SERVER = "us13"
 
 class handler(BaseHTTPRequestHandler):

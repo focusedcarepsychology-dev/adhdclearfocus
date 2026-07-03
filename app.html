@@ -136,6 +136,7 @@
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
   <!-- Vercel Analytics -->
   <script defer src="/_vercel/insights/script.js"></script>
+  <script src="/auth.js"></script>
 </head>
 <body>
 
@@ -297,8 +298,8 @@
     </a>
     <a href="/insights.html" class="quick-card strategies">
       <span class="icon">📰</span>
-      <span class="title">ADHD Insights</span>
-      <span class="sub">Evidence-based articles, fully cited</span>
+      <span class="title">The Focus Files</span>
+      <span class="sub">Top-searched ADHD topics, answered with evidence</span>
     </a>
     <a href="/" class="quick-card assess">
       <span class="icon">🧠</span>
@@ -347,10 +348,52 @@
     </div>
   </div>
 
+  <!-- ACCOUNT & SYNC -->
+  <div style="background:#1A2E4A;border:1px solid #1E3A5F;border-radius:14px;padding:16px;margin-bottom:16px" id="accountCard">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:700;font-size:14px">👤 <span id="accTitle">Your account</span></div>
+        <div style="font-size:12px;color:#7B93B4;margin-top:3px" id="accSub">Sign up free to sync your streak, challenge and diary across devices — and to post in the community.</div>
+      </div>
+      <div id="accStatus" style="display:none;background:#00E67615;border:1px solid #00E67640;border-radius:99px;padding:3px 10px;font-size:10px;color:#00E676;font-weight:800;white-space:nowrap">☁ SYNCED</div>
+    </div>
+    <div id="accButtons" style="display:flex;gap:8px;margin-top:12px">
+      <button onclick="acfAuth.open('signup')" style="flex:1;background:linear-gradient(135deg,#00D4DD,#4FC3F7);color:#0A1628;border:none;border-radius:10px;padding:11px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit">Create free account</button>
+      <button onclick="acfAuth.open('login')" style="flex:1;background:#0A1628;color:#fff;border:1px solid #1E3A5F;border-radius:10px;padding:11px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit">Log in</button>
+    </div>
+    <div id="accSignedIn" style="display:none;margin-top:12px">
+      <div style="display:flex;gap:8px">
+        <button onclick="acfAuth.syncPush().then(ok=>showToast(ok?'☁ Progress synced':'Sync failed — try again'))" style="flex:1;background:#0A1628;color:#00D4DD;border:1px solid #00D4DD50;border-radius:10px;padding:10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">↑ Sync now</button>
+        <button onclick="if(confirm('Log out on this device? Your synced progress is safe.'))acfAuth.logout()" style="flex:1;background:#0A1628;color:#7B93B4;border:1px solid #1E3A5F;border-radius:10px;padding:10px;font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7-DAY FOCUS CHALLENGE -->
+  <div style="background:#1A2E4A;border:1px solid #1E3A5F;border-radius:14px;padding:16px;margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <div style="font-weight:700;font-size:14px">🏆 7-Day Focus Challenge</div>
+      <div style="font-size:11px;color:#7B93B4" id="challengeCount">0/7</div>
+    </div>
+    <div style="font-size:12px;color:#7B93B4;line-height:1.6;margin-bottom:10px">
+      One evidence-based micro-task per day. Tap to complete — each cites its source study.
+    </div>
+    <div style="background:#0A1628;border-radius:99px;height:6px;overflow:hidden;margin-bottom:12px">
+      <div id="challengeBar" style="width:0%;height:100%;background:linear-gradient(to right,#00D4DD,#00E676);border-radius:99px;transition:width 0.6s"></div>
+    </div>
+    <div id="challengeTasks"></div>
+    <div id="challengeDone" style="display:none;background:#00E67612;border:1px solid #00E67640;border-radius:10px;padding:12px;margin-top:10px;text-align:center">
+      <div style="font-size:20px;margin-bottom:4px">🎉</div>
+      <div style="font-weight:700;font-size:13px;color:#00E676;margin-bottom:3px">Challenge complete!</div>
+      <div style="font-size:12px;color:#7B93B4">Pro members get a new challenge every week — <a href="/pricing.html" style="color:#00D4DD">7-day free trial, no credit card required →</a></div>
+    </div>
+    <div style="font-size:10px;color:#7B93B4;margin-top:8px;line-height:1.5">Note: progress is saved on this device. Cross-device tracking arrives with Pro accounts.</div>
+  </div>
+
   <!-- VOICE DIARY -->
   <div class="diary-section">
     <div style="font-weight:700;font-size:14px">🎙️ Voice Diary</div>
-    <div style="font-size:12px;color:#7B93B4;margin-top:3px">Speak or type your day — AI coach responds</div>
+    <div style="font-size:12px;color:#7B93B4;margin-top:3px">Speak or type your day — your coach responds (AI-powered when online)</div>
     <textarea class="diary-input" id="diaryText" placeholder="How did today go? What's on your mind? What did you do?"></textarea>
     <div class="diary-controls">
       <button class="diary-btn record" id="recordBtn" onclick="(function(){if(localStorage.getItem('acf_pro')!=='true'){showToast('⭐ Voice Diary is a Pro feature — enter your loyalty code to unlock');return;}toggleRecording();}())">🎙 Record</button>
@@ -534,6 +577,67 @@ function updateTrialBanner(){
 }
 updateTrialBanner();
 
+
+
+// ── ACCOUNT CARD ──────────────────────────────────────────────────
+function renderAccountCard(){
+  if(!window.acfAuth)return;
+  const inn=acfAuth.isLoggedIn;
+  document.getElementById('accButtons').style.display=inn?'none':'flex';
+  document.getElementById('accSignedIn').style.display=inn?'block':'none';
+  document.getElementById('accStatus').style.display=inn?'inline-block':'none';
+  document.getElementById('accTitle').textContent=inn?('Hi, '+(acfAuth.name||'there')):'Your account';
+  document.getElementById('accSub').textContent=inn
+    ?'Your streak, challenge and diary sync to your account automatically.'
+    :'Sign up free to sync your streak, challenge and diary across devices — and to post in the community.';
+}
+if(window.acfAuth){
+  acfAuth.onChange(function(){renderAccountCard();updateStreak();renderChallenge();});
+  renderAccountCard();
+}
+
+// ── 7-DAY FOCUS CHALLENGE ─────────────────────────────────────────
+const CHALLENGE_TASKS=[
+  {day:1, icon:'\u23f1\ufe0f', task:'Do one 25-minute focused work block with a visible timer', why:'Time-segmented work \u2014 Safren et al. (2010) JAMA RCT'},
+  {day:2, icon:'\ud83d\udcdd', task:"Write tomorrow's 3 most important tasks before bed tonight", why:'Externalising the future \u2014 Barkley (2012)'},
+  {day:3, icon:'\ud83d\udeb6', task:'Take a 20-minute brisk walk before your hardest task', why:'Acute exercise improves inhibitory control \u2014 Pontifex et al. (2013)'},
+  {day:4, icon:'\ud83c\udfaf', task:"Use one if-then plan: 'When X happens, I will do Y'", why:'Implementation intentions \u2014 Gollwitzer (1999)'},
+  {day:5, icon:'\ud83e\uddf9', task:'Clear one working surface completely before starting work', why:'Environmental modification \u2014 NICE NG87 (2018)'},
+  {day:6, icon:'\ud83d\udde3\ufe0f', task:'Label one strong emotion precisely when it arises today', why:'Affect labelling reduces amygdala reactivity \u2014 Lieberman et al. (2007)'},
+  {day:7, icon:'\ud83d\udc65', task:'Do one task alongside another person (in person or virtual)', why:'Body-doubling \u2014 Solanto (2011)'},
+];
+function getChallengeDone(){
+  try{return JSON.parse(localStorage.getItem('acf_challenge')||'[]');}catch(e){return [];}
+}
+function toggleChallengeTask(day){
+  let done=getChallengeDone();
+  if(done.includes(day)) done=done.filter(d=>d!==day);
+  else {done.push(day); if(typeof gtag==='function')gtag('event','challenge_task_done',{day});}
+  localStorage.setItem('acf_challenge',JSON.stringify(done));
+  renderChallenge();
+  if(window.acfAuth&&acfAuth.isLoggedIn)acfAuth.syncPush();
+}
+function renderChallenge(){
+  const wrap=document.getElementById('challengeTasks');
+  if(!wrap)return;
+  const done=getChallengeDone();
+  wrap.innerHTML='';
+  CHALLENGE_TASKS.forEach(t=>{
+    const isDone=done.includes(t.day);
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:10px;cursor:pointer;margin-bottom:4px;border:1px solid '+(isDone?'#00E67640':'#1E3A5F')+';background:'+(isDone?'#00E6760D':'transparent');
+    row.onclick=()=>toggleChallengeTask(t.day);
+    row.innerHTML='<span style="font-size:16px;flex-shrink:0">'+(isDone?'\u2705':t.icon)+'</span>'+
+      '<div style="flex:1"><div style="font-size:12px;font-weight:600;color:'+(isDone?'#00E676':'#fff')+';'+(isDone?'text-decoration:line-through;opacity:0.75':'')+'">Day '+t.day+': '+t.task+'</div>'+
+      '<div style="font-size:10px;color:#7B93B4;margin-top:2px">'+t.why+'</div></div>';
+    wrap.appendChild(row);
+  });
+  document.getElementById('challengeCount').textContent=done.length+'/7';
+  document.getElementById('challengeBar').style.width=Math.round(done.length/7*100)+'%';
+  document.getElementById('challengeDone').style.display=done.length>=7?'block':'none';
+}
+renderChallenge();
+
 // ── STREAK ────────────────────────────────────────────────────────
 function updateStreak(){
   const today=new Date().toDateString();
@@ -624,7 +728,23 @@ async function submitDiary(){
     return;
   }
 
-  // Simple sentiment-based response (no API needed)
+  // Real AI coach (server keeps the key; falls back to offline responder below)
+  try{
+    const r=await fetch('/api/coach',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text})});
+    if(r.ok){
+      const d=await r.json();
+      if(d&&d.reply){
+        resp.textContent=d.reply;
+        if(typeof gtag==='function')gtag('event','diary_ai_reply');
+        saveDiary();
+        return;
+      }
+    }
+  }catch(e){}
+
+  // Offline fallback: sentiment-based response (no API needed)
   const negWords=['bad','terrible','anxious','overwhelmed','stuck','frustrated','angry','sad','hopeless','useless'];
   const posWords=['good','great','happy','productive','focused','calm','better','managed','did','completed'];
   const words=text.toLowerCase().split(/\s+/);

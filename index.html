@@ -123,6 +123,39 @@
 </head>
 <body>
   <noscript>ADHDclearfocus requires JavaScript. Please enable it in your browser.</noscript>
+    <!-- Warm ambient side illustrations (decorative) -->
+  <style>
+    .amb{position:fixed;top:0;bottom:0;width:200px;pointer-events:none;z-index:0;opacity:0.85}
+    .amb.l{left:-40px}.amb.r{right:-40px}
+    @media(max-width:900px){.amb{display:none}}
+  </style>
+  <svg class="amb l" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="ag1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.35"/><stop offset="100%" stop-color="#FF6B9D" stop-opacity="0.08"/></linearGradient>
+      <linearGradient id="ag2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD" stop-opacity="0.25"/><stop offset="100%" stop-color="#A855F7" stop-opacity="0.06"/></linearGradient>
+    </defs>
+    <circle cx="30" cy="120" r="110" fill="url(#ag1)"/>
+    <circle cx="110" cy="420" r="70" fill="url(#ag2)"/>
+    <circle cx="20" cy="680" r="90" fill="url(#ag2)"/>
+    <g transform="translate(70,560)" opacity="0.9">
+      <circle cx="0" cy="0" r="17" fill="url(#ag1)"/>
+      <circle cx="-5" cy="-3" r="2.4" fill="#0A1628"/><circle cx="6" cy="-3" r="2.4" fill="#0A1628"/>
+      <path d="M-5 5c2.5 2.8 8 2.8 11 0" stroke="#0A1628" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <animateTransform attributeName="transform" type="translate" values="70 560;70 552;70 560" dur="4s" repeatCount="indefinite"/>
+    </g>
+    <path d="M40 300 q22 -28 48 -10" stroke="#FFB34730" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
+  <svg class="amb r" viewBox="0 0 200 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="170" cy="200" r="115" fill="url(#ag2)"/>
+    <circle cx="80" cy="520" r="65" fill="url(#ag1)"/>
+    <g transform="translate(120,340)" opacity="0.9">
+      <circle cx="0" cy="0" r="15" fill="url(#ag2)"/>
+      <circle cx="-5" cy="-2" r="2.2" fill="#0A1628"/><circle cx="5" cy="-2" r="2.2" fill="#0A1628"/>
+      <path d="M-5 5c2.5 2.5 7.5 2.5 10 0" stroke="#0A1628" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <animateTransform attributeName="transform" type="translate" values="120 340;120 333;120 340" dur="5s" repeatCount="indefinite"/>
+    </g>
+    <path d="M120 700 q25 -22 52 -6" stroke="#FF6B9D30" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
   <div id="root"></div>
   <div id="scroll-progress"></div>
   <script>
@@ -961,7 +994,7 @@ function App(){
                   Discover Your Full ADHD Profile →
                 </button>
                 <p style={{fontSize:12,color:C.muted,marginTop:10}}>
-                  39 questions · 12–15 minutes · Results available immediately
+                  39 questions · 12–15 minutes · Full 10-dimension profile FREE
                 </p>
                 <div style={{display:"inline-flex",alignItems:"center",gap:6,
                   background:"#00E67610",border:"1px solid #00E67630",
@@ -973,7 +1006,14 @@ function App(){
                   <a href="/insights.html"
                     onClick={()=>gtag("event","blog_nav_click",{location:"intro"})}
                     style={{color:C.teal,fontSize:13,fontWeight:700,textDecoration:"none"}}>
-                    📚 ADHD Insights — evidence-based articles →
+                    🗂 The Focus Files — the most-searched ADHD topics, answered →
+                  </a>
+                </div>
+                <div style={{marginTop:8}}>
+                  <a href="/workplace.html"
+                    onClick={()=>gtag("event","employer_nav_click",{location:"intro"})}
+                    style={{color:C.amber,fontSize:12,fontWeight:700,textDecoration:"none"}}>
+                    🏢 Employer? See workplace programmes →
                   </a>
                 </div>
               </div>
@@ -1297,10 +1337,10 @@ function App(){
                 </h2>
                 <p style={{color:C.muted,fontSize:13,lineHeight:1.65}}>
                   {result.level==="Elevated"?
-                    "Your responses across 10 neurological dimensions are consistent with clinically meaningful ADHD. The full profile, evidence-based strategies and next steps are locked below.":
+                    "Your responses across 10 neurological dimensions are consistent with clinically meaningful ADHD. Enter your email below to see your complete profile — free.":
                    result.level==="Moderate"?
                     "Your responses indicate ADHD-related patterns across several dimensions. Understanding your full profile will give you targeted, evidence-based strategies.":
-                    "Your responses suggest lower ADHD indicators, though some dimension patterns were identified. Your full profile contains important detail."}
+                    "Your responses suggest lower ADHD indicators, though some dimension patterns were identified. Enter your email to see your complete profile — free."}
                 </p>
               </div>
 
@@ -1424,6 +1464,40 @@ function App(){
                 </div>
               ):(
                 <div>
+                  {/* FREE full 10-dimension profile */}
+                  {result.asrsFlag&&(
+                    <div style={{background:"#1A1000",border:"1px solid #FFB34780",
+                      borderRadius:12,padding:"14px 16px",marginBottom:12,display:"flex",gap:12}}>
+                      <span style={{fontSize:18,flexShrink:0}}>⚠️</span>
+                      <div>
+                        <div style={{fontWeight:700,color:C.amber,fontSize:13,marginBottom:3}}>
+                          WHO ASRS-v1.1: Positive ({result.asrsCount}/6 Part A items)
+                        </div>
+                        <div style={{color:C.muted,fontSize:12,lineHeight:1.55}}>
+                          Sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005).
+                          Formal assessment with a qualified clinician is recommended.
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <div style={{background:C.navyLight,border:`1px solid ${C.teal}50`,
+                    borderRadius:16,padding:"18px 20px",marginBottom:12}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+                      <div style={{fontWeight:800,fontSize:15}}>Your 10-Dimension Profile</div>
+                      <div style={{background:"#00E67615",border:"1px solid #00E67640",borderRadius:99,
+                        padding:"2px 10px",fontSize:10,color:C.green,fontWeight:800,letterSpacing:1}}>FREE</div>
+                    </div>
+                    {Object.keys(DOMAINS).map(key=>{
+                      const d=DOMAINS[key];
+                      return <DBar key={key} label={d.label} icon={d.icon}
+                        pct={result.pcts[key]||0} color={dc(key)}/>;
+                    })}
+                    <div style={{fontSize:11,color:C.muted,marginTop:10,lineHeight:1.55}}>
+                      This profile is educational, not diagnostic. Your personalised interpretation —
+                      what your specific pattern means and exactly what to do about it — is in the Clarity Report below.
+                    </div>
+                  </div>
+
                   {/* Report CTA */}
                   <div style={{background:C.navyLight,border:`2px solid ${C.teal}`,
                     borderRadius:16,padding:"20px",marginBottom:12,position:"relative"}}>
@@ -1435,7 +1509,7 @@ function App(){
                       <div>
                         <div style={{fontSize:11,color:C.teal,fontWeight:700,
                           textTransform:"uppercase",letterSpacing:1,marginBottom:4}}>
-                          Full Clarity Report
+                          Go Deeper — Clarity Report
                         </div>
                         <div style={{fontSize:30,fontWeight:900}}>
                           €49 <span style={{fontSize:13,fontWeight:400,color:C.muted}}>one-off</span>
@@ -1443,10 +1517,11 @@ function App(){
                       </div>
                       <span style={{fontSize:26}}>📋</span>
                     </div>
-                    {["Complete 10-dimension neurological profile with % scores",
-                      "14-page personalised evidence-based PDF report",
-                      "Strategies for each of your elevated dimensions",
+                    {["AI-personalised interpretation of YOUR exact pattern",
+                      "14-page evidence-based PDF report to keep and share with a GP",
+                      "Targeted strategies for each of your elevated dimensions",
                       "Next steps guide and formal assessment pathway",
+                      "Pro founding loyalty code (€5/month locked for life)",
                       "Delivered to your inbox within 24 hours"].map(f=>(
                       <div key={f} style={{display:"flex",gap:8,marginBottom:7}}>
                         <span style={{color:C.teal,fontSize:13,flexShrink:0}}>✓</span>

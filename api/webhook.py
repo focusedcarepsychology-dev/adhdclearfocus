@@ -5,6 +5,8 @@ Flow: Stripe payment confirmed → Claude AI analyses results →
 """
 
 import json
+import hmac
+import time
 import os
 import base64
 import http.client
@@ -15,11 +17,22 @@ import sys
 sys.path.append(os.path.dirname(__file__))
 from generate_report import build_report
 
-SENDGRID_API_KEY  = os.environ.get("SENDGRID_API_KEY", "")
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+def env(*names, default=""):
+    """Case-insensitive env lookup: tries each name as-is, UPPER, and lower."""
+    for n in names:
+        for k in (n, n.upper(), n.lower()):
+            v = os.environ.get(k)
+            if v:
+                return v
+    return default
+
+
+SENDGRID_API_KEY  = env("SENDGRID_API_KEY")
+ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY")
+STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
 FROM_EMAIL        = "hello@adhdclearfocus.com"
 FROM_NAME         = "ADHDclearfocus"
-ADMIN_EMAIL       = os.environ.get("ADMIN_EMAIL", "conalldonegan@outlook.com")
+ADMIN_EMAIL       = env("ADMIN_EMAIL", default="conalldonegan@outlook.com")
 
 DOMAIN_LABELS = {
     "inattention":    "Attention Regulation",
@@ -175,10 +188,38 @@ def notify_admin(customer_email, level, total_pct, pcts, loyalty_code, ai_analys
     conn.getresponse()
 
 class handler(BaseHTTPRequestHandler):
+    def _verify_stripe_signature(self, body):
+        """Verify Stripe-Signature (HMAC-SHA256 of 't.payload').
+        Enforced when STRIPE_WEBHOOK_SECRET is set; returns True otherwise
+        so the endpoint keeps working before the secret is configured."""
+        if not STRIPE_WEBHOOK_SECRET:
+            return True
+        sig_header = self.headers.get("Stripe-Signature", "")
+        try:
+            parts = dict(p.split("=", 1) for p in sig_header.split(",") if "=" in p)
+            t = parts.get("t", "")
+            v1 = parts.get("v1", "")
+            if not t or not v1:
+                return False
+            # Reject events older than 5 minutes (replay protection)
+            if abs(time.time() - int(t)) > 300:
+                return False
+            signed = f"{t}.".encode() + body
+            expected = hmac.new(STRIPE_WEBHOOK_SECRET.encode(), signed,
+                                hashlib.sha256).hexdigest()
+            return hmac.compare_digest(expected, v1)
+        except Exception:
+            return False
+
     def do_POST(self):
         try:
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length)
+            if not self._verify_stripe_signature(body):
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(b'{"error":"invalid_signature"}')
+                return
             data = json.loads(body)
             event_type = data.get("type", "")
 

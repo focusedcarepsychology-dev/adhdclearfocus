@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="theme-color" content="#0A1628"/>
+  <meta name="description" content="ADHD-aware workplace programmes for Irish and UK employers — team screening insights, manager training, and workplace certification led by chartered-psychologist expertise."/>
+  <link rel="manifest" href="/manifest.json"/>
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <title>For Employers — ADHDclearfocus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0A1628;font-family:'DM Sans',system-ui,sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+    :root{--teal:#00D4DD;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--pink:#FF6B9D;--blue:#4FC3F7;--navy:#0A1628;--navyMid:#112240;--navyLight:#1A2E4A;--muted:#7B93B4;--border:#1E3A5F}
+    .header{background:rgba(10,22,40,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+    .logo{font-size:18px;font-weight:900;text-decoration:none;color:#fff}
+    .logo span{color:var(--teal)}
+    .back-btn{background:var(--navyLight);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 14px;font-size:13px;text-decoration:none}
+    .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1A1206 0%,#0A1628 45%,#0F2847 100%);padding:56px 20px;text-align:center;border-bottom:1px solid var(--border)}
+    .hero h1{font-size:clamp(26px,5vw,42px);font-weight:900;line-height:1.15;letter-spacing:-1.5px;margin-bottom:14px;position:relative;z-index:2}
+    .hero h1 span{background:linear-gradient(135deg,var(--amber),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{color:#C8B8A8;font-size:15px;line-height:1.75;max-width:560px;margin:0 auto 22px;position:relative;z-index:2}
+    .side-art{position:absolute;top:0;bottom:0;width:220px;opacity:0.9;pointer-events:none;z-index:1}
+    .side-art.left{left:-30px}
+    .side-art.right{right:-30px}
+    @media(max-width:820px){.side-art{display:none}}
+    .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,179,71,0.1);border:1px solid rgba(255,179,71,0.35);border-radius:99px;padding:6px 16px;font-size:11px;color:var(--amber);font-weight:700;letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px;position:relative;z-index:2}
+    .main{max-width:820px;margin:0 auto;padding:28px 16px 80px}
+    .card{background:var(--navyLight);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:14px}
+    .warm{background:linear-gradient(135deg,#1A1206,#112240);border-color:#FFB34735}
+    .card h3{font-size:16px;font-weight:800;margin-bottom:8px}
+    .card p{font-size:13px;color:#B8C8D8;line-height:1.75;margin-bottom:8px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:640px){.grid{grid-template-columns:1fr}}
+    .stat{background:var(--navyMid);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+    .stat-num{font-size:24px;font-weight:900;color:var(--amber)}
+    .stat-label{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+    .tier{position:relative;border-radius:18px;padding:22px;border:1px solid var(--border);background:var(--navyLight)}
+    .tier.featured{border:2px solid var(--amber);background:linear-gradient(135deg,#1A1206,#112240)}
+    .tier-price{font-size:30px;font-weight:900;margin:8px 0}
+    .tier ul{list-style:none;margin:12px 0}
+    .tier li{font-size:13px;color:#B8C8D8;padding:5px 0 5px 22px;position:relative;line-height:1.5}
+    .tier li::before{content:'✓';position:absolute;left:0;color:var(--amber);font-weight:800}
+    .cta{display:inline-block;background:linear-gradient(135deg,var(--amber),#FF8C42);color:var(--navy);border-radius:12px;padding:14px 26px;font-size:15px;font-weight:900;text-decoration:none;border:none;cursor:pointer;font-family:inherit}
+    .cta-ghost{display:inline-block;background:var(--navyMid);border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:14px 26px;font-size:14px;font-weight:700;text-decoration:none}
+    .section-title{font-size:11px;font-weight:700;color:var(--amber);text-transform:uppercase;letter-spacing:1.5px;margin:30px 0 14px;display:flex;align-items:center;gap:8px}
+    .section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    .footer{border-top:1px solid var(--border);padding:24px 20px;text-align:center;font-size:12px;color:var(--muted);line-height:1.8}
+    .footer a{color:var(--teal);text-decoration:none}
+    input,textarea{background:var(--navy);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;font-family:inherit;outline:none;width:100%}
+    input:focus,textarea:focus{border-color:var(--amber)}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="/">ADHD<span>clearfocus</span></a>
+  <a class="back-btn" href="/">← For individuals</a>
+</header>
+
+<section class="hero">
+  <!-- Warm side illustrations -->
+  <svg class="side-art left" viewBox="0 0 220 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="wb1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFB347" stop-opacity="0.55"/><stop offset="100%" stop-color="#FF6B9D" stop-opacity="0.15"/></linearGradient>
+      <linearGradient id="wb2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD" stop-opacity="0.35"/><stop offset="100%" stop-color="#A855F7" stop-opacity="0.1"/></linearGradient>
+    </defs>
+    <circle cx="40" cy="90" r="90" fill="url(#wb1)"/>
+    <circle cx="120" cy="290" r="60" fill="url(#wb2)"/>
+    <g transform="translate(60,380)">
+      <rect x="-8" y="30" width="90" height="8" rx="4" fill="#1E3A5F"/>
+      <circle cx="20" cy="8" r="16" fill="url(#wb1)"/>
+      <circle cx="15" cy="6" r="2.4" fill="#0A1628"/><circle cx="25" cy="6" r="2.4" fill="#0A1628"/>
+      <path d="M15 13c2.5 2.5 7.5 2.5 10 0" stroke="#0A1628" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <rect x="46" y="-6" width="34" height="26" rx="4" fill="#112240" stroke="#FFB34760"/>
+      <rect x="50" y="-2" width="26" height="3" rx="1.5" fill="#FFB347" opacity="0.7"/>
+      <rect x="50" y="4" width="20" height="3" rx="1.5" fill="#7B93B4" opacity="0.6"/>
+      <rect x="50" y="10" width="23" height="3" rx="1.5" fill="#7B93B4" opacity="0.4"/>
+    </g>
+    <path d="M30 200 q20 -30 45 -12" stroke="#FFB34740" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="78" cy="185" r="4" fill="#FFB347" opacity="0.7"/>
+  </svg>
+  <svg class="side-art right" viewBox="0 0 220 500" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="wb3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B9D" stop-opacity="0.4"/><stop offset="100%" stop-color="#FFB347" stop-opacity="0.12"/></linearGradient>
+    </defs>
+    <circle cx="180" cy="140" r="100" fill="url(#wb3)"/>
+    <circle cx="80" cy="340" r="55" fill="url(#wb1)" opacity="0.5"/>
+    <g transform="translate(80,110)">
+      <circle cx="0" cy="0" r="15" fill="url(#wb3)"/>
+      <circle cx="-5" cy="-2" r="2.2" fill="#0A1628"/><circle cx="5" cy="-2" r="2.2" fill="#0A1628"/>
+      <path d="M-5 5c2.5 2.5 7.5 2.5 10 0" stroke="#0A1628" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <circle cx="38" cy="4" r="13" fill="url(#wb2)"/>
+      <circle cx="34" cy="2" r="2" fill="#0A1628"/><circle cx="42" cy="2" r="2" fill="#0A1628"/>
+      <path d="M34 8c2 2 6 2 8 0" stroke="#0A1628" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M14 22 q5 6 12 0" stroke="#FFB34760" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <path d="M150 400 q25 -20 50 -5" stroke="#FF6B9D40" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </svg>
+
+  <div class="badge">🏢 For Employers · Ireland & UK</div>
+  <h1>Make your workplace <span>ADHD-aware</span></h1>
+  <p>Roughly one in twenty adults meets symptomatic ADHD criteria (Song et al., 2021) — in a 100-person company, that is likely several of your best lateral thinkers, quietly struggling with systems built for other brains. We help you keep them, support them, and get the best from them.</p>
+  <a class="cta" href="#contact" onclick="gtag('event','employer_cta',{location:'hero'})">Talk to us →</a>
+</section>
+
+<main class="main">
+
+  <div class="section-title">Why this matters commercially</div>
+  <div class="grid">
+    <div class="stat"><div class="stat-num">~1 in 20</div><div class="stat-label">adults meet symptomatic ADHD criteria globally (Song et al., 2021, J Glob Health)</div></div>
+    <div class="stat"><div class="stat-num">70–80%</div><div class="stat-label">heritability — it's neurology, not attitude (Faraone et al., 2021)</div></div>
+    <div class="stat"><div class="stat-num">Legal duty</div><div class="stat-label">reasonable accommodation obligations apply under the Employment Equality Acts (IE) and Equality Act 2010 (UK)</div></div>
+    <div class="stat"><div class="stat-num">Low cost</div><div class="stat-label">most effective ADHD accommodations are process changes, not spend (Kooij et al., 2019 European Guidelines)</div></div>
+  </div>
+
+  <div class="section-title">Programmes</div>
+  <div class="grid">
+    <div class="tier">
+      <div style="font-size:11px;color:var(--teal);font-weight:700;text-transform:uppercase;letter-spacing:1">Team Insight</div>
+      <div class="tier-price">€490</div>
+      <div style="font-size:12px;color:var(--muted)">up to 25 staff</div>
+      <ul>
+        <li>Anonymous, aggregated team screening using our validated 39-question instrument</li>
+        <li>Aggregate neurodiversity profile report — no individual is identified</li>
+        <li>Practical recommendations mapped to your team's actual pattern</li>
+        <li>GDPR-compliant by design: individual results go only to the individual</li>
+      </ul>
+      <a class="cta-ghost" href="#contact">Enquire →</a>
+    </div>
+    <div class="tier featured">
+      <div style="position:absolute;top:-12px;right:16px;background:var(--amber);color:var(--navy);font-size:10px;font-weight:900;padding:3px 12px;border-radius:99px">FLAGSHIP</div>
+      <div style="font-size:11px;color:var(--amber);font-weight:700;text-transform:uppercase;letter-spacing:1">ADHD-Aware Workplace Certification</div>
+      <div class="tier-price">€2,500</div>
+      <div style="font-size:12px;color:var(--muted)">per site · annual</div>
+      <ul>
+        <li>Everything in Team Insight</li>
+        <li>Manager training: recognising, supporting and getting the best from ADHD staff</li>
+        <li>Accommodation playbook tailored to your workflows</li>
+        <li>Written policy review against equality-law accommodation duties</li>
+        <li>Certification mark for careers pages and job listings</li>
+        <li>Annual re-assessment and refresher session</li>
+      </ul>
+      <a class="cta" href="#contact" onclick="gtag('event','employer_cta',{location:'tier'})">Enquire →</a>
+    </div>
+  </div>
+
+  <div class="card warm" style="margin-top:14px">
+    <h3>🧠 Why employers choose us</h3>
+    <p>The programme is built on the same evidence base as our consumer platform — every recommendation cites its source study, from time-segmented work (Safren et al., 2010, JAMA) to environmental modification (NICE NG87). It is educational and organisational, not clinical: we do not diagnose staff, and no employee's individual data ever reaches the employer.</p>
+    <p>Delivery is led by chartered-psychologist expertise with seventeen years of clinical experience across NHS and independent services.</p>
+  </div>
+
+  <div class="section-title" id="contact">Start the conversation</div>
+  <div class="card">
+    <h3>📩 Tell us about your team</h3>
+    <p>We reply within two working days with a short scoping call proposal. Email only — we'll fit around your calendar.</p>
+    <div style="display:grid;gap:10px;margin-top:12px">
+      <input id="empEmail" type="email" placeholder="Work email"/>
+      <input id="empCompany" type="text" placeholder="Company & approximate headcount"/>
+      <textarea id="empMsg" rows="3" placeholder="What prompted this? (optional)"></textarea>
+      <button class="cta" onclick="employerEnquire()" id="empBtn">Send enquiry →</button>
+      <div id="empDone" style="display:none;color:var(--green);font-weight:700;font-size:14px">✓ Received — we'll reply within two working days.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div>ADHDclearfocus workplace programmes are operated by Focused Care Psychology Limited, Waterford, Ireland. Educational and organisational services — not clinical diagnosis.</div>
+  <div style="margin-top:8px">
+    <a href="/">Individual screener</a> · <a href="/insights.html">The Focus Files</a> · <a href="/pricing.html">Pricing</a> · <a href="/legal.html">Privacy & Terms</a>
+  </div>
+</footer>
+
+<script>
+async function employerEnquire(){
+  const email=(document.getElementById('empEmail').value||'').trim();
+  const company=(document.getElementById('empCompany').value||'').trim();
+  const msg=(document.getElementById('empMsg').value||'').trim();
+  if(!email.includes('@')){alert('Please enter a valid work email');return;}
+  const btn=document.getElementById('empBtn');btn.textContent='Sending…';
+  try{
+    await fetch('/api/mailchimp-subscribe',{method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,tags:['employer-lead']})});
+  }catch(e){}
+  // Guaranteed delivery path: open a pre-filled email
+  const sub=encodeURIComponent('Workplace programme enquiry — '+(company||'company'));
+  const bod=encodeURIComponent('Company: '+company+'\n\n'+msg+'\n\n(Sent from adhdclearfocus.ie/workplace)');
+  window.location.href='mailto:conalldonegan@outlook.com?subject='+sub+'&body='+bod;
+  btn.style.display='none';
+  document.getElementById('empDone').style.display='block';
+  gtag('event','employer_enquiry',{company_size:company});
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>

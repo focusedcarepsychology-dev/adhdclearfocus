@@ -9,9 +9,19 @@ import os
 import http.client
 from http.server import BaseHTTPRequestHandler
 
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY", "")
-PRICE_ID = os.environ.get("STRIPE_PRICE_ID", "")  # €49 report price ID
-DOMAIN = os.environ.get("DOMAIN", "https://adhdclearfocus.com")
+def env(*names, default=""):
+    """Case-insensitive env lookup: tries each name as-is, UPPER, and lower."""
+    for n in names:
+        for k in (n, n.upper(), n.lower()):
+            v = os.environ.get(k)
+            if v:
+                return v
+    return default
+
+
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
+PRICE_ID = env("STRIPE_PRICE_ID")  # €49 report price ID
+DOMAIN = env("DOMAIN", default="https://adhdclearfocus.ie")
 
 
 def create_stripe_session(email, metadata):

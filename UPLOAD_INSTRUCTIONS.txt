@@ -13,7 +13,7 @@ fully reaching GitHub. Follow these steps EXACTLY.
 STEP 1 — EXTRACT (do not upload the .zip itself)
 ───────────────────────────────────────────────────────────────
 1. Right-click the downloaded zip → Extract All
-2. Open the extracted "flat_deploy" folder
+2. Open the extracted "adhdclearfocus_site" folder
 3. You should see index.html, app.html, the "api" folder, etc.
 
 ───────────────────────────────────────────────────────────────
@@ -27,7 +27,7 @@ Vercel fails. Turn on hidden files:
 ───────────────────────────────────────────────────────────────
 STEP 3 — COPY EVERYTHING INTO YOUR REPO
 ───────────────────────────────────────────────────────────────
-1. Inside flat_deploy, select ALL files (Ctrl+A / Cmd+A)
+1. Inside adhdclearfocus_site, select ALL files (Ctrl+A / Cmd+A)
 2. Copy (Ctrl+C / Cmd+C)
 3. Open your local GitHub repo folder
 4. Paste (Ctrl+V / Cmd+V) → choose "Replace all" if asked
