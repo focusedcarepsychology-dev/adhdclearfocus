@@ -1,5 +1,5 @@
-// ADHDclearfocus Service Worker v2
-const CACHE_NAME = 'adhdclearfocus-v2';
+// ADHDclearfocus Service Worker v3
+const CACHE_NAME = 'adhdclearfocus-v3';
 const OFFLINE_PAGES = ['/crisis.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
 
 self.addEventListener('install', (event) => {
@@ -23,7 +23,10 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    fetch(event.request).then((response) => {
+    // cache:'no-store' forces a genuine network round-trip, bypassing the browser's own
+    // HTTP cache layer -- without this, "network-first" can still silently serve a stale
+    // cached response if the host's cache-control headers allow it.
+    fetch(event.request, { cache: 'no-store' }).then((response) => {
       if (response && response.status === 200) {
         const clone = response.clone();
         caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone)).catch(() => {});
