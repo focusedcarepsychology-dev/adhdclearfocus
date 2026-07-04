@@ -713,6 +713,7 @@ function App(){
   const[resumeData,setResumeData]=useState(null);
   const topRef=useRef(null);
   const currentQ=QS[qIndex];
+  const progress=Math.round((qIndex/QS.length)*100);
 
   // Exit intent detection
   useEffect(()=>{
@@ -740,7 +741,6 @@ function App(){
       }
     }catch(e){}
   },[]);
-  const progress=Math.round((qIndex/QS.length)*100);
   const daysLeft=getFoundingDaysLeft();
   const domainKeys=Object.keys(DOMAINS);
 
