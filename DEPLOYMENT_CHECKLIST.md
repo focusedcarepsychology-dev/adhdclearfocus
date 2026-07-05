@@ -61,3 +61,8 @@
 - [ ] Legal page.
 - [ ] Offline page after first load.
 
+
+
+## Vercel runtime fix
+
+If Vercel says `Function Runtimes must have a valid version`, make sure `vercel.json` does **not** contain `"runtime": "python3.12"`. This package has already removed it; Vercel will auto-detect Python from the `.py` files and `.python-version`.
