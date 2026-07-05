@@ -7,7 +7,7 @@ can generate and send the personalised PDF report.
 Stdlib only. Env vars:
   STRIPE_SECRET_KEY
   STRIPE_PRICE_ID
-  DOMAIN=https://adhdclearfocus.ie
+  DOMAIN=https://www.adhdclearfocus.com
 """
 import json
 import os
@@ -28,7 +28,7 @@ def env(*names, default=""):
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 PRICE_ID = env("STRIPE_PRICE_ID")
-DOMAIN = env("DOMAIN", default="https://adhdclearfocus.ie").rstrip("/")
+DOMAIN = env("DOMAIN", default="https://www.adhdclearfocus.com").rstrip("/")
 
 DOMAIN_KEYS = [
     "inattention", "hyperactivity", "executive", "emotional", "working_memory",

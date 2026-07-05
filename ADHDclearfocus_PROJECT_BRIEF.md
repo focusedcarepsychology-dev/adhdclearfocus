@@ -7,11 +7,11 @@
 
 ## 1. What ADHDclearfocus is
 
-An **educational** ADHD self-awareness and productivity platform at **adhdclearfocus.ie**. It is explicitly **not** a clinical service, does not diagnose, and does not create a clinical relationship (this keeps it outside EU MDR classification). All public copy must preserve this framing.
+An **educational** ADHD self-awareness and productivity platform at **adhdclearfocus.com**. It is explicitly **not** a clinical service, does not diagnose, and does not create a clinical relationship (this keeps it outside EU MDR classification). All public copy must preserve this framing.
 
 **Attribution rules (non-negotiable):**
 - **No personal name appears anywhere as the creator/author of the platform.** Reports say "Prepared by the ADHDclearfocus clinical team". Site copy says "developed by the ADHDclearfocus clinical team" / "Built by experts".
-- The **only** permitted personal surfaces are: (a) the Psychology Today profile link (https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075), framed as *"if your results raise concerns, speak to a chartered psychologist — free 15-minute consultation"*, shown **after** the screener and on support sections — never as "the person who built this site"; and (b) the legal/privacy contact email conalldonegan@outlook.com on legal.html and support copy.
+- The **only** permitted personal surfaces are: (a) the Psychology Today profile link (https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075), framed as *"if your results raise concerns, speak to a chartered psychologist — free 15-minute consultation"*, shown **after** the screener and on support sections — never as "the person who built this site"; and (b) the legal/privacy contact email focusedcarepsychology@gmail.com on legal.html and support copy.
 - The book **The Gratitude Prescription** is advertised as "written by a DPsych psychologist with 17 years of clinical experience" — no name, links to Amazon: https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL
 
 ## 2. Architecture (DO NOT CHANGE — this has been rebuilt wrongly multiple times)
@@ -19,7 +19,7 @@ An **educational** ADHD self-awareness and productivity platform at **adhdclearf
 - **Flat HTML, one file per page. No build step. No Vite, no Next, no TypeScript, no Supabase.** Any AI that proposes a framework rebuild is wrong — reject it.
 - React 18 **via CDN** + Babel standalone, used only inside index.html (the screener app).
 - Serverless functions in **/api** as **Python using stdlib only** (urllib, json — **no pip SDKs**). `.python-version` file must be present (it is hidden — enable "show hidden files" before uploading).
-- `vercel.json` present and valid. Deployed on **Vercel**, repo: focusedcarepsychology-dev/adhdclearfocus, project adhdclearfocus-g7cu, domain adhdclearfocus.ie.
+- `vercel.json` present and valid. Deployed on **Vercel**, repo: focusedcarepsychology-dev/adhdclearfocus, project adhdclearfocus-g7cu, domain adhdclearfocus.com.
 - Integrations: Stripe Payment Links, SendGrid (email), Anthropic API (claude-haiku-4-5-20251001) for report generation, Mailchimp (list capture), JSONBin.io (community forum storage, BIN_ID 6a38525eda38895dfee84b8a), GA4 (G-R8CLJRBNM0) + Vercel Analytics via script tag on **all pages**.
 - **Known deployment failure mode:** changes "not showing" has always been caused by incomplete GitHub uploads (files not fully replacing old ones, or hidden `.python-version` not copied) — never by Vercel itself. Follow UPLOAD_INSTRUCTIONS.txt in the zip exactly.
 
@@ -68,7 +68,7 @@ ASRS-v1.1: Kessler et al. 2005 (Part A 68.7% sens / 99.5% spec at 4/6); Brevik e
    - app.html: two mangled greeting ternaries → whole dashboard script died;
    - app.html: Unicode minus signs (−) in mood-score comparisons → script parse failure;
    - api/generate_report.py: `},,` syntax error → **every €49 report purchase would have failed**.
-6. Copy corrected 35 → **39 questions** (meta tags, intro, consent); stray €9/month waitlist line aligned to €5/mo-yearly; founding deadline unified to 31 July 2026; sitemap unified to adhdclearfocus.ie and now includes /insights.html and /app.html.
+6. Copy corrected 35 → **39 questions** (meta tags, intro, consent); stray €9/month waitlist line aligned to €5/mo-yearly; founding deadline unified to 31 July 2026; sitemap unified to adhdclearfocus.com and now includes /insights.html and /app.html.
 7. All 12 pages pass JS/JSX parse validation; all 4 Python functions compile; all referenced DOM ids exist.
 
 ## 8. Standing instructions for any future Claude conversation

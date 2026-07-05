@@ -85,6 +85,10 @@
     {
       "source": "/api/focus-room",
       "destination": "/api/focus-room.py"
+    },
+    {
+      "source": "/api/employer-lead",
+      "destination": "/api/employer-lead.py"
     }
   ]
 }

@@ -182,20 +182,42 @@ async function employerEnquire(){
   const email=(document.getElementById('empEmail').value||'').trim();
   const company=(document.getElementById('empCompany').value||'').trim();
   const msg=(document.getElementById('empMsg').value||'').trim();
-  if(!email.includes('@')){alert('Please enter a valid work email');return;}
-  const btn=document.getElementById('empBtn');btn.textContent='Sending…';
-  try{
-    await fetch('/api/mailchimp-subscribe',{method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email,tags:['employer-lead']})});
-  }catch(e){}
-  // Guaranteed delivery path: open a pre-filled email
+  if(!email.includes('@') || !email.includes('.')){alert('Please enter a valid work email');return;}
+  const btn=document.getElementById('empBtn');
+  const done=document.getElementById('empDone');
+  btn.disabled=true;
+  btn.textContent='Sending…';
+
   const sub=encodeURIComponent('Workplace programme enquiry — '+(company||'company'));
-  const bod=encodeURIComponent('Company: '+company+'\n\n'+msg+'\n\n(Sent from adhdclearfocus.ie/workplace)');
-  window.location.href='mailto:conalldonegan@outlook.com?subject='+sub+'&body='+bod;
-  btn.style.display='none';
-  document.getElementById('empDone').style.display='block';
-  gtag('event','employer_enquiry',{company_size:company});
+  const bod=encodeURIComponent('Company: '+company+'\nWork email: '+email+'\n\n'+msg+'\n\n(Sent from adhdclearfocus.com/workplace)');
+  const fallback='mailto:focusedcarepsychology@gmail.com?subject='+sub+'&body='+bod;
+
+  try{
+    // Add the lead to Mailchimp if configured. This is non-blocking.
+    fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,tags:['employer-lead'],merge_fields:{COMPANY:company}})}).catch(function(){});
+
+    // Reliable delivery path: server-side SendGrid email to focusedcarepsychology@gmail.com.
+    const res=await fetch('/api/employer-lead',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,company:company,message:msg,page:'/workplace.html'})});
+    const data=await res.json().catch(function(){return {}});
+    if(res.ok && data.ok){
+      btn.style.display='none';
+      done.textContent='✓ Received — we will reply within two working days.';
+      done.style.display='block';
+      if(window.gtag)gtag('event','employer_enquiry',{method:'sendgrid'});
+      return;
+    }
+    throw new Error(data.error||'send_failed');
+  }catch(e){
+    // Backup delivery path if SendGrid/env vars are not configured yet.
+    done.innerHTML='Your email app is opening so you can send the enquiry directly. If it does not open, email <a href="mailto:focusedcarepsychology@gmail.com" style="color:var(--teal)">focusedcarepsychology@gmail.com</a>.';
+    done.style.display='block';
+    btn.disabled=false;
+    btn.textContent='Open email app →';
+    window.location.href=fallback;
+    if(window.gtag)gtag('event','employer_enquiry',{method:'mailto_fallback'});
+  }
 }
 </script>
 <script defer src="/_vercel/insights/script.js"></script>

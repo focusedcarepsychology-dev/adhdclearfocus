@@ -56,7 +56,7 @@ STEP 6 — WATCH VERCEL DEPLOY
 ───────────────────────────────────────────────────────────────
 STEP 7 — VERIFY IT'S THE NEW BUILD
 ───────────────────────────────────────────────────────────────
-Visit adhdclearfocus.ie on your phone. Take the assessment.
+Visit adhdclearfocus.com on your phone. Take the assessment.
   ✓ If you count 39 questions and see the friendly animated
     character in the hero → SUCCESS, new build is live.
   ✗ If you still see 35 questions → old build still cached,
@@ -65,15 +65,19 @@ Visit adhdclearfocus.ie on your phone. Take the assessment.
 ───────────────────────────────────────────────────────────────
 ENVIRONMENT VARIABLES (needed for payments/email to work)
 ───────────────────────────────────────────────────────────────
-Vercel → Settings → Environment Variables. Add these 8:
-  SENDGRID_API_KEY        (from SendGrid)
-  ANTHROPIC_API_KEY       (from console.anthropic.com)
-  STRIPE_SECRET_KEY       (sk_live_... from Stripe)
-  STRIPE_WEBHOOK_SECRET   (whsec_... from Stripe webhooks)
-  STRIPE_PRICE_ID         (price_... from Stripe product)
-  MAILCHIMP_API_KEY       (from Mailchimp)
-  MAILCHIMP_LIST_ID       3f6c1e163c
-  ADMIN_EMAIL             conalldonegan@outlook.com
+Vercel → Settings → Environment Variables. Minimum live setup:
+  DOMAIN                  https://www.adhdclearfocus.com
+  SENDGRID_API_KEY        from SendGrid
+  SENDGRID_FROM_EMAIL     focusedcarepsychology@gmail.com
+  ADMIN_EMAIL             focusedcarepsychology@gmail.com
+  EMPLOYER_LEADS_EMAIL    focusedcarepsychology@gmail.com
+  ANTHROPIC_API_KEY       from console.anthropic.com
+  STRIPE_SECRET_KEY       sk_live_... from Stripe
+  STRIPE_WEBHOOK_SECRET   whsec_... from Stripe webhooks
+  STRIPE_PRICE_ID         price_... from Stripe product
+  MAILCHIMP_API_KEY       optional, from Mailchimp
+  MAILCHIMP_LIST_ID       optional, for example 3f6c1e163c
 After adding: Deployments → Redeploy.
+For full beginner instructions, read ENVIRONMENT_VARIABLES_STEP_BY_STEP.md.
 
 ═══════════════════════════════════════════════════════════════

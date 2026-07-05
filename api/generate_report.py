@@ -1400,7 +1400,7 @@ def build_report(name, age_group, level, total_pct, asrs_flag, asrs_count, pcts,
     # Contact
     story += [
         sp(10), hr(TEAL),
-        Paragraph("ADHDclearfocus — adhdclearfocus.ie", ParagraphStyle("cf",
+        Paragraph("ADHDclearfocus — adhdclearfocus.com", ParagraphStyle("cf",
             fontName="Helvetica-Bold", fontSize=9, textColor=TEAL, leading=13)),
         Paragraph("Prepared by the ADHDclearfocus clinical team",
             ParagraphStyle("cfa", fontName="Helvetica", fontSize=8.5, textColor=MUTED, leading=12)),
@@ -1436,7 +1436,7 @@ def build_report(name, age_group, level, total_pct, asrs_flag, asrs_count, pcts,
             ST["disclaimer"]),
         sp(8),
         Paragraph(
-            f"Report generated: {date_str}  ·  ADHDclearfocus  ·  adhdclearfocus.ie",
+            f"Report generated: {date_str}  ·  ADHDclearfocus  ·  adhdclearfocus.com",
             ST["footer"]),
     ]
 

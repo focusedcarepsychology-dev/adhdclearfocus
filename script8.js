@@ -387,7 +387,7 @@ function FeedbackWidget({ C }) {
         catch (e) { }
         const sub = encodeURIComponent(`ADHDclearfocus ${type}`);
         const bod = encodeURIComponent(`Type: ${type}\n\nMessage: ${msg}\n\nTime: ${entry.time}`);
-        window.open(`mailto:conalldonegan@outlook.com?subject=${sub}&body=${bod}`);
+        window.open(`mailto:focusedcarepsychology@gmail.com?subject=${sub}&body=${bod}`);
         setSent(true);
         setTimeout(() => { setSent(false); setOpen(false); setMsg(""); }, 3000);
     }
@@ -1283,9 +1283,9 @@ function App() {
                         React.createElement("div", { style: { fontSize: 12, color: C.muted, marginBottom: 10, lineHeight: 1.55 } }, "Share your ADHD profile level \u2014 it might help someone you know recognise their own patterns."),
                         React.createElement("div", { style: { display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" } }, [
                             { label: "Share on Twitter/X", icon: "🐦",
-                                url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://adhdclearfocus.ie`)}` },
+                                url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://www.adhdclearfocus.com`)}` },
                             { label: "Share on WhatsApp", icon: "💬",
-                                url: `https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://adhdclearfocus.ie`)}` },
+                                url: `https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://www.adhdclearfocus.com`)}` },
                             { label: "Copy link", icon: "🔗", url: null },
                         ].map(s => (React.createElement("button", { key: s.label, onClick: () => {
                                 var _a;
@@ -1293,7 +1293,7 @@ function App() {
                                     window.open(s.url, "_blank");
                                 }
                                 else {
-                                    (_a = navigator.clipboard) === null || _a === void 0 ? void 0 : _a.writeText("https://adhdclearfocus.ie");
+                                    (_a = navigator.clipboard) === null || _a === void 0 ? void 0 : _a.writeText("https://www.adhdclearfocus.com");
                                     alert("Link copied!");
                                 }
                             }, style: { background: C.navyMid, border: `1px solid ${C.border}`,

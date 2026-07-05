@@ -14,7 +14,7 @@ This package keeps the required architecture: flat HTML pages, React 18 + Babel 
 - Fixed the Stripe checkout function so it URL-encodes metadata properly and returns safe errors.
 - Rebuilt Mailchimp proxy to fail gracefully if not configured.
 - Added server-side community and focus-room proxies so JSONBin keys are not exposed in the browser.
-- Updated public domain references to `adhdclearfocus.ie`.
+- Updated public domain references to `adhdclearfocus.com`.
 - Added basic security headers and cache rules.
 
 ## Upload to Vercel
@@ -40,10 +40,11 @@ Minimum for core paid report flow:
 - `STRIPE_PRICE_ID`
 - `STRIPE_WEBHOOK_SECRET`
 - `SENDGRID_API_KEY`
-- `SENDGRID_FROM_EMAIL` optional, defaults to `hello@adhdclearfocus.ie`
-- `ADMIN_EMAIL` optional, defaults to the legal contact email
+- `SENDGRID_FROM_EMAIL` optional, defaults to `focusedcarepsychology@gmail.com` but must be verified in SendGrid
+- `ADMIN_EMAIL` optional, defaults to `focusedcarepsychology@gmail.com`
+- `EMPLOYER_LEADS_EMAIL` optional, defaults to `ADMIN_EMAIL` / `focusedcarepsychology@gmail.com`
 - `ANTHROPIC_API_KEY`
-- `DOMAIN=https://adhdclearfocus.ie`
+- `DOMAIN=https://www.adhdclearfocus.com`
 
 For accounts:
 
@@ -87,3 +88,7 @@ A JSONBin master key was previously embedded in the client-side HTML. Rotate tha
 ## Final full-feature locked package
 
 This package has been checked against the old working backend files uploaded after the v2 reconciliation. The legacy Stripe checkout, webhook, AI report generation, SendGrid delivery, Mailchimp capture and ReportLab PDF generation are preserved. See `LEGACY_FEATURE_AUDIT.md` for details.
+
+## July 2026 assessment reliability fix
+
+`assessment.html` is now a dependency-free static JavaScript assessment. This prevents the prior blank-screen failure caused by the large React assessment app. The 39-question / 10-domain screener, scoring, progress save, Mailchimp capture and Stripe checkout metadata flow are preserved.

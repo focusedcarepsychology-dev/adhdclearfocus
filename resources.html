@@ -30,6 +30,7 @@
     .filter-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
     .filter-btn{background:var(--navyLight);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted);font-family:inherit;transition:all 0.2s}
     .filter-btn.active,.filter-btn:hover{background:var(--teal);color:var(--navy);border-color:var(--teal)}
+    .section-title{font-size:11px;font-weight:900;color:var(--teal);text-transform:uppercase;letter-spacing:1.5px;margin:28px 0 12px;display:flex;align-items:center;gap:8px}.section-title::after{content:"";flex:1;height:1px;background:var(--border)}
     .article{background:var(--navyLight);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;transition:border-color 0.2s}
     .article:hover{border-color:var(--teal)40}
     .article-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
@@ -89,6 +90,7 @@
     <button class="filter-btn" onclick="filterArticles('lifestyle',this)">🏃 Lifestyle</button>
     <button class="filter-btn" onclick="filterArticles('neuroscience',this)">🔬 Neuroscience</button>
     <button class="filter-btn" onclick="filterArticles('emotional',this)">🌊 Emotional</button>
+    <button class="filter-btn" onclick="filterArticles('emerging',this)">🌱 Emerging Evidence</button>
   </div>
 
   <!-- ARTICLE 1 -->
@@ -247,31 +249,37 @@
     <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
   </div>
 
+  <div class="section-title">🌱 Emerging Evidence & Contested Interventions</div>
+
   <!-- ARTICLE 6 -->
-  <div class="article reveal" data-category="psychology neuroscience" onclick="toggleArticle(this)">
+  <div class="article reveal" data-category="emerging neuroscience psychology" onclick="toggleArticle(this)">
     <div class="article-meta">
-      <span class="article-tag" style="background:#FF6B9D20;color:#FF6B9D;border:1px solid #FF6B9D40">Emotional</span>
-      <span class="impact high">★ High Impact</span>
-      <span class="article-date">2025 · JAMA Psychiatry (38 RCTs)</span>
+      <span class="article-tag" style="background:#A855F720;color:#C084FC;border:1px solid #A855F740">Emerging Evidence</span>
+      <span class="impact emerging">◈ Contested</span>
+      <span class="article-date">Neurofeedback · EEG training · protocol research</span>
     </div>
-    <div class="article-title">Neurofeedback for ADHD: the largest ever meta-analysis finds no significant benefit</div>
+    <div class="article-title">Neurofeedback for ADHD: promising theory, mixed trial evidence, and why it should sit under emerging evidence</div>
     <div class="plain-summary">
       <div class="label">Plain English Summary</div>
-      <p>A 2025 JAMA Psychiatry systematic review and meta-analysis analysed 38 randomised controlled trials with 2,472 participants of all ages. When only probably-blinded assessments were used (to control for placebo effects), neurofeedback showed no significant improvement in ADHD total symptoms (effect size 0.04 — essentially zero). A small significant effect appeared only in a subset of 9 trials using specific established protocols.</p>
+      <p>Neurofeedback is not new, but the evidence is still developing. The idea is simple: a person receives real-time feedback from EEG brain activity and learns to shift attention-related brain patterns. The problem is that strong-looking improvements often become much smaller when studies use blinded ratings, credible controls, and standardised protocols. The best current position is not “neurofeedback never works”; it is “do not present it as a first-line ADHD intervention yet”.</p>
     </div>
     <div class="article-detail">
       <div class="what-means">
         <div class="label">What This Means For You</div>
-        <p>Neurofeedback is frequently discussed in ADHD communities and heavily marketed by some practitioners. This meta-analysis — the most rigorous available — does not support spending €1,500-3,000+ on a course of neurofeedback. The money and time are better directed toward medication (if appropriate) or CBT, both of which have substantially stronger evidence bases. If you have already tried neurofeedback and found it helpful, that's valid individual experience — but the population-level controlled evidence doesn't support recommending it broadly.</p>
+        <p>If someone offers neurofeedback, ask three questions before spending money: What protocol are they using? What blinded RCT evidence supports that exact protocol? What outcome will be measured beyond “I feel better”? For most people, medication assessment, ADHD-adapted CBT, sleep work, exercise, workplace accommodations, and external executive-function systems should come first because they have clearer evidence and/or lower cost.</p>
       </div>
       <div class="caveats">
-        <div class="label">Important Caveats</div>
-        <p>The small effect found in standard-protocol trials (d=0.21) is not nothing. Individual responses vary. Some practitioners argue that the heterogeneity of protocols makes meta-analysis difficult. The evidence may improve as protocols become more standardised. This assessment reflects the best current evidence.</p>
+        <div class="label">Balanced Caveat</div>
+        <p>Some individual people report genuine benefit, and specific standard protocols may show small effects. The field may improve with better targeting, cleaner EEG methods, sham-controlled designs, and personalised neurophysiological markers. ADHDclearfocus therefore places neurofeedback in “Emerging Evidence” rather than dismissing it completely.</p>
+      </div>
+      <div class="plain-summary" style="border-left-color:#A855F7">
+        <div class="label" style="color:#C084FC">Journal Trail To Watch</div>
+        <p><strong>JAMA Psychiatry:</strong> systematic reviews/meta-analyses of neurofeedback RCTs and blinded outcomes. <strong>European Child &amp; Adolescent Psychiatry:</strong> ADHD neurofeedback trial protocols and long-term follow-up debates. <strong>NeuroImage: Clinical / Biological Psychiatry: CNNI:</strong> brain-network and EEG-marker work that may make future protocols more targeted. <strong>Clinical EEG and Neuroscience:</strong> protocol-level neurofeedback studies and technical limitations. <strong>Frontiers in Human Neuroscience:</strong> accessible reviews on EEG self-regulation, attention training, and neurotechnology.</p>
       </div>
       <div class="article-source">
-        <span class="source-label">Source:</span>
-        <span class="journal-badge">JAMA Psychiatry 2025 (Westwood et al.)</span>
-        <a href="https://pubmed.ncbi.nlm.nih.gov/39661381/" target="_blank" rel="noopener" class="source-link">Read on PubMed →</a>
+        <span class="source-label">Evidence status:</span>
+        <span class="journal-badge">Emerging / contested, not first-line</span>
+        <a href="https://pubmed.ncbi.nlm.nih.gov/?term=ADHD+neurofeedback+meta-analysis" target="_blank" rel="noopener" class="source-link">Search PubMed →</a>
       </div>
     </div>
     <button class="read-more" onclick="event.stopPropagation()">Read more ▾</button>
@@ -343,7 +351,7 @@
   </div>
 
   <div style="font-size:12px;color:var(--muted);line-height:1.6;padding:16px;background:var(--navyLight);border-radius:12px;border:1px solid var(--border)">
-    <strong style="color:#fff">About this page:</strong> All research summaries are prepared by the ADHDclearfocus clinical team and reviewed for accuracy. We cite original peer-reviewed sources and include caveats where evidence is preliminary. If you identify an error or would like to suggest a study for inclusion, contact us at <a href="mailto:conalldonegan@outlook.com" style="color:var(--teal)">conalldonegan@outlook.com</a>. This page does not constitute clinical advice.
+    <strong style="color:#fff">About this page:</strong> All research summaries are prepared by the ADHDclearfocus clinical team and reviewed for accuracy. We cite original peer-reviewed sources and include caveats where evidence is preliminary. If you identify an error or would like to suggest a study for inclusion, contact us at <a href="mailto:focusedcarepsychology@gmail.com" style="color:var(--teal)">focusedcarepsychology@gmail.com</a>. This page does not constitute clinical advice.
   </div>
 
 </div>

@@ -11,13 +11,14 @@
 
 ## Vercel environment variables
 
-- [ ] `DOMAIN=https://adhdclearfocus.ie`
+- [ ] `DOMAIN=https://www.adhdclearfocus.com`
 - [ ] `STRIPE_SECRET_KEY`
 - [ ] `STRIPE_PRICE_ID`
 - [ ] `STRIPE_WEBHOOK_SECRET`
 - [ ] `SENDGRID_API_KEY`
-- [ ] `SENDGRID_FROM_EMAIL`
-- [ ] `ADMIN_EMAIL`
+- [ ] `SENDGRID_FROM_EMAIL=focusedcarepsychology@gmail.com`
+- [ ] `ADMIN_EMAIL=focusedcarepsychology@gmail.com`
+- [ ] `EMPLOYER_LEADS_EMAIL=focusedcarepsychology@gmail.com`
 - [ ] `ANTHROPIC_API_KEY`
 - [ ] `MAILCHIMP_API_KEY`
 - [ ] `MAILCHIMP_LIST_ID`
@@ -30,7 +31,7 @@
 
 ## Stripe
 
-- [ ] Webhook endpoint points to `https://adhdclearfocus.ie/api/webhook`.
+- [ ] Webhook endpoint points to `https://www.adhdclearfocus.com/api/webhook`.
 - [ ] Event enabled: `checkout.session.completed`.
 - [ ] Test mode works before live mode.
 - [ ] Price ID matches the €49 report product.
