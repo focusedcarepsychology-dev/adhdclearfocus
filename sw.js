@@ -1,5 +1,5 @@
-// ADHDclearfocus Service Worker v3
-const CACHE_NAME = 'adhdclearfocus-v4-blankfix';
+// ADHDclearfocus Service Worker v5 - cookie-overlay blank-screen fix
+const CACHE_NAME = 'adhdclearfocus-v5-cookiefix';
 const OFFLINE_PAGES = ['/','/index.html','/crisis.html','/strategies.html','/resources.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
 
 self.addEventListener('install', (event) => {

@@ -1,17 +1,14 @@
-# Blank Screen Fix — ADHDclearfocus
+# Blank screen fix — cookie overlay issue
 
-The homepage previously depended on in-browser Babel (`type="text/babel"`). If Babel fails to load, is blocked, or errors during transformation, React never mounts and the user sees a blank page because the original `#root` was empty.
+## What happened
+The homepage was not fully crashing. It flashed the fallback homepage, then React loaded and replaced it with the app. The app's initial state was `step = "cookie"`, which displayed only the sticky header and the cookie banner at the bottom. The main content area had no intro screen, so it looked like the page had gone blank.
 
 ## Fix applied
+- Changed the initial app step from `cookie` to `intro`.
+- Converted the cookie notice into an overlay banner shown on top of the intro screen.
+- Added `acf_cookie_ok` localStorage persistence so the banner does not reappear after acceptance.
+- Kept the no-Babel homepage fix.
+- Bumped the service worker cache to `adhdclearfocus-v5-cookiefix` so browsers refresh cached homepage assets.
 
-- Precompiled the homepage JSX into normal browser JavaScript.
-- Removed the Babel CDN dependency from `index.html`.
-- Kept React and ReactDOM CDN links only.
-- Added a static fallback inside `#root`, so the page no longer appears blank even if JavaScript fails.
-- Added a React error boundary around the assessment app.
-- Bumped the service worker cache name to force browsers to replace stale cached files.
-- Added `/`, `/index.html`, `strategies.html`, and `resources.html` to offline cache.
-
-## Upload note
-
-Upload the contents of this package to GitHub, replacing all existing files. After deploy, test in an incognito/private browser first. If your normal browser still shows blank, clear site data or unregister the old service worker once.
+## After deployment
+Open the site in an incognito window first. If your normal browser still shows the old version, clear site data for `adhdclearfocus.com` and `www.adhdclearfocus.com`, or open DevTools > Application > Service Workers > Unregister.
