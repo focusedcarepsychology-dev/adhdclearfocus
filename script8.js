@@ -1,0 +1,1337 @@
+
+const { useState, useRef, useEffect } = React;
+// ── STRIPE ────────────────────────────────────────────────────────────────────
+const STRIPE_LINKS = {
+    report: "https://buy.stripe.com/4gM7sL6oE2Fk32T8NHfYY01",
+    reviewCall: "https://buy.stripe.com/14A7sL8wM0xcbzpgg9fYY00",
+};
+async function createCheckout(result, email, isTeen) {
+    const activeButton = document.activeElement && document.activeElement.tagName === 'BUTTON' ? document.activeElement : null;
+    const originalHtml = activeButton ? activeButton.innerHTML : null;
+    try {
+        if (activeButton) {
+            activeButton.innerHTML = '⏳ Opening secure checkout...';
+            activeButton.disabled = true;
+        }
+        const res = await fetch("/api/create-checkout", { method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, level: result.level, total_pct: result.totalPct, asrs_flag: result.asrsFlag,
+                asrs_count: result.asrsCount, age_group: isTeen ? "Adolescent" : "Adult", pcts: result.pcts }) });
+        if (res.ok) {
+            const d = await res.json();
+            if (d.url) {
+                window.location.href = d.url;
+                return;
+            }
+        }
+    }
+    catch (e) {
+        console.log("Checkout API unavailable", e);
+    }
+    finally {
+        if (activeButton) {
+            activeButton.innerHTML = originalHtml;
+            activeButton.disabled = false;
+        }
+    }
+    window.open(STRIPE_LINKS.report, "_blank", "noopener,noreferrer");
+}
+// ── COLOURS ───────────────────────────────────────────────────────────────────
+const C = {
+    navy: "#0A1628", navyMid: "#112240", navyLight: "#1A2E4A",
+    teal: "#00D4DD", tealDark: "#00A8B0",
+    amber: "#FFB347", amberDark: "#F5A623",
+    green: "#00E676", greenDark: "#2ECC71",
+    purple: "#A855F7", purpleDark: "#7C3AED",
+    pink: "#FF6B9D", blue: "#4FC3F7",
+    red: "#FF5252", white: "#FFFFFF",
+    muted: "#7B93B4", border: "#1E3A5F",
+};
+// ── DOMAINS (10 neurological dimensions) ──────────────────────────────────────
+const DOMAINS = {
+    inattention: { label: "Attention Regulation", icon: "🎯", color: C.teal,
+        desc: "How your brain filters, sustains and directs focus" },
+    hyperactivity: { label: "Hyperactivity & Impulse Control", icon: "⚡", color: C.amber,
+        desc: "Internal restlessness, urgency and response inhibition" },
+    executive: { label: "Executive Function", icon: "🧩", color: C.purple,
+        desc: "Planning, initiation, sequencing and self-direction" },
+    emotional: { label: "Emotional Regulation", icon: "🌊", color: C.pink,
+        desc: "Emotional intensity, recovery and dysregulation patterns" },
+    working_memory: { label: "Working Memory", icon: "💾", color: C.blue,
+        desc: "Holding, manipulating and applying information in real time" },
+    time: { label: "Time Perception", icon: "⏳", color: C.amberDark,
+        desc: "Temporal awareness, time blindness and deadline management" },
+    hyperfocus: { label: "Hyperfocus & Interest Drive", icon: "🔥", color: C.green,
+        desc: "The interest-based nervous system and hyperfocus patterns" },
+    rsd: { label: "Rejection Sensitivity", icon: "💔", color: C.pink,
+        desc: "Rejection Sensitive Dysphoria and emotional pain responses" },
+    developmental: { label: "Developmental History", icon: "🌱", color: C.greenDark,
+        desc: "Childhood onset and neurodevelopmental trajectory" },
+    impact: { label: "Life Impact", icon: "🌍", color: C.teal,
+        desc: "Functional consequences across work, relationships and daily life" },
+};
+// ── QUESTIONS (35 — expanded, multi-framework) ────────────────────────────────
+// ASRS Part A items tagged asrs:true (6 items only — do not add more asrs:true)
+const FREQ = [{ l: "Never", v: 0 }, { l: "Rarely", v: 1 }, { l: "Sometimes", v: 2 }, { l: "Often", v: 3 }, { l: "Very Often", v: 4 }];
+const AGREE = [{ l: "Not at all", v: 0 }, { l: "A little", v: 1 }, { l: "Moderately", v: 2 }, { l: "Quite a bit", v: 3 }, { l: "Very much", v: 4 }];
+const QS = [
+    // INATTENTION (8 questions) — ASRS Part A items a1-a3, Part B b1-b4, + 1 extra
+    { id: "a1", d: "inattention", t: "freq", asrs: true,
+        a: "How often do you have trouble wrapping up the final details of a project once the challenging parts are done?",
+        teen: "How often do you have trouble finishing assignments once the hardest part is done?" },
+    { id: "a2", d: "inattention", t: "freq", asrs: true,
+        a: "How often do you have difficulty getting things in order when you have to do a task that requires organisation?",
+        teen: "How often do you find it hard to organise your schoolwork or personal space?" },
+    { id: "a3", d: "inattention", t: "freq", asrs: true,
+        a: "How often do you have problems remembering appointments or obligations?",
+        teen: "How often do you forget homework, tests, or plans you have made?" },
+    { id: "b1", d: "inattention", t: "freq",
+        a: "How often do you make careless mistakes when working on something boring or difficult?",
+        teen: "How often do you make careless mistakes on schoolwork or tasks you find boring?" },
+    { id: "b2", d: "inattention", t: "freq",
+        a: "How often do you have difficulty sustaining attention on repetitive or tedious work?",
+        teen: "How often is it hard to keep your attention on something boring or repetitive?" },
+    { id: "b3", d: "inattention", t: "freq",
+        a: "How often do you have difficulty concentrating on what people say, even when they speak directly to you?",
+        teen: "How often do you zone out when someone is talking to you directly?" },
+    { id: "b4", d: "inattention", t: "freq",
+        a: "How often do you misplace or have difficulty finding things at home or at work?",
+        teen: "How often do you lose or misplace things like your phone, keys, or school items?" },
+    { id: "b5", d: "inattention", t: "freq",
+        a: "How often do you find yourself re-reading the same paragraph multiple times without taking it in?",
+        teen: "How often do you read something and realise you have not taken in any of it?" },
+    // HYPERACTIVITY (5 questions) — ASRS Part A items a4-a6 + 2 extra
+    { id: "a4", d: "hyperactivity", t: "freq", asrs: true,
+        a: "When you have a task requiring a lot of thought, how often do you avoid or delay getting started?",
+        teen: "How often do you put off starting schoolwork that requires real effort?" },
+    { id: "a5", d: "hyperactivity", t: "freq", asrs: true,
+        a: "How often do you fidget or squirm with your hands or feet when you have to sit down for a long time?",
+        teen: "How often do you feel restless or fidgety when you have to stay seated?" },
+    { id: "a6", d: "hyperactivity", t: "freq", asrs: true,
+        a: "How often do you feel overly active and compelled to do things, like you were driven by a motor?",
+        teen: "How often do you feel like you just cannot slow down, like something is driving you?" },
+    { id: "h1", d: "hyperactivity", t: "freq",
+        a: "How often do you interrupt others or blurt out answers before they have finished speaking?",
+        teen: "How often do you interrupt people or answer before they have finished?" },
+    { id: "h2", d: "hyperactivity", t: "freq",
+        a: "How often do you make impulsive decisions that you later regret?",
+        teen: "How often do you do things impulsively that you later wish you had thought through?" },
+    // EXECUTIVE FUNCTION (4 questions)
+    { id: "e1", d: "executive", t: "freq",
+        a: "How often do you have trouble getting started on tasks, even when you know they are important?",
+        teen: "How often do you struggle to start tasks even when you know you need to?" },
+    { id: "e2", d: "executive", t: "freq",
+        a: "How often do you lose track of time and end up late or miss deadlines?",
+        teen: "How often do you lose track of time and end up late or miss deadlines?" },
+    { id: "e3", d: "executive", t: "freq",
+        a: "How often do you start many projects but finish very few?",
+        teen: "How often do you start lots of things but finish very few of them?" },
+    { id: "e4", d: "executive", t: "freq",
+        a: "How often do you struggle to prioritise tasks when facing multiple competing demands?",
+        teen: "How often do you struggle to decide what to do first when you have lots to do?" },
+    // EMOTIONAL REGULATION (4 questions)
+    { id: "em1", d: "emotional", t: "freq",
+        a: "How often do you experience sudden intense frustration or anger that feels out of proportion to the situation?",
+        teen: "How often do you get very frustrated or angry in a way that feels bigger than the situation?" },
+    { id: "em2", d: "emotional", t: "freq",
+        a: "How often do you have trouble unwinding or calming down after something upsets or excites you?",
+        teen: "How often is it hard to calm down after you have been upset or wound up?" },
+    { id: "em3", d: "emotional", t: "freq",
+        a: "How often do you feel easily overwhelmed by tasks or demands that others seem to handle more easily?",
+        teen: "How often do you feel overwhelmed by things that seem easier for others?" },
+    { id: "em4", d: "emotional", t: "freq",
+        a: "How often do you experience rapid mood shifts — going from fine to frustrated or low within minutes?",
+        teen: "How often does your mood change very quickly, going from okay to upset in minutes?" },
+    // WORKING MEMORY (3 questions)
+    { id: "wm1", d: "working_memory", t: "freq",
+        a: "How often do you forget what you were about to do or say mid-task?",
+        teen: "How often do you forget what you were about to do or say?" },
+    { id: "wm2", d: "working_memory", t: "freq",
+        a: "How often do you struggle to hold instructions in mind long enough to follow them through?",
+        teen: "How often do you forget instructions before you have finished following them?" },
+    { id: "wm3", d: "working_memory", t: "freq",
+        a: "How often do you find it hard to keep track of several things at once — for example in conversations or complex tasks?",
+        teen: "How often do you lose track when you are trying to follow something that has several parts?" },
+    // TIME PERCEPTION (3 questions)
+    { id: "tp1", d: "time", t: "freq",
+        a: "How often are you surprised by how much — or how little — time has passed while working?",
+        teen: "How often are you surprised by how much or little time has passed while doing something?" },
+    { id: "tp2", d: "time", t: "freq",
+        a: "How often do you underestimate how long tasks will take, leading to being late or rushing?",
+        teen: "How often do you think something will take less time than it does?" },
+    { id: "tp3", d: "time", t: "freq",
+        a: "How often do you struggle to start tasks until you are almost at the deadline?",
+        teen: "How often do you only start things when the deadline is almost here?" },
+    // HYPERFOCUS & INTEREST-BASED NERVOUS SYSTEM (3 questions)
+    { id: "hf1", d: "hyperfocus", t: "freq",
+        a: "How often do you become so absorbed in something interesting that you lose all track of time and surroundings?",
+        teen: "How often do you get so into something that you completely lose track of time?" },
+    { id: "hf2", d: "hyperfocus", t: "freq",
+        a: "How often do you find that your ability to focus depends almost entirely on whether you find something interesting or not?",
+        teen: "How often does whether you can focus depend mainly on if you find it interesting?" },
+    { id: "hf3", d: "hyperfocus", t: "freq",
+        a: "How often do you find it very hard to shift your attention away from something absorbing, even when you need to stop?",
+        teen: "How often is it very hard to stop doing something you are absorbed in, even when you should?" },
+    // REJECTION SENSITIVITY (3 questions)
+    { id: "rsd1", d: "rsd", t: "freq",
+        a: "How often do you experience an intense emotional response to perceived criticism, rejection, or failure?",
+        teen: "How often does criticism or feeling rejected cause you intense emotional pain?" },
+    { id: "rsd2", d: "rsd", t: "freq",
+        a: "How often do you avoid situations where you might be criticised or judged because the emotional risk feels too high?",
+        teen: "How often do you avoid situations where you might be criticised because it feels too painful?" },
+    { id: "rsd3", d: "rsd", t: "agree",
+        a: "I often modify my behaviour significantly to avoid any possibility of criticism, rejection, or disapproval from others.",
+        teen: "I often change how I act to avoid being criticised or rejected." },
+    // DEVELOPMENTAL HISTORY (3 questions)
+    { id: "d1", d: "developmental", t: "agree",
+        a: "These kinds of difficulties have been present in my life since I was a child, before age 12.",
+        teen: "I have had these kinds of difficulties for as long as I can remember, including in primary school." },
+    { id: "d2", d: "developmental", t: "agree",
+        a: "My difficulties with attention or activity significantly affected my performance at school or in early employment.",
+        teen: "My difficulties with attention or energy significantly affected my performance in primary or secondary school." },
+    { id: "d3", d: "developmental", t: "agree",
+        a: "Adults in my childhood — parents, teachers — commented on my difficulty with attention, activity level, or self-control.",
+        teen: "Parents or teachers commented on my difficulty with attention, behaviour, or sitting still when I was young." },
+    // LIFE IMPACT (3 questions)
+    { id: "i1", d: "impact", t: "agree",
+        a: "My attention or activity difficulties have significantly affected my work or career.",
+        teen: "My attention or energy difficulties significantly affect my school performance." },
+    { id: "i2", d: "impact", t: "agree",
+        a: "My attention or activity difficulties have significantly affected my personal relationships.",
+        teen: "My attention or energy difficulties affect my friendships or family relationships." },
+    { id: "i3", d: "impact", t: "agree",
+        a: "My attention or activity difficulties have affected my ability to manage daily life — finances, admin, or household tasks.",
+        teen: "My attention or energy difficulties affect how I manage daily tasks at home." },
+];
+// MAX_D: questions per domain × 4
+// inattention:8×4=32, hyperactivity:5×4=20, executive:4×4=16,
+// emotional:4×4=16, working_memory:3×4=12, time:3×4=12,
+// hyperfocus:3×4=12, rsd:3×4=12, developmental:3×4=12, impact:3×4=12
+const MAX_D = {
+    inattention: 32, hyperactivity: 20, executive: 16, emotional: 16,
+    working_memory: 12, time: 12, hyperfocus: 12, rsd: 12, developmental: 12, impact: 12
+};
+const PRO_FEATURES = [
+    { icon: "📋", title: "Full Clarity Report", desc: "Your personalised 14-page PDF report across all 10 neurological dimensions — with AI-generated personalised insights for your exact profile.", status: "available" },
+    { icon: "🔖", title: "Evidence Library", desc: "Searchable library of ADHD tools, apps and strategies rated by evidence quality.", status: "available" },
+    { icon: "🏷️", title: "15% Off Clinical Assessments", desc: "Exclusive subscriber discount on formal ADHD and ASD assessments with registered clinical partners in Ireland and the UK.", status: "available" },
+    { icon: "👥", title: "Body Doubling Rooms", desc: "Virtual silent co-working sessions — camera-off by default, Pomodoro-synced, small groups. The most evidence-backed ADHD productivity tool (Solanto, 2011).", status: "launching" },
+    { icon: "🚨", title: "Crisis Mode", desc: "Pavlovian-conditioned calming sounds, breathing visualiser, and biometric integration. Real-time stress intervention designed for ADHD emotional dysregulation.", status: "launching" },
+    { icon: "🎙️", title: "Voice Diary & AI Coach", desc: "Speak your day — AI coach responds with ADHD-aware guidance built around your specific neurological profile and recent diary entries.", status: "launching" },
+    { icon: "🧠", title: "AI ADHD Coaching Dashboard", desc: "Daily planning assistant that knows your 10-dimension profile and breaks tasks into ADHD-friendly micro-steps.", status: "launching" },
+    { icon: "📈", title: "Progress Tracking", desc: "Monthly re-assessments across all 10 dimensions using validated scales. Track real change over time with your own data.", status: "launching" },
+    { icon: "📚", title: "Weekly Evidence Modules", desc: "One research-backed ADHD module per week — under 7 minutes, interactive, immediately applicable to your profile.", status: "launching" },
+    { icon: "🎙️", title: "Expert Guest Sessions", desc: "Monthly sessions from specialist psychologists, coaches and occupational therapists.", status: "launching" },
+    { icon: "❓", title: "Monthly Live Q&A with our Clinical Psychologist", desc: "60-minute group session — ask anything about your profile or ADHD management.", status: "launching" },
+];
+function scoreResults(answers) {
+    const scores = {};
+    let asrsCount = 0;
+    let total = 0;
+    QS.forEach(q => {
+        var _a;
+        const val = (_a = answers[q.id]) !== null && _a !== void 0 ? _a : 0;
+        scores[q.d] = (scores[q.d] || 0) + val;
+        total += val;
+        if (q.asrs && val >= 2)
+            asrsCount++;
+    });
+    const pcts = {};
+    Object.keys(DOMAINS).forEach(d => { pcts[d] = Math.round(((scores[d] || 0) / MAX_D[d]) * 100); });
+    const asrsFlag = asrsCount >= 4;
+    const totalPct = Math.round((total / (QS.length * 4)) * 100);
+    let level, color;
+    if (totalPct >= 65 || asrsFlag) {
+        level = "Elevated";
+        color = C.amber;
+    }
+    else if (totalPct >= 40) {
+        level = "Moderate";
+        color = C.teal;
+    }
+    else {
+        level = "Low";
+        color = C.green;
+    }
+    return { scores, pcts, asrsFlag, asrsCount, totalPct, level, color };
+}
+function getFoundingDaysLeft() {
+    const close = new Date("2026-07-31T23:59:59");
+    const diff = Math.ceil((close - new Date()) / (1000 * 60 * 60 * 24));
+    return Math.max(0, diff);
+}
+// ── COMPONENTS ────────────────────────────────────────────────────────────────
+function Bars({ active }) {
+    return (React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 2, height: 16 } }, [3, 6, 10, 14, 10, 6, 3].map((h, i) => (React.createElement("div", { key: i, style: { width: 3, height: h, borderRadius: 3,
+            background: active ? `linear-gradient(to top,${C.teal},${C.blue})` : C.border,
+            opacity: active ? 1 : 0.4, transition: "all 0.3s" } })))));
+}
+function DBar({ label, icon, pct, color }) {
+    const [anim, setAnim] = useState(0);
+    useEffect(() => { const t = setTimeout(() => setAnim(pct), 100); return () => clearTimeout(t); }, [pct]);
+    return (React.createElement("div", { style: { marginBottom: 14 } },
+        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 } },
+            React.createElement("span", { style: { fontSize: 13, color: C.white, display: "flex", alignItems: "center", gap: 6 } },
+                React.createElement("span", null, icon),
+                React.createElement("span", null, label)),
+            React.createElement("span", { style: { fontSize: 13, fontWeight: 800, color } },
+                pct,
+                "%")),
+        React.createElement("div", { style: { background: C.navyMid, borderRadius: 99, height: 6, overflow: "hidden" } },
+            React.createElement("div", { style: { width: `${anim}%`, background: `linear-gradient(to right,${color},${color}CC)`,
+                    height: "100%", borderRadius: 99, transition: "width 1.2s cubic-bezier(0.4,0,0.2,1)" } }))));
+}
+function FoundingCTA({ daysLeft, showDetail, setShowDetail, proEmail, setProEmail, proJoined, onJoin, inPaywall = false }) {
+    return (React.createElement("div", { style: { background: "linear-gradient(135deg,#1A0A35,#0A1825)",
+            border: "1px solid #A855F760", borderRadius: 16, padding: 20, marginBottom: inPaywall ? 0 : 16 } },
+        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 } },
+            React.createElement("div", null,
+                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4 } },
+                    React.createElement("span", { style: { fontSize: 11, color: "#C084FC", fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 } }, "Pro \u2014 Founding Member"),
+                    React.createElement("span", { style: { background: "#A855F720", border: "1px solid #A855F7", borderRadius: 99, padding: "2px 8px",
+                            fontSize: 9, color: "#C084FC", fontWeight: 700 } }, "LAUNCHING SOON")),
+                React.createElement("div", { style: { display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap" } },
+                    React.createElement("div", { style: { fontSize: 26, fontWeight: 900 } },
+                        "\u20AC5",
+                        React.createElement("span", { style: { fontSize: 12, fontWeight: 400, color: C.muted } }, "/month")),
+                    React.createElement("div", { style: { background: "#00E67615", border: "1px solid #00E67640", borderRadius: 99,
+                            padding: "2px 10px", fontSize: 11, color: C.green, fontWeight: 700 } }, "YEARLY \u00B7 SAVE 50%")),
+                React.createElement("div", { style: { fontSize: 11, color: C.muted, marginBottom: 2 } }, "\u20AC60/year billed annually \u00B7 Regular monthly price \u20AC10/month"),
+                React.createElement("div", { style: { fontSize: 11, color: C.green, fontWeight: 600 } }, "Assessment completers get this rate locked for life with their discount code")),
+            React.createElement("span", { style: { fontSize: 24 } }, "\uD83D\uDE80")),
+        daysLeft > 0 && (React.createElement("div", { style: { background: "#A855F715", border: "1px solid #A855F740", borderRadius: 8,
+                padding: "8px 12px", marginBottom: 12, fontSize: 12, color: "#C084FC", textAlign: "center" } },
+            "\u23F3 Founding member offer closes in ",
+            React.createElement("strong", null,
+                daysLeft,
+                " days"))),
+        React.createElement("div", { style: { marginBottom: 10 } }, PRO_FEATURES.map(f => (React.createElement("div", { key: f.title, style: { display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 8 } },
+            React.createElement("span", { style: { fontSize: 14, flexShrink: 0 } }, f.icon),
+            React.createElement("div", { style: { flex: 1 } },
+                React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6, marginBottom: 1 } },
+                    React.createElement("span", { style: { fontSize: 12, fontWeight: 600, color: f.status === "available" ? C.white : C.muted } }, f.title),
+                    React.createElement("span", { style: { background: f.status === "available" ? C.teal + "25" : C.amber + "20",
+                            color: f.status === "available" ? C.teal : C.amber, fontSize: 9, fontWeight: 700,
+                            padding: "1px 6px", borderRadius: 99, textTransform: "uppercase" } }, f.status === "available" ? "Included" : "Soon")),
+                showDetail && React.createElement("div", { style: { fontSize: 11, color: C.muted, lineHeight: 1.5 } }, f.desc)))))),
+        React.createElement("button", { onClick: () => setShowDetail(!showDetail), style: { background: "transparent", border: "none", color: "#C084FC", cursor: "pointer", fontSize: 12, marginBottom: 12, padding: 0 } }, showDetail ? "Hide details ▲" : "Show full details ▼"),
+        !proJoined ? (React.createElement("div", null,
+            React.createElement("p", { style: { fontSize: 13, color: C.muted, marginBottom: 10, lineHeight: 1.55 } },
+                "Join the founding member waitlist. Your \u20AC5/month yearly rate is reserved from sign-up. When Pro launches, you'll get a ",
+                React.createElement("strong", { style: { color: C.white } }, "7-day free trial \u2014 no credit card required"),
+                ". Full access to every Pro feature. Cancel any time and pay nothing."),
+            React.createElement("div", { style: { display: "flex", gap: 8 } },
+                React.createElement("input", { type: "email", value: proEmail, onChange: e => setProEmail(e.target.value), onKeyDown: e => e.key === "Enter" && onJoin(), placeholder: "your@email.com", style: { flex: 1, background: C.navy, border: "1px solid #A855F760", borderRadius: 8,
+                        padding: "11px 14px", color: C.white, fontSize: 14, outline: "none" } }),
+                React.createElement("button", { onClick: onJoin, style: { background: "#A855F7", color: C.white, border: "none", borderRadius: 8,
+                        padding: "11px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer", whiteSpace: "nowrap" } }, "Reserve \u2192")),
+            React.createElement("p", { style: { fontSize: 11, color: C.muted, marginTop: 8 } }, "No payment now. Email on launch. Cancel any time."))) : (React.createElement("div", { style: { background: "#A855F715", border: "1px solid #A855F740", borderRadius: 10,
+                padding: 14, textAlign: "center" } },
+            React.createElement("div", { style: { fontSize: 18, marginBottom: 6 } }, "\uD83C\uDF89"),
+            React.createElement("div", { style: { fontWeight: 700, fontSize: 14, color: "#C084FC", marginBottom: 4 } }, "You are on the list!"),
+            React.createElement("div", { style: { color: C.muted, fontSize: 12 } }, "Your founding rate of \u20AC5/month (billed yearly) is reserved for life.")))));
+}
+// ── MAIN APP ──────────────────────────────────────────────────────────────────
+function AuthModal({ mode, authEmail, setAuthEmail, authCode, setAuthCode, authError, onRegister, onPro, onClose, daysLeft, C }) {
+    return React.createElement('div', {
+        style: { position: "fixed", inset: 0, background: "rgba(10,22,40,0.92)", zIndex: 1000,
+            display: "flex", alignItems: "flex-end", justifyContent: "center" },
+        onClick: e => { if (e.target === e.currentTarget)
+            onClose(); }
+    }, React.createElement('div', { style: { background: "#112240", borderRadius: "20px 20px 0 0",
+            width: "100%", maxWidth: 520, padding: "24px 20px 40px",
+            animation: "slideInUp 0.3s cubic-bezier(0.34,1.56,0.64,1)" } }, React.createElement('div', { style: { width: 40, height: 4, background: "#1E3A5F",
+            borderRadius: 99, margin: "0 auto 20px" } }), mode === "register"
+        ? React.createElement(React.Fragment, null, React.createElement('div', { style: { textAlign: "center", marginBottom: 16 } }, React.createElement('div', { style: { fontSize: 28, marginBottom: 6 } }, "🧠"), React.createElement('div', { style: { fontWeight: 900, fontSize: 20, marginBottom: 6 } }, "Free account — 10 seconds"), React.createElement('div', { style: { fontSize: 13, color: "#7B93B4", lineHeight: 1.6 } }, "Unlock all 47 strategies, community, focus rooms and your personal dashboard.")), React.createElement('input', { type: "email", value: authEmail,
+            onChange: e => setAuthEmail(e.target.value),
+            placeholder: "Your email address",
+            onKeyDown: e => { if (e.key === "Enter")
+                onRegister(authEmail); },
+            style: { width: "100%", background: "#0A1628", border: "1px solid #1E3A5F",
+                borderRadius: 10, padding: "13px 14px", color: "#fff", fontSize: 15,
+                fontFamily: "inherit", outline: "none", marginBottom: 8 } }), authError && React.createElement('div', { style: { fontSize: 12, color: "#FF8080", marginBottom: 8 } }, authError), React.createElement('button', {
+            onClick: () => onRegister(authEmail),
+            style: { width: "100%", background: "linear-gradient(135deg,#00D4DD,#4FC3F7)",
+                color: "#0A1628", border: "none", borderRadius: 12, padding: "14px",
+                fontSize: 16, fontWeight: 900, cursor: "pointer", marginBottom: 10, fontFamily: "inherit" }
+        }, "Get Free Access →"), React.createElement('div', { style: { textAlign: "center", fontSize: 12, color: "#7B93B4" } }, "No password · No card · GDPR compliant"))
+        : React.createElement(React.Fragment, null, React.createElement('div', { style: { textAlign: "center", marginBottom: 16 } }, React.createElement('div', { style: { fontSize: 28, marginBottom: 6 } }, "⭐"), React.createElement('div', { style: { fontWeight: 900, fontSize: 20, marginBottom: 6 } }, "Activate Pro Access"), React.createElement('div', { style: { fontSize: 13, color: "#7B93B4", lineHeight: 1.6 } }, `Enter your loyalty code from your Clarity Report email. Founding rate — ${daysLeft} days left.`)), React.createElement('input', { type: "text", value: authCode,
+            onChange: e => setAuthCode(e.target.value.toUpperCase()),
+            placeholder: "ACF-XXXXX-XXXX",
+            onKeyDown: e => { if (e.key === "Enter")
+                onPro(authCode); },
+            style: { width: "100%", background: "#0A1628", border: "1px solid #A855F740",
+                borderRadius: 10, padding: "13px 14px", color: "#A855F7", fontSize: 15,
+                fontFamily: "monospace", outline: "none", letterSpacing: 2,
+                textTransform: "uppercase", marginBottom: 8 } }), authError && React.createElement('div', { style: { fontSize: 12, color: "#FF8080", marginBottom: 8 } }, authError), React.createElement('button', { onClick: () => onPro(authCode),
+            style: { width: "100%", background: "linear-gradient(135deg,#A855F7,#7C3AED)",
+                color: "#fff", border: "none", borderRadius: 12, padding: "14px",
+                fontSize: 16, fontWeight: 900, cursor: "pointer", marginBottom: 10, fontFamily: "inherit" } }, "Activate Pro →")), React.createElement('button', { onClick: onClose,
+        style: { display: "block", width: "100%", background: "transparent",
+            border: "1px solid #1E3A5F", color: "#7B93B4", borderRadius: 10,
+            padding: "10px", fontSize: 13, cursor: "pointer", fontFamily: "inherit", marginTop: 8 } }, "Maybe later")));
+}
+function FeedbackWidget({ C }) {
+    const [open, setOpen] = React.useState(false);
+    const [type, setType] = React.useState("suggestion");
+    const [msg, setMsg] = React.useState("");
+    const [sent, setSent] = React.useState(false);
+    function submit() {
+        if (msg.trim().length < 5)
+            return;
+        const entry = { type, msg, time: new Date().toISOString() };
+        try {
+            const ex = JSON.parse(localStorage.getItem("acf_feedback") || "[]");
+            ex.push(entry);
+            localStorage.setItem("acf_feedback", JSON.stringify(ex.slice(-20)));
+        }
+        catch (e) { }
+        const sub = encodeURIComponent(`ADHDclearfocus ${type}`);
+        const bod = encodeURIComponent(`Type: ${type}\n\nMessage: ${msg}\n\nTime: ${entry.time}`);
+        window.open(`mailto:conalldonegan@outlook.com?subject=${sub}&body=${bod}`);
+        setSent(true);
+        setTimeout(() => { setSent(false); setOpen(false); setMsg(""); }, 3000);
+    }
+    if (sent)
+        return React.createElement('div', { style: { background: "#0A2010", border: "1px solid #00E67640", borderRadius: 14, padding: "14px 16px", marginBottom: 16, textAlign: "center", fontSize: 13, color: "#00E676" } }, "✓ Thank you — feedback sent. We read everything.");
+    return React.createElement('div', { style: { background: C.navyLight, border: `1px solid ${C.border}`, borderRadius: 14, padding: "16px", marginBottom: 16 } }, React.createElement('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } }, React.createElement('div', null, React.createElement('div', { style: { fontWeight: 700, fontSize: 13, marginBottom: 2 } }, "💬 Share feedback"), React.createElement('div', { style: { fontSize: 11, color: C.muted } }, "Suggestions, complaints, questions — we read everything")), React.createElement('button', { onClick: () => setOpen(!open),
+        style: { background: open ? C.teal : C.navyMid, color: open ? C.navy : C.muted,
+            border: `1px solid ${open ? C.teal : C.border}`, borderRadius: 8,
+            padding: "6px 14px", fontSize: 12, cursor: "pointer", fontWeight: 700, fontFamily: "inherit" } }, open ? "Close" : "Give feedback")), open && React.createElement('div', { style: { marginTop: 12 } }, React.createElement('div', { style: { display: "flex", gap: 6, marginBottom: 8, flexWrap: "wrap" } }, ["suggestion", "complaint", "question", "praise"].map(t => React.createElement('button', { key: t, onClick: () => setType(t),
+        style: { background: type === t ? C.teal : C.navyMid, color: type === t ? C.navy : C.muted,
+            border: `1px solid ${type === t ? C.teal : C.border}`, borderRadius: 99,
+            padding: "4px 10px", fontSize: 11, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize" } }, t === "suggestion" ? "💡 Suggestion" : t === "complaint" ? "⚠️ Complaint" : t === "question" ? "❓ Question" : "⭐ Praise"))), React.createElement('textarea', { value: msg, onChange: e => setMsg(e.target.value),
+        placeholder: type === "complaint" ? "Tell us what went wrong — we respond within 48 hours." : "Share your thoughts...",
+        style: { width: "100%", background: C.navy, border: `1px solid ${C.border}`,
+            borderRadius: 10, padding: "10px 12px", color: C.white, fontSize: 13,
+            fontFamily: "inherit", resize: "vertical", minHeight: 70, outline: "none", marginBottom: 8 } }), React.createElement('div', { style: { display: "flex", justifyContent: "space-between", alignItems: "center" } }, React.createElement('span', { style: { fontSize: 11, color: C.muted } }, type === "complaint" ? "Responded to within 48 hours" : "Anonymous is fine"), React.createElement('button', { onClick: submit,
+        style: { background: type === "complaint" ? "#FF5252" : C.teal,
+            color: type === "complaint" ? "#fff" : C.navy,
+            border: "none", borderRadius: 8, padding: "8px 16px",
+            fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" } }, "Send →"))));
+}
+function App() {
+    var _a, _b, _c, _d, _e;
+    const [step, setStep] = useState("cookie");
+    const [isTeen, setIsTeen] = useState(false);
+    const [qIndex, setQIndex] = useState(0);
+    const [answers, setAnswers] = useState({});
+    const [result, setResult] = useState(null);
+    const [animIn, setAnimIn] = useState(true);
+    const [email, setEmail] = useState("");
+    const [emailConsent, setEmailConsent] = useState(false);
+    const [emailSubmitted, setEmailSubmitted] = useState(false);
+    const [emailError, setEmailError] = useState("");
+    const [emailLoading, setEmailLoading] = useState(false);
+    const [proEmail, setProEmail] = useState("");
+    const [proJoined, setProJoined] = useState(false);
+    const [openDomain, setOpenDomain] = useState(null);
+    const [showDetail, setShowDetail] = useState(false);
+    const [consentChecked, setConsentChecked] = useState(false);
+    // Auth state
+    const [userEmail, setUserEmail] = useState(() => localStorage.getItem('acf_email') || '');
+    const [isPro, setIsPro] = useState(() => localStorage.getItem('acf_pro') === 'true');
+    const [showAuthModal, setShowAuthModal] = useState(false);
+    const [authMode, setAuthMode] = useState('register');
+    const [authEmail, setAuthEmail] = useState('');
+    const [authCode, setAuthCode] = useState('');
+    const [authError, setAuthError] = useState('');
+    const isRegistered = () => !!localStorage.getItem('acf_email');
+    const isProUser = () => localStorage.getItem('acf_pro') === 'true';
+    function registerUser(email) {
+        if (!email || !email.includes('@')) {
+            setAuthError('Please enter a valid email address');
+            return;
+        }
+        localStorage.setItem('acf_email', email);
+        setUserEmail(email);
+        setShowAuthModal(false);
+        setAuthError('');
+        fetch('/api/mailchimp-subscribe', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, tags: ['registered-free'] }) }).catch(() => { });
+        gtag('event', 'register', { method: 'email' });
+    }
+    function activatePro(code) {
+        const clean = code.trim().toUpperCase();
+        if (!/^ACF-[A-Z0-9]{5}-[A-Z0-9]{4}$/.test(clean)) {
+            setAuthError('Code format: ACF-XXXXX-XXXX — check your report email');
+            return;
+        }
+        localStorage.setItem('acf_loyalty', clean);
+        localStorage.setItem('acf_pro', 'true');
+        localStorage.setItem('report_purchased', 'true');
+        setIsPro(true);
+        setShowAuthModal(false);
+        setAuthError('');
+        gtag('event', 'pro_activated');
+    }
+    const [showResume, setShowResume] = useState(false);
+    const [resumeData, setResumeData] = useState(null);
+    const topRef = useRef(null);
+    const currentQ = QS[qIndex];
+    const progress = Math.round((qIndex / QS.length) * 100);
+    // Exit intent detection
+    useEffect(() => {
+        function handleBeforeUnload(e) {
+            if (step === "questions" && qIndex > 3) {
+                e.preventDefault();
+                e.returnValue = "Your profile is " + progress + "% complete. Are you sure you want to leave?";
+                return e.returnValue;
+            }
+        }
+        window.addEventListener("beforeunload", handleBeforeUnload);
+        return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+    }, [step, qIndex, progress]);
+    // Resume detection on load
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("acf_progress");
+            if (saved) {
+                const { answers: a, qIndex: qi, isTeen: it } = JSON.parse(saved);
+                if (a && qi > 0 && qi < QS.length) {
+                    setResumeData({ answers: a, qIndex: qi, isTeen: it || false });
+                    setShowResume(true);
+                }
+            }
+        }
+        catch (e) { }
+    }, []);
+    const daysLeft = getFoundingDaysLeft();
+    const domainKeys = Object.keys(DOMAINS);
+    function tr(fn) {
+        setAnimIn(false);
+        setTimeout(() => { var _a; fn(); setAnimIn(true); (_a = topRef.current) === null || _a === void 0 ? void 0 : _a.scrollIntoView({ behavior: "smooth" }); }, 200);
+    }
+    function handleAnswer(val) {
+        const newA = { ...answers, [currentQ.id]: val };
+        setAnswers(newA);
+        // Save progress
+        try {
+            localStorage.setItem("acf_progress", JSON.stringify({ answers: newA, qIndex: qIndex + 1, isTeen }));
+        }
+        catch (e) { }
+        if (qIndex < QS.length - 1) {
+            tr(() => setQIndex(qIndex + 1));
+        }
+        else {
+            try {
+                localStorage.removeItem("acf_progress");
+            }
+            catch (e) { }
+            const r = scoreResults(newA);
+            setResult(r);
+            if (navigator.vibrate)
+                navigator.vibrate([100, 50, 100, 50, 200]);
+            tr(() => setStep("paywall"));
+        }
+    }
+    async function subscribeToMailchimp(emailAddr, tags = []) {
+        try {
+            await fetch("/api/mailchimp-subscribe", { method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: emailAddr, tags,
+                    merge_fields: { ADHD_LEVEL: (result === null || result === void 0 ? void 0 : result.level) || "", ADHD_PCT: String((result === null || result === void 0 ? void 0 : result.totalPct) || "") } }) });
+        }
+        catch (e) {
+            console.log("Mailchimp:", e);
+        }
+    }
+    const DISPOSABLE_DOMAINS = ["mailinator.com", "guerrillamail.com", "10minutemail.com",
+        "tempmail.com", "throwaway.email", "yopmail.com", "sharklasers.com", "guerrillamailblock.com",
+        "grr.la", "guerrillamail.info", "spam4.me", "trashmail.com", "dispostable.com", "maildrop.cc",
+        "spamgourmet.com", "getairmail.com", "fakeinbox.com", "mailnull.com", "spamspot.com"];
+    async function handleEmailSubmit() {
+        var _a, _b;
+        if (!email.includes("@") || !email.includes(".") || email.length < 5) {
+            setEmailError("Please enter a valid email address.");
+            return;
+        }
+        const domain = ((_a = email.split("@")[1]) === null || _a === void 0 ? void 0 : _a.toLowerCase()) || "";
+        if (DISPOSABLE_DOMAINS.includes(domain)) {
+            setEmailError("Please use a real email address — we need it to send your report.");
+            return;
+        }
+        setEmailError("");
+        setEmailLoading(true);
+        await subscribeToMailchimp(email, ["screener-complete", ((_b = result === null || result === void 0 ? void 0 : result.level) === null || _b === void 0 ? void 0 : _b.toLowerCase()) || ""]);
+        gtag("event", "email_captured", { adhd_level: result === null || result === void 0 ? void 0 : result.level });
+        setEmailLoading(false);
+        setEmailSubmitted(true);
+    }
+    async function handleProJoin() {
+        if (!proEmail.includes("@") || !proEmail.includes(".")) {
+            return;
+        }
+        await subscribeToMailchimp(proEmail, ["pro-waitlist"]);
+        setProJoined(true);
+    }
+    function restart() {
+        try {
+            localStorage.removeItem("acf_progress");
+        }
+        catch (e) { }
+        setStep("intro");
+        setIsTeen(false);
+        setQIndex(0);
+        setAnswers({});
+        setResult(null);
+        setEmail("");
+        setEmailConsent(false);
+        setEmailSubmitted(false);
+        setEmailError("");
+        setOpenDomain(null);
+        setProEmail("");
+        setProJoined(false);
+        setShowDetail(false);
+        setConsentChecked(false);
+        setShowResume(false);
+        setResumeData(null);
+    }
+    const fade = { opacity: animIn ? 1 : 0, transform: animIn ? "translateY(0)" : "translateY(12px)",
+        transition: "opacity 0.2s ease,transform 0.2s ease" };
+    const dc = k => (result === null || result === void 0 ? void 0 : result.pcts[k]) >= 65 ? C.amber : (result === null || result === void 0 ? void 0 : result.pcts[k]) >= 40 ? C.teal : C.green;
+    // Domain colour lookup
+    const domainColor = k => { var _a; return ((_a = DOMAINS[k]) === null || _a === void 0 ? void 0 : _a.color) || C.teal; };
+    return (React.createElement("div", { style: { background: C.navy, minHeight: "100vh", color: C.white } },
+        step === "cookie" && (React.createElement("div", { style: { position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 100,
+                background: C.navyMid, borderTop: `1px solid ${C.border}`, padding: "14px 18px" } },
+            React.createElement("div", { style: { maxWidth: 680, margin: "0 auto" } },
+                React.createElement("p", { style: { fontSize: 12, color: C.muted, margin: "0 0 10px", lineHeight: 1.55 } },
+                    "ADHDclearfocus uses essential cookies only \u2014 session management and security. No advertising cookies. See our ",
+                    React.createElement("a", { href: "/legal.html", style: { color: C.teal } }, "Privacy Policy"),
+                    "."),
+                React.createElement("div", { style: { display: "flex", gap: 8 } },
+                    React.createElement("button", { onClick: () => setStep("intro"), style: { background: C.teal, color: C.navy, border: "none", borderRadius: 8,
+                            padding: "8px 18px", fontWeight: 700, fontSize: 13, cursor: "pointer" } }, "Accept & Continue"),
+                    React.createElement("button", { onClick: () => setStep("intro"), style: { background: "transparent", border: `1px solid ${C.border}`, color: C.muted,
+                            borderRadius: 8, padding: "8px 14px", fontSize: 13, cursor: "pointer" } }, "Essential Only"))))),
+        React.createElement("div", { style: { background: "rgba(10,22,40,0.95)", backdropFilter: "blur(10px)",
+                borderBottom: `1px solid ${C.border}`, padding: "13px 18px",
+                display: "flex", alignItems: "center", justifyContent: "space-between",
+                position: "sticky", top: 0, zIndex: 20 } },
+            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }, onClick: restart },
+                React.createElement("img", { src: "/logo.png", loading: "lazy", "aria-hidden": "true", alt: "Logo", style: { width: 28, height: 28, borderRadius: "50%", objectFit: "cover" } }),
+                React.createElement(Bars, { active: step === "questions" }),
+                React.createElement("span", { style: { fontSize: 16, fontWeight: 900, letterSpacing: "-0.5px" } },
+                    "ADHD",
+                    React.createElement("span", { style: { color: C.teal } }, "clearfocus"))),
+            React.createElement("a", { href: "/app.html", style: { fontSize: 11, color: C.teal, fontWeight: 700,
+                    textDecoration: "none", background: C.teal + "15", border: `1px solid ${C.teal}40`,
+                    borderRadius: 99, padding: "4px 12px" } }, "\uD83D\uDD10 Secret Resources \u2192"),
+            step === "questions" && (React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } },
+                React.createElement("div", { style: { background: C.navyLight, borderRadius: 99, height: 3, width: 80, overflow: "hidden" } },
+                    React.createElement("div", { style: { width: `${progress}%`, height: "100%",
+                            background: `linear-gradient(to right,${C.teal},${C.blue})`,
+                            transition: "width 0.3s ease" } })),
+                React.createElement("span", { style: { fontSize: 11, color: C.muted } },
+                    qIndex + 1,
+                    "/",
+                    QS.length))),
+            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+                (step === "paywall" || step === "unlocked") && (React.createElement("span", { style: { fontSize: 11, color: C.teal, fontWeight: 700 } }, "Profile Complete \u2713")),
+                React.createElement("button", { onClick: () => document.body.classList.toggle("focus-mode"), title: "Toggle focus mode", style: { background: "transparent", border: `1px solid ${C.border}`,
+                        borderRadius: 8, padding: "4px 10px", fontSize: 11, color: C.muted,
+                        cursor: "pointer", display: step === "questions" ? "flex" : "none", alignItems: "center", gap: 4 } }, "\uD83C\uDFAF Focus"))),
+        React.createElement("div", { ref: topRef, style: { maxWidth: 700, margin: "0 auto", padding: "0 16px 100px" } },
+            step === "intro" && (React.createElement("div", { style: fade },
+                showResume && resumeData && (React.createElement("div", { style: { background: "linear-gradient(135deg,#0A2535,#0A1628)",
+                        border: `1px solid ${C.teal}60`, borderRadius: 14, padding: "16px 18px",
+                        marginTop: 16, marginBottom: 4, display: "flex", justifyContent: "space-between",
+                        alignItems: "center", flexWrap: "wrap", gap: 10 } },
+                    React.createElement("div", null,
+                        React.createElement("div", { style: { fontWeight: 700, fontSize: 14, marginBottom: 3 } }, "\u21A9 Continue where you left off?"),
+                        React.createElement("div", { style: { fontSize: 12, color: C.muted } },
+                            "You completed ",
+                            resumeData.qIndex,
+                            " of ",
+                            QS.length,
+                            " questions last time.")),
+                    React.createElement("div", { style: { display: "flex", gap: 8 } },
+                        React.createElement("button", { onClick: () => {
+                                setAnswers(resumeData.answers);
+                                setQIndex(resumeData.qIndex);
+                                setIsTeen(resumeData.isTeen);
+                                setShowResume(false);
+                                tr(() => setStep("questions"));
+                            }, style: { background: C.teal, color: C.navy, border: "none", borderRadius: 8,
+                                padding: "8px 14px", fontWeight: 700, fontSize: 13, cursor: "pointer" } }, "Resume \u2192"),
+                        React.createElement("button", { onClick: () => {
+                                try {
+                                    localStorage.removeItem("acf_progress");
+                                }
+                                catch (e) { }
+                                setShowResume(false);
+                            }, style: { background: "transparent", border: `1px solid ${C.border}`,
+                                color: C.muted, borderRadius: 8, padding: "8px 12px", fontSize: 12, cursor: "pointer" } }, "Start fresh")))),
+                React.createElement("div", { style: {
+                        background: "linear-gradient(135deg,#0F2847 0%,#0A1628 50%,#1A0A35 100%)",
+                        borderRadius: 20, padding: "32px 24px", margin: "20px 0 20px",
+                        border: `1px solid ${C.border}`, position: "relative", overflow: "hidden"
+                    } },
+                    React.createElement("div", { style: { position: "absolute", top: -40, right: -40, width: 150, height: 150,
+                            borderRadius: "50%", background: `radial-gradient(circle,${C.teal}15,transparent 70%)` } }),
+                    React.createElement("div", { style: { position: "absolute", bottom: -30, left: -30, width: 120, height: 120,
+                            borderRadius: "50%", background: `radial-gradient(circle,${C.purple}15,transparent 70%)` } }),
+                    React.createElement("div", { style: { position: "absolute", top: 10, right: 10, width: 110, height: 110 }, "aria-hidden": "true", dangerouslySetInnerHTML: { __html: `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="110" height="110"><defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD"/><stop offset="100%" stop-color="#4FC3F7"/></linearGradient></defs><circle cx="60" cy="60" r="42" fill="#00D4DD"><animate attributeName="opacity" values="0.10;0.22;0.10" dur="3.5s" repeatCount="indefinite"/><animate attributeName="r" values="40;46;40" dur="3.5s" repeatCount="indefinite"/></circle><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -6; 0 0" dur="3s" repeatCount="indefinite" additive="sum"/><animateTransform attributeName="transform" type="rotate" values="-2 60 60; 2 60 60; -2 60 60" dur="4s" repeatCount="indefinite" additive="sum"/><path d="M60 24c-19 0-32 13-32 31 0 10 5 18 10 23 3 3 4 6 4 9v4c0 3 2 5 5 5h26c3 0 5-2 5-5v-4c0-3 1-6 4-9 5-5 10-13 10-23 0-18-13-31-32-31z" fill="url(#hg)"/><g><circle cx="50" cy="56" r="4" fill="#0A1628"/><circle cx="70" cy="56" r="4" fill="#0A1628"/><circle cx="51.5" cy="54.5" r="1.3" fill="#fff"/><circle cx="71.5" cy="54.5" r="1.3" fill="#fff"/><animateTransform attributeName="transform" type="scale" values="1 1;1 1;1 0.1;1 1;1 1" dur="4.5s" repeatCount="indefinite" additive="sum"/></g><path d="M51 67c4 5 14 5 18 0" stroke="#0A1628" stroke-width="3" fill="none" stroke-linecap="round"><animate attributeName="d" values="M51 67c4 5 14 5 18 0; M51 67c4 6 14 6 18 0; M51 67c4 5 14 5 18 0" dur="3s" repeatCount="indefinite"/></path><circle cx="45" cy="63" r="3.5" fill="#FF9AA2" opacity="0.55"/><circle cx="75" cy="63" r="3.5" fill="#FF9AA2" opacity="0.55"/></g><circle cx="90" cy="40" r="4" fill="#A855F7"><animate attributeName="cy" values="44;18;44" dur="3.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.9;0" dur="3.2s" repeatCount="indefinite"/></circle><circle cx="98" cy="36" r="2.5" fill="#00E676"><animate attributeName="cy" values="40;14;40" dur="2.6s" begin="0.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.8;0" dur="2.6s" begin="0.6s" repeatCount="indefinite"/></circle><circle cx="84" cy="44" r="2" fill="#FFB347"><animate attributeName="cy" values="48;22;48" dur="3.8s" begin="1.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.85;0" dur="3.8s" begin="1.2s" repeatCount="indefinite"/></circle></svg>` } }),
+                    React.createElement("div", { style: { position: "relative" } },
+                        React.createElement("div", { style: { display: "inline-flex", alignItems: "center", gap: 6,
+                                background: `${C.teal}15`, border: `1px solid ${C.teal}40`,
+                                borderRadius: 99, padding: "5px 14px", fontSize: 11, color: C.teal,
+                                fontWeight: 700, letterSpacing: 1.2, marginBottom: 16, textTransform: "uppercase" } }, "\uD83E\uDDE0 The Most Complete ADHD Profile & Personalised Recommendations Available Online"),
+                        React.createElement("h1", { style: { fontSize: "clamp(24px,6vw,38px)", fontWeight: 900, lineHeight: 1.15,
+                                letterSpacing: "-1.5px", margin: "0 0 16px" } },
+                            "The most complete ADHD profile",
+                            React.createElement("br", null),
+                            React.createElement("span", { style: {
+                                    background: `linear-gradient(135deg,${C.teal},${C.blue})`,
+                                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"
+                                } }, "and recommendations that work.")),
+                        React.createElement("p", { style: { color: "#A8C4D8", fontSize: 15, lineHeight: 1.7, maxWidth: 520, marginBottom: 16 } },
+                            "Most ADHD screeners ask 6 questions and give you a number. ADHDclearfocus measures",
+                            React.createElement("strong", { style: { color: C.white } }, " 10 distinct neurological dimensions"),
+                            " \u2014 then generates a ",
+                            React.createElement("strong", { style: { color: C.teal } }, "fully personalised action plan"),
+                            " built around your specific profile. Not generic ADHD advice. Not a one-size-fits-all checklist. A targeted strategy for ",
+                            React.createElement("em", null, "your"),
+                            " brain, your highest-impact dimensions, and your daily life \u2014 backed by the strongest available clinical evidence."),
+                        React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginBottom: 20, maxWidth: 480 } }, ["Your personalised plan targets your specific elevated dimensions — not all ADHD in general",
+                            "Evidence-based strategies cited to NICE NG87, JAMA RCTs, and WHO guidelines",
+                            "Prioritised by impact — what to tackle first, second, and third for your profile",
+                            "Delivered as a 14-page PDF report within 24 hours of assessment"
+                        ].map(t => (React.createElement("div", { key: t, style: { display: "flex", gap: 8, alignItems: "flex-start" } },
+                            React.createElement("span", { style: { color: C.teal, fontSize: 13, flexShrink: 0, marginTop: 2 } }, "\u2713"),
+                            React.createElement("span", { style: { fontSize: 13, color: "#A8C4D8", lineHeight: 1.5 } }, t))))),
+                        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12, marginBottom: 20, flexWrap: "wrap" } },
+                            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+                                React.createElement("div", { style: { display: "flex", gap: -2 } }, "⭐⭐⭐⭐⭐".split("").map((s, i) => (React.createElement("span", { key: i, style: { fontSize: 13 } }, s)))),
+                                React.createElement("span", { style: { fontSize: 12, color: C.muted } }, "Developed by a chartered DPsych psychologist with lived ADHD experience"))),
+                        React.createElement("button", { onClick: () => { gtag("event", "screener_start"); tr(() => setStep("consent")); }, style: { background: `linear-gradient(135deg,${C.teal},${C.blue})`,
+                                color: C.navy, border: "none", borderRadius: 12, padding: "16px 28px",
+                                fontSize: 17, fontWeight: 900, cursor: "pointer",
+                                boxShadow: `0 8px 32px ${C.teal}40`, letterSpacing: "-0.3px" } }, "Discover Your Full ADHD Profile \u2192"),
+                        React.createElement("p", { style: { fontSize: 12, color: C.muted, marginTop: 10 } }, "39 questions \u00B7 12\u201315 minutes \u00B7 Full 10-dimension profile FREE"),
+                        React.createElement("div", { style: { display: "inline-flex", alignItems: "center", gap: 6,
+                                background: "#00E67610", border: "1px solid #00E67630",
+                                borderRadius: 99, padding: "5px 14px", fontSize: 11, color: C.green,
+                                fontWeight: 700, marginTop: 8 } }, "\uD83C\uDF81 7-day free Pro trial after your assessment \u2014 no credit card required"),
+                        React.createElement("div", { style: { marginTop: 14 } },
+                            React.createElement("a", { href: "/insights.html", onClick: () => gtag("event", "blog_nav_click", { location: "intro" }), style: { color: C.teal, fontSize: 13, fontWeight: 700, textDecoration: "none" } }, "\uD83D\uDDC2 The Focus Files \u2014 the most-searched ADHD topics, answered \u2192")),
+                        React.createElement("div", { style: { marginTop: 8 } },
+                            React.createElement("a", { href: "/workplace.html", onClick: () => gtag("event", "employer_nav_click", { location: "intro" }), style: { color: C.amber, fontSize: 12, fontWeight: 700, textDecoration: "none" } }, "\uD83C\uDFE2 Employer? See workplace programmes \u2192")))),
+                React.createElement("div", { style: { marginBottom: 20 } },
+                    React.createElement("h2", { style: { fontSize: 16, fontWeight: 800, marginBottom: 4, textAlign: "center" } }, "10 Neurological Dimensions Measured"),
+                    React.createElement("p", { style: { fontSize: 13, color: C.muted, textAlign: "center", marginBottom: 14, lineHeight: 1.5 } }, "Standard ADHD tools measure 2\u20133 dimensions. ADHDclearfocus measures all 10 areas where ADHD affects the brain \u2014 giving you a complete neurocognitive map."),
+                    React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 } }, Object.entries(DOMAINS).map(([key, d]) => (React.createElement("div", { key: key, style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 12, padding: "12px 14px", display: "flex", gap: 10, alignItems: "flex-start" } },
+                        React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, d.icon),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, fontSize: 12, color: d.color, marginBottom: 2 } }, d.label),
+                            React.createElement("div", { style: { color: C.muted, fontSize: 11, lineHeight: 1.4 } }, d.desc))))))),
+                React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                        borderRadius: 14, padding: "18px 20px", marginBottom: 16 } },
+                    React.createElement("div", { style: { fontSize: 13, fontWeight: 800, color: C.teal, marginBottom: 10,
+                            textTransform: "uppercase", letterSpacing: 0.8 } }, "\uD83D\uDD2C Built on the strongest evidence available"),
+                    React.createElement("div", { style: { display: "grid", gap: 8 } }, [
+                        { fw: "WHO ASRS-v1.1", desc: "World Health Organisation validated screen — sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005). The gold standard brief ADHD assessment tool." },
+                        { fw: "Brown ADD Rating Scale", desc: "Thomas Brown's six-cluster executive function model (Brown, 2001) — activation, focus, effort, emotion, memory and action." },
+                        { fw: "DIVA-5.0 Protocol", desc: "Diagnostic Interview for ADHD in Adults developmental history framework (Kooij & Francken, 2010) — used in formal clinical assessments worldwide." },
+                        { fw: "Barkley Executive Function Model", desc: "Russell Barkley's self-regulation model (2012) — the most comprehensive neurological account of ADHD executive impairment." },
+                        { fw: "European ADHD Guidelines 2019", desc: "Kooij et al. (2019) updated consensus statement representing 80+ European ADHD specialists." },
+                        { fw: "Faraone et al. World Federation Consensus", desc: "The most comprehensive ADHD evidence synthesis ever published — 208 consensus statements (Faraone et al., 2021)." },
+                    ].map(e => (React.createElement("div", { key: e.fw, style: { display: "flex", gap: 10, alignItems: "flex-start" } },
+                        React.createElement("span", { style: { color: C.teal, fontSize: 12, flexShrink: 0, marginTop: 2 } }, "\u2713"),
+                        React.createElement("div", null,
+                            React.createElement("span", { style: { fontWeight: 700, fontSize: 12, color: C.white } },
+                                e.fw,
+                                ": "),
+                            React.createElement("span", { style: { fontSize: 12, color: C.muted, lineHeight: 1.5 } }, e.desc))))))),
+                React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                        borderRadius: 14, padding: "18px", marginBottom: 16 } },
+                    React.createElement("div", { style: { display: "flex", gap: 14, alignItems: "flex-start", marginBottom: 12 } },
+                        React.createElement("img", { src: "/logo_sm.png", alt: "ADHDclearfocus", style: { width: 52, height: 52, borderRadius: "50%", objectFit: "cover",
+                                flexShrink: 0, border: `2px solid ${C.teal}` } }),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 800, fontSize: 14, marginBottom: 3 } }, "Built by experts at the forefront of ADHD understanding"),
+                            React.createElement("div", { style: { color: C.muted, fontSize: 12, lineHeight: 1.65 } }, "ADHDclearfocus is developed by a multidisciplinary team of chartered psychologists, neurodevelopmental specialists, and researchers with over 15 years of combined clinical experience across NHS, inpatient, and specialist care settings in Ireland and the UK. Our team combines rigorous scientific expertise with lived ADHD experience \u2014 because understanding ADHD from the inside changes everything."))),
+                    React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 } }, [
+                        { icon: "🔬", t: "Evidence-first", s: "Every recommendation cites peer-reviewed research" },
+                        { icon: "🧠", t: "Lived experience", s: "Our team includes people with ADHD diagnoses" },
+                        { icon: "🏥", t: "Clinically grounded", s: "NHS and specialist care background" },
+                        { icon: "🌍", t: "Always evolving", s: "Updated as ADHD science advances" },
+                    ].map(i => (React.createElement("div", { key: i.t, style: { background: C.navy, borderRadius: 10, padding: "10px 12px",
+                            display: "flex", gap: 8, alignItems: "flex-start" } },
+                        React.createElement("span", { style: { fontSize: 14, flexShrink: 0 } }, i.icon),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, fontSize: 11, color: C.white, marginBottom: 2 } }, i.t),
+                            React.createElement("div", { style: { fontSize: 10, color: C.muted, lineHeight: 1.4 } }, i.s))))))),
+                React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                        borderRadius: 16, padding: "20px", marginBottom: 16 } },
+                    React.createElement("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 } },
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontSize: 11, color: C.purple, fontWeight: 700, textTransform: "uppercase",
+                                    letterSpacing: 1, marginBottom: 4 } }, "ADHDclearfocus Pro"),
+                            React.createElement("div", { style: { fontWeight: 900, fontSize: 18 } }, "Everything you need to manage ADHD daily")),
+                        React.createElement("div", { style: { textAlign: "right", flexShrink: 0 } },
+                            React.createElement("div", { style: { fontSize: 22, fontWeight: 900, color: C.teal } },
+                                "\u20AC5",
+                                React.createElement("span", { style: { fontSize: 12, fontWeight: 400, color: C.muted } }, "/mo")),
+                            React.createElement("div", { style: { fontSize: 10, color: C.muted } }, "yearly \u00B7 \u20AC10 monthly"))),
+                    React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 } }, [
+                        { icon: "🧠", t: "Full ADHD Profile", s: "10-dimension neurological report" },
+                        { icon: "👥", t: "Body Doubling", s: "Virtual silent co-working rooms" },
+                        { icon: "🚨", t: "Crisis Mode", s: "Binaural beats, breathing, grounding" },
+                        { icon: "🎙️", t: "Voice Diary", s: "AI coach knows your full profile" },
+                        { icon: "📚", t: "47 Strategies", s: "Evidence-based coping tools" },
+                        { icon: "🏷️", t: "15% Off Assessments", s: "ADHD & ASD clinical partners" },
+                        { icon: "📈", t: "Progress Tracking", s: "Monthly re-assessments" },
+                        { icon: "❓", t: "Live Q&A Sessions", s: "Monthly with clinical psychologist" },
+                    ].map(f => (React.createElement("div", { key: f.t, style: { display: "flex", gap: 8, alignItems: "flex-start",
+                            background: C.navy, borderRadius: 10, padding: "10px 12px" } },
+                        React.createElement("span", { style: { fontSize: 16, flexShrink: 0 } }, f.icon),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, fontSize: 12, color: C.white, marginBottom: 1 } }, f.t),
+                            React.createElement("div", { style: { fontSize: 10, color: C.muted, lineHeight: 1.4 } }, f.s)))))),
+                    React.createElement("div", { style: { background: `${C.teal}10`, border: `1px solid ${C.teal}30`,
+                            borderRadius: 10, padding: "10px 14px", fontSize: 12, color: C.muted,
+                            lineHeight: 1.6, marginBottom: 12 } },
+                        "\uD83C\uDF81 ",
+                        React.createElement("strong", { style: { color: C.white } }, "Complete the assessment today"),
+                        " and receive a lifetime discount code for \u20AC5/month Pro \u2014 locked forever, even when the price rises. Plus a ",
+                        React.createElement("strong", { style: { color: C.white } }, "7-day free trial \u2014 no credit card required"),
+                        " when Pro launches."),
+                    React.createElement("button", { onClick: () => { gtag("event", "screener_start"); tr(() => setStep("consent")); }, style: { width: "100%", background: `linear-gradient(135deg,${C.teal},${C.blue})`,
+                            color: C.navy, border: "none", borderRadius: 12, padding: "14px",
+                            fontSize: 15, fontWeight: 900, cursor: "pointer" } }, "Start Your Assessment \u2014 It's Free \u2192")),
+                React.createElement("div", { style: { background: "#080F1A", border: `1px solid ${C.border}`,
+                        borderRadius: 10, padding: "11px 14px", fontSize: 11, color: C.muted, lineHeight: 1.65 } },
+                    React.createElement("strong", { style: { color: C.white } }, "Important: "),
+                    "Educational self-awareness tool only. Results do not constitute a diagnosis of ADHD or any other condition and do not establish a clinical relationship. If you are in crisis contact the Samaritans free on",
+                    " ",
+                    React.createElement("strong", { style: { color: C.white } }, "116 123"),
+                    " (Ireland and UK, 24/7)."))),
+            step === "consent" && (React.createElement("div", { style: fade },
+                React.createElement("div", { style: { padding: "28px 0" } },
+                    React.createElement("h2", { style: { fontSize: 22, fontWeight: 900, marginBottom: 8, letterSpacing: "-0.5px" } }, "Before we begin"),
+                    React.createElement("p", { style: { color: C.muted, fontSize: 14, lineHeight: 1.65, marginBottom: 20 } }, "ADHDclearfocus measures health-related information under EU GDPR Article 9 (special category data). We need your explicit consent before you start."),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 14, padding: 18, marginBottom: 16 } },
+                        React.createElement("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 12 } }, "This assessment will:"),
+                        ["Collect your responses to 39 questions about ADHD-related experiences",
+                            "Process your responses to generate a personalised ADHD neurological profile",
+                            "Store your email address (if provided) for report delivery and updates",
+                            "Use anonymised analytics to improve the platform (Google Analytics)"].map(t => (React.createElement("div", { key: t, style: { display: "flex", gap: 10, marginBottom: 8 } },
+                            React.createElement("span", { style: { color: C.teal, flexShrink: 0 } }, "\u2713"),
+                            React.createElement("span", { style: { fontSize: 13, color: C.muted, lineHeight: 1.5 } }, t))))),
+                    React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 20,
+                            background: C.navyLight, borderRadius: 12, padding: 14,
+                            border: `1px solid ${consentChecked ? C.teal : C.border}`, cursor: "pointer" }, onClick: () => setConsentChecked(!consentChecked) },
+                        React.createElement("div", { style: { width: 20, height: 20, borderRadius: 5, border: `2px solid ${consentChecked ? C.teal : C.muted}`,
+                                background: consentChecked ? C.teal : "transparent", flexShrink: 0,
+                                display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1 } }, consentChecked && React.createElement("span", { style: { color: C.navy, fontSize: 12, fontWeight: 900 } }, "\u2713")),
+                        React.createElement("div", { style: { fontSize: 13, color: C.muted, lineHeight: 1.6 } },
+                            "I consent to ADHDclearfocus processing my responses as health-related data to generate my personalised ADHD profile. I understand this is an educational tool, not a clinical diagnosis. I have read the",
+                            " ",
+                            React.createElement("a", { href: "/legal.html", style: { color: C.teal } }, "Privacy Policy"),
+                            ".")),
+                    React.createElement("button", { onClick: () => { if (consentChecked)
+                            tr(() => setStep("age")); }, style: { width: "100%",
+                            background: consentChecked ? `linear-gradient(135deg,${C.teal},${C.blue})` : "#1A2E4A",
+                            color: consentChecked ? C.navy : C.muted, border: "none", borderRadius: 12,
+                            padding: "15px", fontSize: 16, fontWeight: 900,
+                            cursor: consentChecked ? "pointer" : "not-allowed", marginBottom: 10,
+                            transition: "all 0.2s" } }, consentChecked ? "Continue to Assessment →" : "Please tick the consent box above")))),
+            step === "age" && (React.createElement("div", { style: fade },
+                React.createElement("div", { style: { padding: "28px 0" } },
+                    React.createElement("h2", { style: { fontSize: 22, fontWeight: 900, marginBottom: 6 } }, "One quick question"),
+                    React.createElement("p", { style: { color: C.muted, marginBottom: 22, fontSize: 14, lineHeight: 1.6 } }, "This helps us use age-appropriate language throughout your assessment."),
+                    React.createElement("div", { style: { display: "grid", gap: 10 } }, [{ l: "I am 13–17 years old", s: "Adolescent version — school and home context", teen: true },
+                        { l: "I am 18 or older", s: "Adult version — work, relationships and daily life", teen: false }].map(o => (React.createElement("button", { key: o.l, onClick: () => { setIsTeen(o.teen); tr(() => setStep("questions")); }, style: { background: C.navyLight, border: `2px solid ${C.border}`, borderRadius: 14,
+                            padding: "20px 18px", textAlign: "left", cursor: "pointer", color: C.white,
+                            display: "flex", justifyContent: "space-between", alignItems: "center",
+                            transition: "border-color 0.2s" }, onMouseEnter: e => e.currentTarget.style.borderColor = C.teal, onMouseLeave: e => e.currentTarget.style.borderColor = C.border },
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, fontSize: 15, marginBottom: 4 } }, o.l),
+                            React.createElement("div", { style: { color: C.muted, fontSize: 12 } }, o.s)),
+                        React.createElement("span", { style: { color: C.teal, fontSize: 20 } }, "\u2192")))))))),
+            step === "questions" && currentQ && (React.createElement("div", { style: fade },
+                React.createElement("div", { style: { paddingTop: 20 } },
+                    React.createElement("div", { style: { display: "flex", justifyContent: "space-between", marginBottom: 8 } },
+                        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 6 } },
+                            React.createElement("span", { style: { fontSize: 14 } }, (_a = DOMAINS[currentQ.d]) === null || _a === void 0 ? void 0 : _a.icon),
+                            React.createElement("span", { style: { fontSize: 11, color: ((_b = DOMAINS[currentQ.d]) === null || _b === void 0 ? void 0 : _b.color) || C.teal,
+                                    fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 } }, (_c = DOMAINS[currentQ.d]) === null || _c === void 0 ? void 0 : _c.label)),
+                        React.createElement("span", { style: { fontSize: 11, color: C.muted } },
+                            progress,
+                            "%")),
+                    React.createElement("div", { style: { background: `linear-gradient(135deg,${C.navyLight},${C.navyMid})`,
+                            border: `1px solid ${((_d = DOMAINS[currentQ.d]) === null || _d === void 0 ? void 0 : _d.color) || C.teal}40`,
+                            borderRadius: 16, padding: "24px 20px", marginBottom: 16,
+                            boxShadow: `0 4px 24px ${((_e = DOMAINS[currentQ.d]) === null || _e === void 0 ? void 0 : _e.color) || C.teal}10` } },
+                        React.createElement("p", { style: { fontSize: "clamp(15px,3.5vw,18px)", fontWeight: 600, lineHeight: 1.6, margin: 0 } }, isTeen ? currentQ.teen : currentQ.a)),
+                    React.createElement("div", { style: { display: "grid", gap: 8 } }, (currentQ.t === "agree" ? AGREE : FREQ).map(opt => {
+                        var _a;
+                        const sel = answers[currentQ.id] === opt.v;
+                        const col = ((_a = DOMAINS[currentQ.d]) === null || _a === void 0 ? void 0 : _a.color) || C.teal;
+                        return (React.createElement("button", { key: opt.v, onClick: () => { if (navigator.vibrate)
+                                navigator.vibrate(25); handleAnswer(opt.v); }, style: { background: sel ? col : C.navyLight,
+                                border: `2px solid ${sel ? col : C.border}`,
+                                borderRadius: 11, padding: "13px 16px", textAlign: "left", cursor: "pointer",
+                                color: sel ? C.navy : C.white, fontWeight: sel ? 700 : 400, fontSize: 14,
+                                transition: "all 0.15s", display: "flex", justifyContent: "space-between",
+                                alignItems: "center" } },
+                            React.createElement("span", null, opt.l),
+                            sel && React.createElement("span", { style: { fontWeight: 900 } }, "\u2713")));
+                    })),
+                    qIndex > 0 && (React.createElement("button", { onClick: () => tr(() => setQIndex(qIndex - 1)), style: { background: "transparent", border: "none", color: C.muted,
+                            cursor: "pointer", fontSize: 12, marginTop: 14, padding: "4px 0" } }, "\u2190 Previous question"))))),
+            step === "paywall" && result && (React.createElement("div", { style: fade },
+                React.createElement("div", { style: { paddingTop: 20, animation: "slideInUp 0.5s ease" } },
+                    React.createElement("div", { style: {
+                            background: `linear-gradient(135deg,${C.navyMid},${C.navyLight})`,
+                            border: `2px solid ${result.color}50`, borderRadius: 18,
+                            padding: "24px 20px", marginBottom: 16, textAlign: "center",
+                            boxShadow: `0 8px 32px ${result.color}20`
+                        } },
+                        React.createElement("div", { style: { display: "inline-block",
+                                background: `${result.color}20`, border: `1px solid ${result.color}`,
+                                borderRadius: 99, padding: "4px 16px", fontSize: 11, fontWeight: 700,
+                                color: result.color, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 12, animation: "slideInUp 0.5s ease" } }, "\u2713 Your 10-Dimension Profile is Ready"),
+                        React.createElement("h2", { style: { fontSize: "clamp(17px,4vw,24px)", fontWeight: 900, lineHeight: 1.3,
+                                margin: "0 0 10px", letterSpacing: "-0.5px" } }, result.level === "Elevated" ? "Your profile shows a significant ADHD neurological pattern" :
+                            result.level === "Moderate" ? "Your profile shows meaningful ADHD-related patterns" :
+                                "Your profile shows lower ADHD indicators at this time"),
+                        React.createElement("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.65 } }, result.level === "Elevated" ?
+                            "Your responses across 10 neurological dimensions are consistent with clinically meaningful ADHD. Enter your email below to see your complete profile — free." :
+                            result.level === "Moderate" ?
+                                "Your responses indicate ADHD-related patterns across several dimensions. Understanding your full profile will give you targeted, evidence-based strategies." :
+                                "Your responses suggest lower ADHD indicators, though some dimension patterns were identified. Enter your email to see your complete profile — free.")),
+                    result.asrsFlag && (React.createElement("div", { style: { background: "#1A1000", border: "1px solid #FFB34780",
+                            borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", gap: 12 } },
+                        React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\u26A0\uFE0F"),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, color: C.amber, fontSize: 13, marginBottom: 3 } }, "Clinical screening threshold triggered"),
+                            React.createElement("div", { style: { color: C.muted, fontSize: 12, lineHeight: 1.55 } }, "A validated clinical screening threshold was met in your responses. The full clinical interpretation, what this means for you specifically, and your recommended next steps are included in your Clarity Report.")))),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 12, padding: "14px 16px", marginBottom: 12 } },
+                        React.createElement("div", { style: { display: "flex", justifyContent: "space-between",
+                                marginBottom: 10, flexWrap: "wrap", gap: 8 } }, [
+                            { n: "39", l: "questions answered" },
+                            { n: "10", l: "dimensions profiled" },
+                            { n: "668K+", l: "on UK NHS waitlist" },
+                        ].map(s => (React.createElement("div", { key: s.l, style: { textAlign: "center", flex: 1, minWidth: 80 } },
+                            React.createElement("div", { style: { fontSize: 18, fontWeight: 900, color: C.teal } }, s.n),
+                            React.createElement("div", { style: { fontSize: 10, color: C.muted, lineHeight: 1.3 } }, s.l))))),
+                        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 12 } },
+                            React.createElement("span", { style: { fontSize: 22, flexShrink: 0 } }, "\uD83D\uDCCA"),
+                            React.createElement("div", null,
+                                React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 3 } }, "How you compare"),
+                                React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.55 } }, result.totalPct >= 65
+                                    ? "Your profile shows patterns consistent with elevated neurological load across multiple ADHD dimensions — a pattern seen in approximately 5–8% of adults (Faraone et al., 2021). Your full breakdown unlocks with your report."
+                                    : result.totalPct >= 40
+                                        ? "Your profile shows moderate neurological load across ADHD dimensions — above the general population average. Common in adults with partially compensated ADHD. Your full breakdown is in your report."
+                                        : "Your profile shows lower overall neurological load, though specific domain patterns were identified worth reviewing in detail. Full breakdown unlocks with your report.")))),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 14, padding: "16px", marginBottom: 16 } },
+                        React.createElement("div", { style: { fontSize: 13, fontWeight: 700, marginBottom: 8, color: C.muted } }, "\uD83D\uDD12 Your personalised plan is locked"),
+                        React.createElement("div", { style: { fontSize: 12, color: C.muted, marginBottom: 12, lineHeight: 1.55 } },
+                            "Your report contains a ",
+                            React.createElement("strong", { style: { color: C.white } }, "targeted strategy plan built specifically for your neurological profile"),
+                            " \u2014 prioritised by your highest-impact dimensions, with step-by-step evidence-based actions. Not generic ADHD advice. Your plan, for your brain."),
+                        React.createElement("div", { style: { display: "grid", gap: 8 } }, Object.entries(DOMAINS).map(([key, d]) => (React.createElement("div", { key: key, style: { display: "flex", justifyContent: "space-between",
+                                alignItems: "center", padding: "6px 0",
+                                borderBottom: `1px solid ${C.border}` } },
+                            React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
+                                React.createElement("span", { style: { fontSize: 14 } }, d.icon),
+                                React.createElement("span", { style: { fontSize: 13, color: C.muted } }, d.label)),
+                            React.createElement("div", { style: { background: C.navyMid, borderRadius: 6, padding: "2px 10px",
+                                    fontSize: 12, color: C.muted } }, "\uD83D\uDD12 Locked")))))),
+                    !emailSubmitted ? (React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.teal}40`,
+                            borderRadius: 16, padding: "20px", marginBottom: 16 } },
+                        React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 8, marginBottom: 4 } },
+                            React.createElement("div", { style: { width: 8, height: 8, borderRadius: "50%", background: C.teal,
+                                    animation: "pulse 2s infinite" } }),
+                            React.createElement("div", { style: { fontWeight: 800, fontSize: 15 } }, "Your profile is ready")),
+                        React.createElement("div", { style: { color: C.muted, fontSize: 13, marginBottom: 14, lineHeight: 1.6 } }, "Enter your email to unlock your complete 10-dimension profile and access your personalised report."),
+                        React.createElement("div", { style: { display: "flex", gap: 8, marginBottom: 8 } },
+                            React.createElement("input", { type: "email", value: email, onChange: e => { setEmail(e.target.value); setEmailError(""); }, onKeyDown: e => e.key === "Enter" && handleEmailSubmit(), placeholder: "your@email.com", style: { flex: 1, background: C.navy,
+                                    border: `1px solid ${emailError ? C.red : C.border}`,
+                                    borderRadius: 10, padding: "13px 14px", color: C.white, fontSize: 14, outline: "none" } }),
+                            React.createElement("button", { onClick: handleEmailSubmit, disabled: emailLoading, style: { background: emailLoading ? "#333" : `linear-gradient(135deg,${C.teal},${C.blue})`,
+                                    color: C.navy, border: "none", borderRadius: 10, padding: "13px 18px",
+                                    fontWeight: 800, fontSize: 14, cursor: emailLoading ? "not-allowed" : "pointer", minWidth: 90 } }, emailLoading ? "..." : "Unlock →")),
+                        emailError && React.createElement("div", { style: { fontSize: 12, color: C.red, marginBottom: 8 } }, emailError),
+                        React.createElement("label", { style: { display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer" } },
+                            React.createElement("input", { type: "checkbox", checked: emailConsent, onChange: e => setEmailConsent(e.target.checked), style: { marginTop: 3, flexShrink: 0, accentColor: C.teal } }),
+                            React.createElement("span", { style: { fontSize: 11, color: C.muted, lineHeight: 1.55 } }, "I agree to receive my results and evidence-based ADHD content from ADHDclearfocus. Unsubscribe any time.")))) : (React.createElement("div", null,
+                        result.asrsFlag && (React.createElement("div", { style: { background: "#1A1000", border: "1px solid #FFB34780",
+                                borderRadius: 12, padding: "14px 16px", marginBottom: 12, display: "flex", gap: 12 } },
+                            React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\u26A0\uFE0F"),
+                            React.createElement("div", null,
+                                React.createElement("div", { style: { fontWeight: 700, color: C.amber, fontSize: 13, marginBottom: 3 } },
+                                    "WHO ASRS-v1.1: Positive (",
+                                    result.asrsCount,
+                                    "/6 Part A items)"),
+                                React.createElement("div", { style: { color: C.muted, fontSize: 12, lineHeight: 1.55 } }, "Sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005). Formal assessment with a qualified clinician is recommended.")))),
+                        React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.teal}50`,
+                                borderRadius: 16, padding: "18px 20px", marginBottom: 12 } },
+                            React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 } },
+                                React.createElement("div", { style: { fontWeight: 800, fontSize: 15 } }, "Your 10-Dimension Profile"),
+                                React.createElement("div", { style: { background: "#00E67615", border: "1px solid #00E67640", borderRadius: 99,
+                                        padding: "2px 10px", fontSize: 10, color: C.green, fontWeight: 800, letterSpacing: 1 } }, "FREE")),
+                            Object.keys(DOMAINS).map(key => {
+                                const d = DOMAINS[key];
+                                return React.createElement(DBar, { key: key, label: d.label, icon: d.icon, pct: result.pcts[key] || 0, color: dc(key) });
+                            }),
+                            React.createElement("div", { style: { fontSize: 11, color: C.muted, marginTop: 10, lineHeight: 1.55 } }, "This profile is educational, not diagnostic. Your personalised interpretation \u2014 what your specific pattern means and exactly what to do about it \u2014 is in the Clarity Report below.")),
+                        React.createElement("div", { style: { background: C.navyLight, border: `2px solid ${C.teal}`,
+                                borderRadius: 16, padding: "20px", marginBottom: 12, position: "relative" } },
+                            React.createElement("div", { style: { position: "absolute", top: -12, right: 16,
+                                    background: C.teal, color: C.navy, fontSize: 10, fontWeight: 900,
+                                    padding: "3px 12px", borderRadius: 99 } }, "AVAILABLE NOW"),
+                            React.createElement("div", { style: { display: "flex", justifyContent: "space-between",
+                                    alignItems: "flex-start", marginBottom: 12 } },
+                                React.createElement("div", null,
+                                    React.createElement("div", { style: { fontSize: 11, color: C.teal, fontWeight: 700,
+                                            textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 } }, "Go Deeper \u2014 Clarity Report"),
+                                    React.createElement("div", { style: { fontSize: 30, fontWeight: 900 } },
+                                        "\u20AC49 ",
+                                        React.createElement("span", { style: { fontSize: 13, fontWeight: 400, color: C.muted } }, "one-off"))),
+                                React.createElement("span", { style: { fontSize: 26 } }, "\uD83D\uDCCB")),
+                            ["AI-personalised interpretation of YOUR exact pattern",
+                                "14-page evidence-based PDF report to keep and share with a GP",
+                                "Targeted strategies for each of your elevated dimensions",
+                                "Next steps guide and formal assessment pathway",
+                                "Pro founding loyalty code (€5/month locked for life)",
+                                "Delivered to your inbox within 24 hours"].map(f => (React.createElement("div", { key: f, style: { display: "flex", gap: 8, marginBottom: 7 } },
+                                React.createElement("span", { style: { color: C.teal, fontSize: 13, flexShrink: 0 } }, "\u2713"),
+                                React.createElement("span", { style: { fontSize: 13, color: C.muted, lineHeight: 1.4 } }, f)))),
+                            React.createElement("button", { onClick: () => {
+                                    gtag("event", "purchase_click", { product: "clarity_report", value: 49 });
+                                    createCheckout(result, email, isTeen);
+                                    tr(() => setStep("unlocked"));
+                                }, style: { width: "100%",
+                                    background: `linear-gradient(135deg,${C.teal},${C.blue})`,
+                                    color: C.navy, border: "none", borderRadius: 12, padding: "15px",
+                                    fontWeight: 900, fontSize: 16, cursor: "pointer", marginTop: 14,
+                                    boxShadow: `0 6px 24px ${C.teal}40` } }, "Get My Full Report \u2014 \u20AC49")),
+                        React.createElement(FoundingCTA, { daysLeft: daysLeft, showDetail: showDetail, setShowDetail: setShowDetail, proEmail: proEmail, setProEmail: setProEmail, proJoined: proJoined, onJoin: handleProJoin, inPaywall: true }),
+                        React.createElement("div", { style: { display: "flex", justifyContent: "center", gap: 16, marginTop: 12, flexWrap: "wrap" } }, ["🔒 Secure checkout", "📧 Delivered within 24 hours", "↩ 7-day refund policy"].map(s => (React.createElement("span", { key: s, style: { fontSize: 11, color: C.muted } }, s)))),
+                        React.createElement("div", { style: { background: "linear-gradient(135deg,#0A1A10,#0A1628)",
+                                border: "1px solid #00E67640", borderRadius: 14, padding: "16px", marginTop: 12 } },
+                            React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 } },
+                                React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\uD83C\uDFE5"),
+                                React.createElement("div", null,
+                                    React.createElement("div", { style: { fontWeight: 800, fontSize: 13, color: C.green, marginBottom: 3 } }, "15% Off Formal ADHD & ASD Assessments"),
+                                    React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.6 } },
+                                        "ADHDclearfocus subscribers receive a ",
+                                        React.createElement("strong", { style: { color: C.white } }, "15% discount on formal ADHD and ASD clinical assessments"),
+                                        " through our registered clinical partners in Ireland and the UK. Your assessment code is generated automatically on subscription."))),
+                            React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 8 } }, [
+                                { icon: "🧠", t: "ADHD Assessment", s: "Full diagnostic assessment" },
+                                { icon: "🎯", t: "ASD Assessment", s: "Autism spectrum evaluation" },
+                                { icon: "📋", t: "Combined ADHD+ASD", s: "Dual pathway assessment" },
+                                { icon: "🔄", t: "Review Appointments", s: "Follow-up clinical sessions" },
+                            ].map(i => (React.createElement("div", { key: i.t, style: { background: "#00E67608", border: "1px solid #00E67625",
+                                    borderRadius: 8, padding: "8px 10px", display: "flex", gap: 6, alignItems: "flex-start" } },
+                                React.createElement("span", { style: { fontSize: 12, flexShrink: 0 } }, i.icon),
+                                React.createElement("div", null,
+                                    React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: C.white } }, i.t),
+                                    React.createElement("div", { style: { fontSize: 10, color: C.muted } }, i.s)))))),
+                            React.createElement("div", { style: { background: "#00E67610", border: "1px solid #00E67630",
+                                    borderRadius: 8, padding: "10px 12px", fontSize: 11, color: C.muted, lineHeight: 1.6 } },
+                                React.createElement("strong", { style: { color: C.green } }, "How it works:"),
+                                " Subscribe to any ADHDclearfocus plan to receive your unique 15% discount code. Valid with our registered clinical partners who meet DSM-5/ICD-11 diagnostic standards \u2014 the same standards accepted by HSE, NHS, and government services. Partners listed in your member dashboard on launch.")),
+                        React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                                borderRadius: 14, padding: "16px", marginTop: 12 } },
+                            React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 10 } },
+                                React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\uD83E\uDDD1\u200D\u2695\uFE0F"),
+                                React.createElement("div", null,
+                                    React.createElement("div", { style: { fontWeight: 800, fontSize: 13, marginBottom: 3 } }, "Concerned about your results?"),
+                                    React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.6, marginBottom: 10 } }, "A screener is a starting point, not a diagnosis. If your profile raises questions you want to talk through, you can speak with a chartered psychologist experienced in adult ADHD \u2014 a free 15-minute initial consultation is available."),
+                                    React.createElement("a", { href: "https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075", target: "_blank", rel: "noopener", onClick: () => gtag("event", "pt_profile_click", { location: "paywall" }), style: { display: "inline-block", background: C.navyMid, border: `1px solid ${C.teal}60`,
+                                            color: C.teal, borderRadius: 8, padding: "9px 14px", fontSize: 12, fontWeight: 700,
+                                            textDecoration: "none" } }, "Speak to a psychologist (Psychology Today) \u2192")))),
+                        React.createElement("div", { style: { background: "linear-gradient(135deg,#1A1206,#0A1628)",
+                                border: "1px solid #FFB34740", borderRadius: 14, padding: "16px", marginTop: 12 } },
+                            React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 10 } },
+                                React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\uD83D\uDCD3"),
+                                React.createElement("div", null,
+                                    React.createElement("div", { style: { fontSize: 10, color: C.amber, fontWeight: 700,
+                                            textTransform: "uppercase", letterSpacing: 1, marginBottom: 3 } }, "Recommended reading"),
+                                    React.createElement("div", { style: { fontWeight: 800, fontSize: 13, marginBottom: 3 } }, "The Gratitude Prescription"),
+                                    React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.6, marginBottom: 10 } }, "A structured, evidence-based 90-day gratitude programme written by a DPsych psychologist. Gratitude practice activates the prefrontal cortex \u2014 the region underactivated in ADHD \u2014 and it takes seconds per day, designed for people who find habits difficult."),
+                                    React.createElement("a", { href: "https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL", target: "_blank", rel: "noopener", onClick: () => gtag("event", "book_click", { location: "paywall" }), style: { display: "inline-block", background: C.amber, color: C.navy,
+                                            borderRadius: 8, padding: "9px 14px", fontSize: 12, fontWeight: 800,
+                                            textDecoration: "none" } }, "\uD83D\uDCDA Get the book on Amazon \u2192"))))))))),
+            step === "unlocked" && result && (React.createElement("div", { style: fade },
+                React.createElement("div", { style: { paddingTop: 20 } },
+                    React.createElement("div", { style: {
+                            background: `linear-gradient(135deg,${C.navyMid},${C.navyLight})`,
+                            border: `2px solid ${result.color}50`, borderRadius: 18,
+                            padding: "22px 20px", marginBottom: 16, textAlign: "center"
+                        } },
+                        React.createElement("div", { style: { display: "inline-block",
+                                background: `${result.color}20`, border: `1px solid ${result.color}`,
+                                borderRadius: 99, padding: "4px 14px", fontSize: 11, fontWeight: 700,
+                                color: result.color, letterSpacing: 1.2, textTransform: "uppercase", marginBottom: 10 } }, "\u2713 Your 10-Dimension Profile is Ready"),
+                        React.createElement("p", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6 } }, "Your complete 10-dimension profile is below. Your personalised PDF report has been sent to your email.")),
+                    result.asrsFlag && (React.createElement("div", { style: { background: "#1A1000", border: "1px solid #FFB34780",
+                            borderRadius: 12, padding: "14px 16px", marginBottom: 16, display: "flex", gap: 12 } },
+                        React.createElement("span", { style: { fontSize: 18, flexShrink: 0 } }, "\u26A0\uFE0F"),
+                        React.createElement("div", null,
+                            React.createElement("div", { style: { fontWeight: 700, color: C.amber, fontSize: 13, marginBottom: 3 } },
+                                "WHO ASRS-v1.1: Positive (",
+                                result.asrsCount,
+                                "/6 Part A items)"),
+                            React.createElement("div", { style: { color: C.muted, fontSize: 12, lineHeight: 1.55 } }, "Sensitivity 68.7%, specificity 99.5% (Kessler et al., 2005). Formal assessment with a qualified clinician is recommended.")))),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 16, padding: "18px 20px", marginBottom: 16 } },
+                        React.createElement("div", { style: { fontWeight: 800, fontSize: 15, marginBottom: 16 } }, "Your 10-Dimension Neurological Profile"),
+                        Object.entries(DOMAINS).map(([key, d]) => (React.createElement(DBar, { key: key, label: d.label, icon: d.icon, pct: result.pcts[key] || 0, color: dc(key) }))),
+                        React.createElement("div", { style: { fontSize: 11, color: C.muted, marginTop: 10, lineHeight: 1.5 } }, "\uD83D\uDFE1 Amber (65%+) = Clinically significant \u00B7 \uD83D\uDD35 Teal (40\u201364%) = Moderate \u00B7 \uD83D\uDFE2 Green (<40%) = Lower priority")),
+                    React.createElement("div", { style: { marginBottom: 16 } },
+                        React.createElement("div", { style: { fontWeight: 800, fontSize: 15, marginBottom: 4 } }, "Evidence-Based Recommendations"),
+                        React.createElement("div", { style: { color: C.muted, fontSize: 12, marginBottom: 12, lineHeight: 1.5 } }, "Tap any dimension to expand your personalised strategies. All strategies cite peer-reviewed clinical literature."),
+                        Object.entries(DOMAINS).map(([key, d]) => {
+                            const pct = result.pcts[key] || 0;
+                            if (pct < 20)
+                                return null;
+                            const isOpen = openDomain === key;
+                            const color = dc(key);
+                            const RECS_DATA = {
+                                inattention: {
+                                    high: ["Use 25-minute focused work blocks with 5-minute breaks (Safren et al., 2010 JAMA RCT — significant inattention reduction).",
+                                        "Implement a single external capture system for all tasks. Barkley (2012): 'externalising the future' removes reliance on impaired working memory.",
+                                        "Reduce environmental distractors: noise-cancelling headphones, notification blocking, single-tab working (NICE NG87, 2018 — first-line recommendation).",
+                                        "Front-load demanding tasks when attentional capacity is highest — typically morning or peak medication effectiveness (NICE NG87, 2018)."],
+                                    mod: ["Notice when attention drifts rather than forcing sustained focus.",
+                                        "Background white noise or instrumental music at moderate volume can raise arousal to optimal levels (Abikoff et al., 1996)."]
+                                },
+                                hyperactivity: {
+                                    high: ["20-30 minutes aerobic exercise before demanding work — improvements comparable to low-dose stimulant medication (Hoza et al., 2015; Pontifex et al., 2013).",
+                                        "Extend response latency: 5-second pause before verbal replies, 24-hour pause before new commitments (Barkley, 2012 inhibitory control model).",
+                                        "Adapted mindfulness: Zylowska et al. (2008) RCT showed significant ADHD hyperactivity reduction from 8-week adapted programme.",
+                                        "Build intentional movement into your working day — standing desk, walking meetings, scheduled breaks (European ADHD Guidelines, Kooij et al., 2019)."],
+                                    mod: ["Identify environments and times that trigger restlessness.",
+                                        "15-minute brisk walk before demanding tasks improves inhibitory control in ADHD (Pontifex et al., 2013)."]
+                                },
+                                executive: {
+                                    high: ["Externalise executive function entirely: visual weekly planner, daily task list with time estimates, physical countdown timer (Barkley, 2012).",
+                                        "Implementation intentions: 'On Tuesday at 9am I will sit at my desk and write the introduction for 25 minutes.' Gollwitzer (1999) showed if-then planning significantly reduces initiation failure.",
+                                        "Body-doubling — working alongside another person, even silently and virtually. Solanto (2011) documents this as consistently effective.",
+                                        "Break every task into smallest possible components. Apply the 2-minute rule: tasks completable in 2 minutes should be done immediately."],
+                                    mod: ["One consistent morning routine reduces executive demand of recurring decisions (Barkley, 2012).",
+                                        "If-then planning: Gollwitzer & Sheeran (2006) meta-analysis of 94 studies showed medium-to-large effect on goal attainment."]
+                                },
+                                emotional: {
+                                    high: ["Emotional dysregulation in ADHD is neurologically driven — reduced prefrontal regulation of amygdala reactivity (Shaw et al., 2014). Not a character trait.",
+                                        "Implement a physical pause before emotionally activating responses. Ramsay (2020) identifies response latency extension as primary CBT target for ADHD emotional impulsiveness.",
+                                        "Precise affect labelling reduces amygdala activation and increases prefrontal regulatory activity (Lieberman et al., 2007).",
+                                        "Address Rejection Sensitive Dysphoria through CBT cognitive restructuring — Ramsay (2020) identifies RSD as most impactful under-addressed dimension of adult ADHD."],
+                                    mod: ["One-word daily emotion log for 4 weeks reveals patterns linked to sleep, medication timing, and triggers.",
+                                        "Identify 3 reliable de-escalation strategies and write them somewhere visible before emotional activation."]
+                                },
+                                working_memory: {
+                                    high: ["Externalise working memory completely — write everything down immediately. The ADHD brain cannot hold multi-step sequences reliably (Barkley, 2012).",
+                                        "Read aloud or sub-vocalise complex instructions to strengthen encoding (dual coding theory — Paivio, 1991).",
+                                        "Reduce working memory load during tasks by closing irrelevant tabs, apps and conversations."],
+                                    mod: ["Repeat back instructions to the speaker immediately to consolidate encoding.",
+                                        "Use written checklists for all multi-step processes."]
+                                },
+                                time: {
+                                    high: ["Use physical timers for all work blocks — the ADHD brain lacks reliable internal time tracking (Barkley, 2011 time blindness model).",
+                                        "Time estimation practice: before every task, estimate duration, then record actual time. 2 weeks of this significantly improves temporal awareness.",
+                                        "Set alarms for transitions 10 minutes before they need to happen, not at the transition time."],
+                                    mod: ["Visible clock in your working environment at all times.",
+                                        "Estimate task duration before starting — most ADHD adults underestimate by 30-50%."]
+                                },
+                                hyperfocus: {
+                                    high: ["Use hyperfocus strategically — schedule deep work during periods of natural high interest and use external alarms to exit.",
+                                        "Create transition rituals for exiting hyperfocus states: a physical action (standing, making a drink) signals the brain to shift (Monsell, 2003 task switching).",
+                                        "Pair uninteresting but necessary tasks with slightly interesting contexts — the interest-based nervous system (Dodson, 2019) requires engagement to activate."],
+                                    mod: ["Notice your hyperfocus patterns — which topics trigger them, and what time of day.",
+                                        "Use interest as a productivity tool deliberately rather than accidentally."]
+                                },
+                                rsd: {
+                                    high: ["RSD in ADHD is neurologically driven — the same prefrontal inhibition failure that creates emotional dysregulation (Dodson, 2019; Barkley, 2010).",
+                                        "CBT cognitive restructuring for RSD: identify the distortions (all-or-nothing, catastrophising, mind-reading) and develop evidence-based counter-statements (Ramsay, 2020).",
+                                        "24-hour rule before responding to perceived criticism — the RSD response is immediate but often inaccurate. Waiting allows prefrontal reappraisal.",
+                                        "Psychoeducation for people in your life about RSD reduces triggering and improves relationship outcomes (Orlov, 2010)."],
+                                    mod: ["Notice when RSD is activated — the emotional intensity is disproportionate to objective events.",
+                                        "One written counter-statement for your most common RSD trigger."]
+                                },
+                                developmental: {
+                                    high: ["ADHD heritability is 70-80% (Faraone et al., 2021). Childhood-onset difficulties are a stable neurological difference, not a character trait.",
+                                        "Compile a developmental timeline — school reports, teacher comments, early employment patterns. This provides the informant history required for formal DIVA-5.0 assessment.",
+                                        "Late identification is common — compensatory strategies (high intelligence, structure, high stakes) often mask ADHD until their collapse in university, employment or parenthood."],
+                                    mod: ["Speak with a parent or sibling about childhood behaviour — informant history is clinically valuable for formal assessment.",
+                                        "Old school reports often contain teacher observations diagnostically relevant decades later."]
+                                },
+                                impact: {
+                                    high: ["In Ireland: Employment Equality Acts 1998-2015 require reasonable workplace accommodations for ADHD. UK: Equality Act 2010.",
+                                        "Automate all recurring financial obligations through direct debit. Batch administrative tasks to a single weekly block.",
+                                        "Psychoeducation for close partners and family members significantly improves relationship outcomes (Orlov, 2010; Bramham, 2009).",
+                                        "Formal assessment unlocks stimulant medication (Cohen's d = 0.9 for methylphenidate — largest effect size in psychiatric medicine, Faraone et al., 2021) and legal workplace protections."],
+                                    mod: ["Identify the 1-2 domains causing most friction and focus there first.",
+                                        "Keep a friction log for one week — note every ADHD-related moment of difficulty."]
+                                },
+                            };
+                            const recs = RECS_DATA[key];
+                            const items = pct >= 50 ? ((recs === null || recs === void 0 ? void 0 : recs.high) || []) : ((recs === null || recs === void 0 ? void 0 : recs.mod) || []);
+                            if (!items.length)
+                                return null;
+                            return (React.createElement("div", { key: key, style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                                    borderRadius: 13, marginBottom: 8, overflow: "hidden" } },
+                                React.createElement("button", { onClick: () => setOpenDomain(isOpen ? null : key), style: { width: "100%", background: "transparent", border: "none",
+                                        padding: "14px 16px", textAlign: "left", cursor: "pointer", color: C.white,
+                                        display: "flex", justifyContent: "space-between", alignItems: "center" } },
+                                    React.createElement("div", { style: { display: "flex", alignItems: "center", gap: 10 } },
+                                        React.createElement("span", { style: { fontSize: 16 } }, d.icon),
+                                        React.createElement("div", null,
+                                            React.createElement("div", { style: { fontWeight: 700, fontSize: 13, color: d.color } }, d.label),
+                                            React.createElement("div", { style: { color: C.muted, fontSize: 11, marginTop: 1 } },
+                                                result.pcts[key],
+                                                "% \u00B7 ",
+                                                pct >= 65 ? "Priority" : "Focus",
+                                                " area"))),
+                                    React.createElement("span", { style: { color: C.muted, transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                                            transition: "transform 0.2s", display: "inline-block", fontSize: 16 } }, "\u25BE")),
+                                isOpen && (React.createElement("div", { style: { padding: "0 16px 16px", borderTop: `1px solid ${C.border}` } }, items.map((s, i) => (React.createElement("div", { key: i, style: { display: "flex", gap: 10, background: C.navy,
+                                        borderRadius: 10, padding: "12px 14px", marginBottom: 7, marginTop: i === 0 ? 12 : 0 } },
+                                    React.createElement("span", { style: { color, fontWeight: 800, fontSize: 13, flexShrink: 0, marginTop: 1 } },
+                                        i + 1,
+                                        "."),
+                                    React.createElement("p", { style: { color: C.muted, fontSize: 12, lineHeight: 1.7, margin: 0 } }, s))))))));
+                        })),
+                    React.createElement("a", { href: "/strategies.html", style: { textDecoration: "none" } },
+                        React.createElement("div", { style: { background: "linear-gradient(135deg,#0A1528,#112240)",
+                                border: `1px solid ${C.teal}40`, borderRadius: 14, padding: "16px 18px",
+                                marginBottom: 10, display: "flex", alignItems: "center", gap: 14, cursor: "pointer" } },
+                            React.createElement("span", { style: { fontSize: 28 } }, "\uD83D\uDCDA"),
+                            React.createElement("div", null,
+                                React.createElement("div", { style: { fontWeight: 800, fontSize: 14, marginBottom: 3 } }, "47 Evidence-Based Coping Strategies"),
+                                React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.55 } }, "Full animated strategy guide \u2014 includes a built-in focus timer, mood check-in, and step-by-step guides for every ADHD dimension.")),
+                            React.createElement("span", { style: { color: C.teal, fontSize: 18, flexShrink: 0 } }, "\u2192"))),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 14, padding: "16px 18px", marginBottom: 14 } },
+                        React.createElement("div", { style: { fontSize: 11, color: C.amber, fontWeight: 700, textTransform: "uppercase",
+                                letterSpacing: 1, marginBottom: 10 } }, "\uD83D\uDE80 Coming in Pro"),
+                        React.createElement("div", { style: { display: "grid", gap: 8 } }, [
+                            { icon: "👥", title: "Body Doubling Rooms", desc: "Virtual silent co-working sessions. Camera-off by default. Pomodoro-synced. The most evidence-backed ADHD productivity tool." },
+                            { icon: "🚨", title: "Crisis Mode", desc: "Pavlovian-conditioned calming sounds + breathing visualiser + biometric integration. Stress intervention that actually works for ADHD brains." },
+                            { icon: "🎙️", title: "Voice Diary & AI Coach", desc: "Speak your day. Your AI coach responds with ADHD-aware guidance built around your specific neurological profile." },
+                            { icon: "📊", title: "Progress Tracking", desc: "Monthly re-assessments across all 10 dimensions using validated scales. See real change over time with your own data." },
+                        ].map(f => (React.createElement("div", { key: f.title, style: { display: "flex", gap: 10, alignItems: "flex-start",
+                                background: C.navy, borderRadius: 10, padding: "10px 12px" } },
+                            React.createElement("span", { style: { fontSize: 16, flexShrink: 0 } }, f.icon),
+                            React.createElement("div", null,
+                                React.createElement("div", { style: { fontWeight: 700, fontSize: 12, color: C.white, marginBottom: 2 } }, f.title),
+                                React.createElement("div", { style: { fontSize: 11, color: C.muted, lineHeight: 1.5 } }, f.desc))))))),
+                    React.createElement("div", { style: {
+                            background: `linear-gradient(135deg,${C.navyLight},#0A1A2E)`,
+                            border: `1px solid ${C.teal}30`, borderRadius: 16,
+                            padding: "20px", marginBottom: 16, textAlign: "center"
+                        } },
+                        React.createElement("div", { style: { fontSize: 22, marginBottom: 8 } }, "\uD83D\uDCCB"),
+                        React.createElement("div", { style: { fontWeight: 900, fontSize: 15, marginBottom: 6 } }, "Your 14-page PDF report is on its way"),
+                        React.createElement("div", { style: { color: C.muted, fontSize: 13, lineHeight: 1.6, marginBottom: 12 } }, "A personalised evidence-based report covering all 10 neurological dimensions has been sent to your email."),
+                        React.createElement("div", { style: { background: C.navy, border: `1px solid ${C.border}`, borderRadius: 8,
+                                padding: "8px 16px", display: "inline-block", fontSize: 12, color: C.teal } }, "\uD83D\uDCE7 Check your inbox")),
+                    React.createElement("div", { style: { background: "linear-gradient(135deg,#0A2010,#0A1628)",
+                            border: `1px solid ${C.green}50`, borderRadius: 16, padding: "20px", marginBottom: 16 } },
+                        React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 } },
+                            React.createElement("div", null,
+                                React.createElement("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 } },
+                                    React.createElement("div", { style: { fontSize: 11, color: C.green, fontWeight: 700,
+                                            textTransform: "uppercase", letterSpacing: 1 } }, "\uD83C\uDF81 Assessment Completer Reward"),
+                                    React.createElement("div", { style: { background: "#FF525220", border: "1px solid #FF525240",
+                                            borderRadius: 99, padding: "2px 8px", fontSize: 10, color: "#FF8080", fontWeight: 700 } },
+                                        daysLeft,
+                                        " days left \u00B7 Founding rate")),
+                                React.createElement("div", { style: { fontSize: 22, fontWeight: 900, marginBottom: 2 } },
+                                    "\u20AC5",
+                                    React.createElement("span", { style: { fontSize: 12, fontWeight: 400, color: C.muted } }, "/month for life")),
+                                React.createElement("div", { style: { fontSize: 11, color: C.muted } }, "Regular Pro price: \u20AC10/month \u00B7 Your rate: locked forever")),
+                            React.createElement("span", { style: { fontSize: 24 } }, "\uD83C\uDFF7\uFE0F")),
+                        React.createElement("div", { style: { background: `${C.green}10`, border: `1px solid ${C.green}30`,
+                                borderRadius: 10, padding: "12px 16px", marginBottom: 10, textAlign: "center" } },
+                            React.createElement("div", { style: { fontSize: 11, color: C.muted, marginBottom: 4 } }, "Your lifetime discount code"),
+                            React.createElement("div", { style: { fontSize: 20, fontWeight: 900, color: C.green, letterSpacing: 4, fontFamily: "monospace" } },
+                                "ACF-",
+                                email.split("@")[0].toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6) || "EARLY",
+                                "-50"),
+                            React.createElement("div", { style: { fontSize: 11, color: C.muted, marginTop: 4 } }, "Use this code when Pro launches to lock your \u20AC5/month rate permanently. If you cancel and rejoin without the code, the rate will be \u20AC10/month.")),
+                        React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.6 } }, "This code is tied to your email address and valid for life. Save it now \u2014 it will also be included in your report email.")),
+                    React.createElement(FoundingCTA, { daysLeft: daysLeft, showDetail: showDetail, setShowDetail: setShowDetail, proEmail: proEmail, setProEmail: setProEmail, proJoined: proJoined, onJoin: handleProJoin }),
+                    React.createElement("div", { style: { background: "#1A0A35", border: "1px solid #A855F760",
+                            borderRadius: 16, padding: "18px", marginBottom: 16 } },
+                        React.createElement("div", { style: { fontWeight: 900, fontSize: 14, marginBottom: 6 } }, "\uD83C\uDFAF Want to go deeper with a specialist?"),
+                        React.createElement("div", { style: { color: C.muted, fontSize: 13, lineHeight: 1.65, marginBottom: 12 } }, "Book a 30-minute report review call with our clinical psychologist. Walk through your 10-dimension profile, get specific answers to your questions, and leave with a clear, personalised action plan."),
+                        React.createElement("a", { href: STRIPE_LINKS.reviewCall, target: "_blank", rel: "noopener noreferrer", style: { textDecoration: "none" } },
+                            React.createElement("button", { style: { background: "#A855F7", color: C.white, border: "none", borderRadius: 10,
+                                    padding: "12px 20px", fontWeight: 700, fontSize: 13, cursor: "pointer" } }, "Book 30-min Review Call \u2014 \u20AC79"))),
+                    React.createElement("div", { style: { background: "#080F1A", border: `1px solid ${C.border}`,
+                            borderRadius: 10, padding: "10px 14px", marginBottom: 16,
+                            fontSize: 11, color: C.muted, lineHeight: 1.55 } },
+                        "If you are experiencing distress or a mental health crisis:",
+                        " ",
+                        React.createElement("strong", { style: { color: C.white } }, "Samaritans 116 123"),
+                        " ",
+                        "(free, 24/7, Ireland & UK) or contact your GP."),
+                    React.createElement("div", { style: { background: C.navyLight, border: `1px solid ${C.border}`,
+                            borderRadius: 14, padding: "16px", marginBottom: 12, textAlign: "center" } },
+                        React.createElement("div", { style: { fontWeight: 700, fontSize: 13, marginBottom: 6 } }, "\uD83D\uDCE4 Share your profile"),
+                        React.createElement("div", { style: { fontSize: 12, color: C.muted, marginBottom: 10, lineHeight: 1.55 } }, "Share your ADHD profile level \u2014 it might help someone you know recognise their own patterns."),
+                        React.createElement("div", { style: { display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" } }, [
+                            { label: "Share on Twitter/X", icon: "🐦",
+                                url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://adhdclearfocus.ie`)}` },
+                            { label: "Share on WhatsApp", icon: "💬",
+                                url: `https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://adhdclearfocus.ie`)}` },
+                            { label: "Copy link", icon: "🔗", url: null },
+                        ].map(s => (React.createElement("button", { key: s.label, onClick: () => {
+                                var _a;
+                                if (s.url) {
+                                    window.open(s.url, "_blank");
+                                }
+                                else {
+                                    (_a = navigator.clipboard) === null || _a === void 0 ? void 0 : _a.writeText("https://adhdclearfocus.ie");
+                                    alert("Link copied!");
+                                }
+                            }, style: { background: C.navyMid, border: `1px solid ${C.border}`,
+                                color: C.white, borderRadius: 8, padding: "8px 14px", fontSize: 12,
+                                cursor: "pointer", display: "flex", alignItems: "center", gap: 6 } },
+                            React.createElement("span", null, s.icon),
+                            React.createElement("span", null, s.label)))))),
+                    React.createElement("button", { onClick: restart, style: { background: "transparent", border: `1px solid ${C.border}`,
+                            color: C.muted, borderRadius: 10, padding: "11px", width: "100%",
+                            cursor: "pointer", fontSize: 13 } }, "\u21BA Start a new assessment"))))))
+        ,
+            showAuthModal && React.createElement(AuthModal, {
+                mode: authMode, authEmail, setAuthEmail, authCode, setAuthCode,
+                authError, onRegister: registerUser, onPro: activatePro,
+                onClose: () => { setShowAuthModal(false); setAuthError(''); },
+                daysLeft, C
+            }));
+}
+class ErrorBoundary extends React.Component {
+    constructor(props) { super(props); this.state = { hasError: false }; }
+    static getDerivedStateFromError() { return { hasError: true }; }
+    componentDidCatch(error, info) { console.error('ADHDclearfocus render error:', error, info); }
+    render() {
+        if (this.state.hasError) {
+            return React.createElement("div", { style: { maxWidth: 760, margin: '0 auto', padding: '42px 18px 90px', fontFamily: 'DM Sans,system-ui,sans-serif', color: '#fff', textAlign: 'center' } },
+                React.createElement("div", { style: { display: 'inline-flex', gap: 8, alignItems: 'center', border: '1px solid rgba(0,212,221,.28)', background: 'rgba(0,212,221,.08)', color: '#00D4DD', borderRadius: 999, padding: '7px 13px', fontSize: 12, fontWeight: 800, marginBottom: 18 } }, "\uD83E\uDDE0 ADHDclearfocus"),
+                React.createElement("h1", { style: { fontSize: 'clamp(30px,7vw,54px)', lineHeight: 1.05, letterSpacing: -1.8, margin: '0 0 14px', fontWeight: 900 } }, "The assessment had trouble loading"),
+                React.createElement("p", { style: { color: '#A8C4D8', fontSize: 15, lineHeight: 1.7, maxWidth: 560, margin: '0 auto 22px' } }, "Please refresh once. The core support tools are still available below."),
+                React.createElement("div", { style: { display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap', marginTop: 18 } },
+                    React.createElement("a", { href: '/strategies.html', style: { background: '#00D4DD', color: '#06101f', borderRadius: 12, padding: '12px 18px', fontWeight: 900, textDecoration: 'none' } }, "Open Strategies"),
+                    React.createElement("a", { href: '/crisis.html', style: { background: '#1A2E4A', color: '#fff', border: '1px solid #1E3A5F', borderRadius: 12, padding: '12px 18px', fontWeight: 800, textDecoration: 'none' } }, "Crisis Mode"),
+                    React.createElement("a", { href: '/resources.html', style: { background: '#1A2E4A', color: '#fff', border: '1px solid #1E3A5F', borderRadius: 12, padding: '12px 18px', fontWeight: 800, textDecoration: 'none' } }, "Resources")));
+        }
+        return this.props.children;
+    }
+}
+// Auth modal render added at App level
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(ErrorBoundary, null,
+    React.createElement(App, null)));
+
