@@ -89,6 +89,10 @@
     {
       "source": "/api/employer-lead",
       "destination": "/api/employer-lead.py"
+    },
+    {
+      "source": "/api/health",
+      "destination": "/api/health.py"
     }
   ]
 }

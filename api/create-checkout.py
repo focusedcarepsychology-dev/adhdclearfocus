@@ -50,7 +50,7 @@ def create_stripe_session(email, metadata):
         "mode": "payment",
         "customer_email": email,
         "success_url": f"{DOMAIN}/thank-you.html?session_id={{CHECKOUT_SESSION_ID}}",
-        "cancel_url": f"{DOMAIN}/#results",
+        "cancel_url": f"{DOMAIN}/assessment.html#results",
         "line_items[0][price]": PRICE_ID,
         "line_items[0][quantity]": "1",
         "allow_promotion_codes": "true",
@@ -116,5 +116,5 @@ class handler(BaseHTTPRequestHandler):
             url = create_stripe_session(email, metadata)
             self.send_json(200, {"url": url})
         except Exception:
-            # The client falls back to the static Stripe Payment Link.
+            # Do not provide a generic Payment Link fallback; it would not contain the assessment metadata needed to generate the personalised PDF.
             self.send_json(503, {"error": "checkout_unavailable"})

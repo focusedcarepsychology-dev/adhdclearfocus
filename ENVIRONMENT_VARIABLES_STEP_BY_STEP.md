@@ -111,11 +111,16 @@ Open these in your browser:
 - `https://www.adhdclearfocus.com/`
 - `https://www.adhdclearfocus.com/assessment.html`
 - `https://www.adhdclearfocus.com/workplace.html`
+- `https://www.adhdclearfocus.com/api/health`
 - `https://www.adhdclearfocus.com/api/webhook`
+
+The `/api/health` route should return JSON showing which environment variables are present or missing. It does **not** show the secret values. For the paid report to be ready, `ok_for_paid_report` should be `true`.
 
 The webhook route should show a simple JSON status message.
 
 For the workplace page, submit a test enquiry using your own email. If SendGrid is configured correctly, the enquiry should arrive at `focusedcarepsychology@gmail.com`. If SendGrid is not configured, the page opens a pre-filled email as a backup.
+
+For the paid PDF report, complete the assessment, enter your email, and click **Open secure checkout**. The button should only redirect to Stripe after the site creates a personalised Checkout Session. If Stripe or Vercel variables are missing, it should show an error and no payment should be taken.
 
 ---
 
@@ -149,3 +154,26 @@ In SendGrid:
 8. Redeploy in Vercel.
 
 Later, for better deliverability, authenticate the domain and use a domain email address.
+
+---
+
+## Step 11 — Safest way to test paid report delivery
+
+Use Stripe **test mode** before switching to live mode.
+
+1. In Stripe, create a test Product called `ADHDclearfocus Clarity Report`.
+2. Create a test Price for €49.
+3. Copy the test `price_...` ID into Vercel as `STRIPE_PRICE_ID`.
+4. Copy your `sk_test_...` secret key into Vercel as `STRIPE_SECRET_KEY`.
+5. Create a test webhook endpoint pointing to `https://www.adhdclearfocus.com/api/webhook`.
+6. Copy the test webhook signing secret into Vercel as `STRIPE_WEBHOOK_SECRET`.
+7. Redeploy.
+8. Complete the assessment and buy the report with Stripe test card `4242 4242 4242 4242`, any future expiry, any CVC.
+9. Confirm the customer email receives the PDF attachment.
+10. Confirm `focusedcarepsychology@gmail.com` receives the admin notification.
+
+Only after the test PDF arrives should you replace the Vercel variables with live `sk_live_...`, live `price_...`, and live `whsec_...` values.
+
+## Important safety rule
+
+Do not use a generic Stripe Payment Link for the personalised PDF report unless it collects and passes all 10 domain scores as metadata. The current package intentionally blocks payment if the personalised Checkout Session cannot be created. This prevents a customer paying without enough information to generate the report.

@@ -15,7 +15,10 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js',new Date());
     gtag('config','G-R8CLJRBNM0');
-    gtag('event','purchase',{currency:'EUR',value:49.00,transaction_id:Date.now()});
+    const params=new URLSearchParams(location.search);
+    if(params.get('session_id')){
+      gtag('event','purchase',{currency:'EUR',value:49.00,transaction_id:params.get('session_id')});
+    }
   </script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -118,13 +121,13 @@
   </svg>
 </div>
     <h1>Your report is on its way</h1>
-    <p class="sub">Your personalised AI-generated ADHDclearfocus report is being prepared and will arrive in your inbox within 2 hours. Check your spam folder if you don't see it.</p>
+    <p class="sub">Your personalised ADHDclearfocus report is being prepared and will arrive in your inbox shortly. Check your spam folder if you do not see it.</p>
   </div>
 
   <!-- WHAT HAPPENS NEXT -->
   <div class="card" style="animation-delay:0.1s">
     <h2>📋 What happens next</h2>
-    <div class="step"><div class="step-n">1</div><p><strong>Check your inbox</strong> — your 14-page report arrives within 2 hours. Check spam if you don't see it.</p></div>
+    <div class="step"><div class="step-n">1</div><p><strong>Check your inbox</strong> — your 14-page report should arrive shortly after payment. Check spam if you don't see it.</p></div>
     <div class="step"><div class="step-n">2</div><p><strong>Open page 3</strong> — your overall neurological profile and the single most important finding for you.</p></div>
     <div class="step"><div class="step-n">3</div><p><strong>Go to your top 2 dimensions</strong> — read the evidence-based strategies for your highest-elevated areas first.</p></div>
     <div class="step"><div class="step-n">4</div><p><strong>Follow your next steps</strong> — page 13 includes your formal assessment pathway if your profile warrants it.</p></div>
@@ -148,7 +151,7 @@
       <div class="upsell-original">€115 clinic rate</div>
       <div class="upsell-saving">ADHDclearfocus rate</div>
     </div>
-    <a href="https://buy.stripe.com/14A7sLd7c5Rs4aX2ybfYY00" class="btn-purple">
+    <a href="https://buy.stripe.com/14A7sL8wM0xcbzpgg9fYY00" class="btn-purple">
       Book My Report Review — €79 →
     </a>
     <a href="/app.html" class="btn-ghost">No thanks, I'll explore the platform first</a>

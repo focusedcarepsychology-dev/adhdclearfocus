@@ -41,7 +41,7 @@ An **educational** ADHD self-awareness and productivity platform at **adhdclearf
 
 ## 4. Business model & pricing (current, live copy)
 
-- **€49 Clarity Report** (one-off AI-generated PDF, delivered by webhook → SendGrid). Stripe link: https://buy.stripe.com/4gM7sL6oE2Fk32T8NHfYY01 (tax code txcd_10103000, inclusive).
+- **€49 Clarity Report** (one-off personalised PDF, delivered by Stripe Checkout Session → webhook → SendGrid). Important: do not use a generic Stripe Payment Link for this report, because the checkout session must include the assessment metadata needed to generate the PDF. Use `STRIPE_PRICE_ID` with `/api/create-checkout`.
 - **€79 30-minute review call** upsell. Stripe link: https://buy.stripe.com/14A7sL8wM0xcbzpgg9fYY00.
 - **Pro — Founding Member (waitlist until launch):** **€5/month billed yearly (€60/year), regular price €10/month**, founding rate locked for life, founding window closes **31 July 2026** (JS countdown and pricing.html now aligned). **7-day free trial on launch — no credit card required** (changed from 14 days on 2 July 2026 at owner instruction; consistent across index, app, pricing, insights).
 - 15% discount on formal ADHD/ASD assessments via registered clinical partners (codes generated on subscription).

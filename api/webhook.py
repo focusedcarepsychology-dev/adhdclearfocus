@@ -116,6 +116,10 @@ Return ONLY valid JSON (no markdown fences):
         return None
 
 def send_report_email(to_email, pdf_bytes, level, total_pct, pcts, ai_analysis, loyalty_code, age_group):
+    if not SENDGRID_API_KEY:
+        raise RuntimeError("sendgrid_not_configured")
+    if not FROM_EMAIL or "@" not in FROM_EMAIL:
+        raise RuntimeError("sendgrid_from_email_missing")
     pdf_b64 = base64.b64encode(pdf_bytes).decode("utf-8")
     subject = f"Your ADHDclearfocus Report — {level} Profile ({total_pct}%)"
 
@@ -170,7 +174,12 @@ def send_report_email(to_email, pdf_bytes, level, total_pct, pcts, ai_analysis, 
     conn = http.client.HTTPSConnection("api.sendgrid.com")
     headers = {"Authorization": f"Bearer {SENDGRID_API_KEY}", "Content-Type": "application/json"}
     conn.request("POST", "/v3/mail/send", json.dumps(payload), headers)
-    return conn.getresponse().status
+    resp = conn.getresponse()
+    raw = resp.read().decode("utf-8", errors="replace")
+    conn.close()
+    if resp.status not in (200, 201, 202):
+        raise RuntimeError(f"sendgrid_report_email_{resp.status}:{raw[:160]}")
+    return resp.status
 
 def notify_admin(customer_email, level, total_pct, pcts, loyalty_code, ai_analysis):
     domain_text = "\n".join([f"  {DOMAIN_LABELS.get(k,k)}: {v}%" for k,v in pcts.items()])
@@ -185,7 +194,8 @@ def notify_admin(customer_email, level, total_pct, pcts, loyalty_code, ai_analys
     conn = http.client.HTTPSConnection("api.sendgrid.com")
     headers = {"Authorization": f"Bearer {SENDGRID_API_KEY}", "Content-Type": "application/json"}
     conn.request("POST", "/v3/mail/send", json.dumps(payload), headers)
-    conn.getresponse()
+    conn.getresponse().read()
+    conn.close()
 
 class handler(BaseHTTPRequestHandler):
     def _verify_stripe_signature(self, body):
@@ -225,8 +235,24 @@ class handler(BaseHTTPRequestHandler):
 
             if event_type == "checkout.session.completed":
                 session = data.get("data", {}).get("object", {})
-                customer_email = session.get("customer_details", {}).get("email", "")
-                metadata = session.get("metadata", {})
+                metadata = session.get("metadata", {}) or {}
+
+                # Only fulfil the personalised ADHD report checkout created by /api/create-checkout.
+                # Other Stripe products, such as optional review calls, must not trigger a report.
+                if metadata.get("source") != "adhdclearfocus_screener":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"received": True, "ignored": "not_report_checkout"}).encode())
+                    return
+                if session.get("payment_status") and session.get("payment_status") != "paid":
+                    self.send_response(200)
+                    self.send_header("Content-Type", "application/json")
+                    self.end_headers()
+                    self.wfile.write(json.dumps({"received": True, "ignored": "not_paid"}).encode())
+                    return
+
+                customer_email = (session.get("customer_details", {}) or {}).get("email", "") or session.get("customer_email", "")
                 level      = metadata.get("level", "Elevated")
                 total_pct  = int(metadata.get("total_pct", 0))
                 asrs_flag  = metadata.get("asrs_flag", "false") == "true"
@@ -247,7 +273,10 @@ class handler(BaseHTTPRequestHandler):
                 if customer_email:
                     send_report_email(customer_email, pdf_bytes, level, total_pct,
                         pcts, ai_analysis, loyalty_code, age_group)
-                    notify_admin(customer_email, level, total_pct, pcts, loyalty_code, ai_analysis)
+                    try:
+                        notify_admin(customer_email, level, total_pct, pcts, loyalty_code, ai_analysis)
+                    except Exception as admin_exc:
+                        print(f"Admin notification failed: {admin_exc}")
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
