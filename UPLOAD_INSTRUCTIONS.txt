@@ -56,7 +56,7 @@ STEP 6 — WATCH VERCEL DEPLOY
 ───────────────────────────────────────────────────────────────
 STEP 7 — VERIFY IT'S THE NEW BUILD
 ───────────────────────────────────────────────────────────────
-Visit adhdclearfocus.com on your phone. Take the assessment.
+Visit adhdclearfocus.ie on your phone. Take the assessment.
   ✓ If you count 39 questions and see the friendly animated
     character in the hero → SUCCESS, new build is live.
   ✗ If you still see 35 questions → old build still cached,

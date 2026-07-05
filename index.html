@@ -8,13 +8,13 @@
   <meta property="og:title" content="ADHDclearfocus — Understand your ADHD brain completely" />
   <meta property="og:description" content="10 neurological dimensions. 39 validated questions. Your most complete ADHD profile — developed by the ADHDclearfocus clinical team." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://adhdclearfocus.com" />
-  <meta property="og:image" content="https://adhdclearfocus.com/logo.png" />
+  <meta property="og:url" content="https://adhdclearfocus.ie" />
+  <meta property="og:image" content="https://adhdclearfocus.ie/logo.png" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="ADHDclearfocus — Know your ADHD profile completely" />
   <meta name="twitter:description" content="10 neurological dimensions. 39 validated questions. Developed by the ADHDclearfocus clinical team." />
   <!-- Google tag (gtag.js) -->
-  <link rel="canonical" href="https://adhdclearfocus.com/"/>
+  <link rel="canonical" href="https://adhdclearfocus.ie/"/>
   
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
   <script>
@@ -28,6 +28,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet" />
   <link rel="manifest" href="/manifest.json"/>
   <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="/assets/brand.css"/>
   <link rel="apple-touch-icon" href="/logo.png" />
   <title>ADHDclearfocus — Understand your ADHD brain completely</title>
   <style>
@@ -71,8 +72,8 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "ADHDclearfocus",
-    "url": "https://adhdclearfocus.com",
-    "logo": "https://adhdclearfocus.com/logo.png",
+    "url": "https://adhdclearfocus.ie",
+    "logo": "https://adhdclearfocus.ie/logo.png",
     "description": "The most comprehensive ADHD profile assessment available online. 39 questions across 10 neurological dimensions. Evidence-based strategies, crisis tools, and community support.",
     "applicationCategory": "HealthApplication",
     "operatingSystem": "Web, iOS, Android",
@@ -95,7 +96,7 @@
     "provider": {
       "@type": "Organization",
       "name": "Focused Care Psychology Limited",
-      "url": "https://adhdclearfocus.com",
+      "url": "https://adhdclearfocus.ie",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Waterford",
@@ -178,22 +179,19 @@ const STRIPE_LINKS={
   reviewCall:"https://buy.stripe.com/14A7sL8wM0xcbzpgg9fYY00",
 };
 async function createCheckout(result,email,isTeen){
+  const activeButton=document.activeElement&&document.activeElement.tagName==='BUTTON'?document.activeElement:null;
+  const originalHtml=activeButton?activeButton.innerHTML:null;
   try{
+    if(activeButton){activeButton.innerHTML='⏳ Opening secure checkout...';activeButton.disabled=true;}
     const res=await fetch("/api/create-checkout",{method:"POST",headers:{"Content-Type":"application/json"},
       body:JSON.stringify({email,level:result.level,total_pct:result.totalPct,asrs_flag:result.asrsFlag,
         asrs_count:result.asrsCount,age_group:isTeen?"Adolescent":"Adult",pcts:result.pcts})});
     if(res.ok){const d=await res.json();if(d.url){window.location.href=d.url;return;}}
-  }catch(e){console.log("Checkout API unavailable");}
-  (()=>{
-                    const btn=document.activeElement;
-                    if(btn){const orig=btn.innerHTML;btn.innerHTML="⏳ Opening secure checkout...";btn.style.opacity="0.8";setTimeout(()=>{btn.innerHTML=orig;btn.style.opacity="1";},2000);}
-                    (()=>{
-                    const btn=document.activeElement;
-                    if(btn&&btn.tagName==="BUTTON"){const orig=btn.innerHTML;btn.innerHTML="⏳ Opening secure checkout...";btn.style.opacity="0.8";setTimeout(()=>{btn.innerHTML=orig;btn.style.opacity="1";},2000);}
-                    window.open(STRIPE_LINKS.report,"_blank");
-                  })();
-                  })();
+  }catch(e){console.log("Checkout API unavailable",e);}
+  finally{if(activeButton){activeButton.innerHTML=originalHtml;activeButton.disabled=false;}}
+  window.open(STRIPE_LINKS.report,"_blank","noopener,noreferrer");
 }
+
 
 // ── COLOURS ───────────────────────────────────────────────────────────────────
 const C={
@@ -1984,14 +1982,14 @@ function App(){
                 <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
                   {[
                     {label:"Share on Twitter/X",icon:"🐦",
-                      url:`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://adhdclearfocus.com`)}`},
+                      url:`https://twitter.com/intent/tweet?text=${encodeURIComponent(`I just completed the ADHDclearfocus 10-dimension ADHD profile — ${result.level} profile (${result.totalPct}%). If you've ever wondered about your own ADHD profile, try it: https://adhdclearfocus.ie`)}`},
                     {label:"Share on WhatsApp",icon:"💬",
-                      url:`https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://adhdclearfocus.com`)}`},
+                      url:`https://wa.me/?text=${encodeURIComponent(`I just completed the ADHDclearfocus ADHD profile assessment — ${result.level} profile (${result.totalPct}% overall). It measures 10 neurological dimensions. Worth trying: https://adhdclearfocus.ie`)}`},
                     {label:"Copy link",icon:"🔗",url:null},
                   ].map(s=>(
                     <button key={s.label} onClick={()=>{
                       if(s.url){window.open(s.url,"_blank");}
-                      else{navigator.clipboard?.writeText("https://adhdclearfocus.com");
+                      else{navigator.clipboard?.writeText("https://adhdclearfocus.ie");
                         alert("Link copied!");}
                     }} style={{background:C.navyMid,border:`1px solid ${C.border}`,
                       color:C.white,borderRadius:8,padding:"8px 14px",fontSize:12,
@@ -2029,5 +2027,6 @@ root.render(<App/>);
   </script>
 
 <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js').catch(()=>{});}</script>
+  <script defer src="/assets/ux.js"></script>
 </body>
 </html>

@@ -1,0 +1,46 @@
+/* ADHDclearfocus v2 shared design layer — no build step, safe to remove if needed. */
+:root{
+  --acf-navy:#0A1628;
+  --acf-navy-2:#112240;
+  --acf-card:#1A2E4A;
+  --acf-card-2:#223B5C;
+  --acf-border:#1E3A5F;
+  --acf-text:#FFFFFF;
+  --acf-muted:#8EA7C7;
+  --acf-teal:#00D4DD;
+  --acf-blue:#4FC3F7;
+  --acf-amber:#FFB347;
+  --acf-green:#00E676;
+  --acf-red:#FF5252;
+  --acf-purple:#A855F7;
+  --acf-radius:16px;
+  --acf-shadow:0 18px 50px rgba(0,0,0,.24);
+  --acf-focus:0 0 0 3px rgba(0,212,221,.32);
+  color-scheme:dark;
+}
+html{scroll-behavior:smooth}
+body{accent-color:var(--acf-teal)}
+::selection{background:rgba(0,212,221,.28);color:#fff}
+.skip-link{position:fixed;left:12px;top:12px;z-index:10000;transform:translateY(-140%);background:var(--acf-teal);color:#06101f;padding:10px 14px;border-radius:999px;font-weight:900;text-decoration:none;box-shadow:var(--acf-shadow)}
+.skip-link:focus{transform:translateY(0);outline:none;box-shadow:var(--acf-focus),var(--acf-shadow)}
+a,button,input,textarea,select{touch-action:manipulation}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:none!important;box-shadow:var(--acf-focus)!important;border-color:var(--acf-teal)!important}
+button:disabled{opacity:.65;cursor:not-allowed;filter:saturate(.7)}
+img{max-width:100%;height:auto}
+.main,.hero,.header,#root{position:relative}
+.acf-premium-card{background:linear-gradient(145deg,rgba(26,46,74,.96),rgba(13,27,42,.96));border:1px solid rgba(0,212,221,.18);border-radius:var(--acf-radius);box-shadow:var(--acf-shadow)}
+.acf-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(0,212,221,.32);background:rgba(0,212,221,.1);color:var(--acf-teal);padding:7px 12px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.02em}
+.acf-gradient-text{background:linear-gradient(135deg,var(--acf-teal),var(--acf-blue),#B8F7FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.acf-bottom-safe{padding-bottom:max(24px,env(safe-area-inset-bottom))}
+.acf-toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;background:rgba(26,46,74,.98);border:1px solid var(--acf-border);border-radius:12px;color:#fff;box-shadow:var(--acf-shadow);padding:11px 16px;font:700 13px/1.4 'DM Sans',system-ui,sans-serif;max-width:min(92vw,460px);text-align:center}
+.acf-progress-ring{inline-size:44px;block-size:44px;border-radius:50%;background:conic-gradient(var(--acf-teal) var(--value,0%),rgba(255,255,255,.12) 0);display:grid;place-items:center;position:relative}
+.acf-progress-ring::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--acf-card)}
+.acf-progress-ring>span{position:relative;z-index:1;font-size:11px;font-weight:900;color:#fff}
+@media(max-width:700px){
+  .header{padding-left:14px!important;padding-right:14px!important}
+  .main{padding-left:14px!important;padding-right:14px!important}
+  .quick-grid,.tools-grid,.rules{grid-template-columns:1fr!important}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+@media(prefers-contrast:more){:root{--acf-muted:#C7D8EC;--acf-border:#4FC3F7} .card,.feature-card,.article,.post-card{border-width:2px!important}}
+@media print{body{background:#fff!important;color:#111!important}.header,.nav,.bottom-nav,.trial-banner,#scroll-progress,.amb,.skip-link{display:none!important}a{color:#111!important}.main{max-width:none!important;padding:0!important}}

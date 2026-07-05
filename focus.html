@@ -7,6 +7,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <link rel="manifest" href="/manifest.json"/>
   <link rel="icon" type="image/png" href="/favicon.png"/>
+  <link rel="stylesheet" href="/assets/brand.css"/>
   <title>Focus Room — ADHDclearfocus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -62,7 +63,7 @@
   <div style="font-size:12px;color:#7B93B4" id="connectionStatus">🟡 Connecting...</div>
 </div>
 
-<div class="main">
+<div id="main-content" class="main">
 <div style="display:flex;justify-content:center;margin:12px 0" aria-hidden="true">
   <svg viewBox="0 0 200 90" width="180" height="81" xmlns="http://www.w3.org/2000/svg">
     <defs><linearGradient id="fg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00D4DD"/><stop offset="100%" stop-color="#4FC3F7"/></linearGradient><linearGradient id="fg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A855F7"/><stop offset="100%" stop-color="#C084FC"/></linearGradient></defs>
@@ -233,24 +234,26 @@
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
 // ── ROOM CODE ─────────────────────────────────────────────────────
-// Generate a 6-char alphanumeric room code and store in sessionStorage
-// so joining via URL param works
-// ── CLOUD ROOMS (JSONBin — same infrastructure as the community forum) ──
-// The room code IS a cloud record id, so it works across any devices anywhere.
-const ROOM_KEY = '$2a$10$NQ43uuryp/VqzrqLmQqn9OcgZT4W.KLmma5lrizDj8JnQbwDi6bm6';
-const ROOM_API = 'https://api.jsonbin.io/v3/b';
-let cloudRoom = null;          // bin id of the active cloud room
+// Rooms now sync through /api/focus-room. The JSONBin master key remains server-side.
+let cloudRoom = null;          // server-side room id
 let cloudSyncTimer = null;
 let myRoomCode = sessionStorage.getItem('myRoomCode') || '';
 document.getElementById('roomCodeDisplay').textContent = myRoomCode || 'creating…';
 
+async function focusRoomApi(payload){
+  const r = await fetch('/api/focus-room', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(payload)
+  });
+  if(!r.ok) throw new Error('focus_room_unavailable');
+  return await r.json();
+}
+
 async function createCloudRoom(){
   try{
-    const r = await fetch(ROOM_API, {method:'POST',
-      headers:{'Content-Type':'application/json','X-Master-Key':ROOM_KEY,'X-Bin-Name':'acf_focus_room'},
-      body: JSON.stringify({type:'acf_focus_room', created:Date.now(), peers:{}})});
-    const d = await r.json();
-    const id = d?.metadata?.id;
+    const d = await focusRoomApi({action:'create'});
+    const id = d && d.room_id;
     if(id){
       myRoomCode = id;
       sessionStorage.setItem('myRoomCode', id);
@@ -285,23 +288,13 @@ async function startCloudSync(roomId){
 async function cloudSyncOnce(){
   if(!cloudRoom) return;
   try{
-    const r = await fetch(ROOM_API + '/' + cloudRoom + '/latest',
-      {headers:{'X-Master-Key':ROOM_KEY,'X-Bin-Meta':'false'}});
-    const d = await r.json();
     const now = Date.now();
+    const task = document.getElementById('selfTaskDisplay').textContent || 'Working silently';
+    const d = await focusRoomApi({
+      action:'heartbeat', room_id:cloudRoom, peer_id:myId,
+      peer:{name:'Focus partner', task:task, struggle:myStruggleTs || 0, ts:now}
+    });
     const remote = (d && d.peers) ? d.peers : {};
-    // Prune stale peers (no update for 45s)
-    Object.keys(remote).forEach(id=>{ if(now - (remote[id].ts||0) > 45000) delete remote[id]; });
-    // Upsert self
-    remote[myId] = {
-      name:'Focus partner',
-      task: document.getElementById('selfTaskDisplay').textContent || 'Working silently',
-      struggle: myStruggleTs || 0,
-      ts: now
-    };
-    await fetch(ROOM_API + '/' + cloudRoom, {method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':ROOM_KEY},
-      body: JSON.stringify({type:'acf_focus_room', peers: remote})});
     // Reconcile remote peers into the existing message pipeline
     Object.keys(remote).forEach(id=>{
       if(id===myId) return;
@@ -315,13 +308,10 @@ async function cloudSyncOnce(){
         }
       }
     });
-    // Peers present locally but gone remotely → left
     Object.keys(peers).forEach(id=>{
       if(!remote[id]) handleMessage({type:'leave', from:id, room:currentRoom, data:{id}});
     });
-    if(!document.getElementById('connectionStatus').textContent.includes('Offline')){
-      updateRoomCount();
-    }
+    if(!document.getElementById('connectionStatus').textContent.includes('Offline')) updateRoomCount();
   }catch(e){}
 }
 
@@ -560,11 +550,7 @@ window.addEventListener('beforeunload', ()=>{
   announceLeave();
   if(cloudRoom){
     try{
-      // Best-effort removal; the 45s stale-prune covers anything missed
-      const payload = JSON.stringify({type:'acf_focus_room', peers: Object.fromEntries(
-        Object.entries(peers).map(([id,p])=>[id,{name:p.name,task:p.task,ts:p.ts}]))});
-      navigator.sendBeacon && fetch(ROOM_API + '/' + cloudRoom, {method:'PUT', keepalive:true,
-        headers:{'Content-Type':'application/json','X-Master-Key':ROOM_KEY}, body: payload});
+      navigator.sendBeacon && navigator.sendBeacon('/api/focus-room', new Blob([JSON.stringify({action:'leave',room_id:cloudRoom,peer_id:myId})], {type:'application/json'}));
     }catch(e){}
   }
 });
@@ -763,5 +749,6 @@ function setNoiseVolume(v){
 
 updateDisplay();
 </script>
+  <script defer src="/assets/ux.js"></script>
 </body>
 </html>

@@ -1,7 +1,94 @@
 {
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
+    "api/*.py": {
+      "runtime": "python3.12",
+      "maxDuration": 30
+    },
     "api/**/*.py": {
       "maxDuration": 30
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(favicon.png|logo.png|logo_sm.png|apple-touch-icon.png)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/auth",
+      "destination": "/api/auth.py"
+    },
+    {
+      "source": "/api/coach",
+      "destination": "/api/coach.py"
+    },
+    {
+      "source": "/api/create-checkout",
+      "destination": "/api/create-checkout.py"
+    },
+    {
+      "source": "/api/mailchimp-subscribe",
+      "destination": "/api/mailchimp-subscribe.py"
+    },
+    {
+      "source": "/api/webhook",
+      "destination": "/api/webhook.py"
+    },
+    {
+      "source": "/api/community",
+      "destination": "/api/community.py"
+    },
+    {
+      "source": "/api/focus-room",
+      "destination": "/api/focus-room.py"
+    }
+  ]
 }

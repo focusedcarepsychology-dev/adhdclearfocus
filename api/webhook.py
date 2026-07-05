@@ -30,7 +30,7 @@ def env(*names, default=""):
 SENDGRID_API_KEY  = env("SENDGRID_API_KEY")
 ANTHROPIC_API_KEY = env("ANTHROPIC_API_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
-FROM_EMAIL        = "hello@adhdclearfocus.com"
+FROM_EMAIL        = env("SENDGRID_FROM_EMAIL", "FROM_EMAIL", default="hello@adhdclearfocus.ie")
 FROM_NAME         = "ADHDclearfocus"
 ADMIN_EMAIL       = env("ADMIN_EMAIL", default="conalldonegan@outlook.com")
 
@@ -155,7 +155,7 @@ def send_report_email(to_email, pdf_bytes, level, total_pct, pcts, ai_analysis, 
 </div>
 <div style="border-top:1px solid #1E3A5F;padding-top:16px;margin-top:16px;">
 <p style="font-size:10px;color:#7B93B4;line-height:1.6;margin:0;">This report is for educational and self-awareness purposes only. It does not constitute a clinical diagnosis. If in crisis contact Samaritans free on <strong style="color:#fff;">116 123</strong> (Ireland and UK, 24/7).</p>
-<p style="font-size:10px;color:#7B93B4;margin:8px 0 0;">ADHDclearfocus · Focused Care Psychology Limited · Waterford, Ireland · <a href="https://adhdclearfocus.com" style="color:#00D4DD;">adhdclearfocus.com</a></p>
+<p style="font-size:10px;color:#7B93B4;margin:8px 0 0;">ADHDclearfocus · Focused Care Psychology Limited · Waterford, Ireland · <a href="https://adhdclearfocus.ie" style="color:#00D4DD;">adhdclearfocus.ie</a></p>
 </div>
 </div></div>"""
 

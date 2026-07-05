@@ -25,4 +25,4 @@ Allow: /
 User-agent: Googlebot
 Allow: /
 
-Sitemap: https://adhdclearfocus.com/sitemap.xml
+Sitemap: https://adhdclearfocus.ie/sitemap.xml

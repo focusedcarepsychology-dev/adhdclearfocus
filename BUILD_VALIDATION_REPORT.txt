@@ -1,0 +1,22 @@
+# Validation summary
+
+- OK: index.html (128489 bytes)
+- OK: app.html (49476 bytes)
+- OK: resources.html (30534 bytes)
+- OK: strategies.html (99409 bytes)
+- OK: welcome.html (12838 bytes)
+- OK: api/auth.py (10305 bytes)
+- OK: api/coach.py (3702 bytes)
+- OK: api/create-checkout.py (4465 bytes)
+- OK: api/generate_report.py (92602 bytes)
+- OK: api/webhook.py (15274 bytes)
+- OK: requirements.txt (17 bytes)
+- OK: .python-version (5 bytes)
+- OK: vercel.json (1478 bytes)
+- OK: robots.txt (342 bytes)
+- OK: sitemap.xml (2015 bytes)
+
+## Important notes
+- This package was assembled locally and not deployed to Vercel.
+- External services still require Vercel environment variables: Stripe, SendGrid, Anthropic, Mailchimp, JSONBin/Auth.
+- Treat any old JSONBin keys as exposed and rotate them before production use.

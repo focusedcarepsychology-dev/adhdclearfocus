@@ -7,6 +7,7 @@
   <meta name="description" content="ADHDclearfocus community — ask questions, share experiences, connect with others who understand ADHD."/>
   <link rel="manifest" href="/manifest.json"/>
   <link rel="icon" type="image/png" href="/favicon.png"/>
+  <link rel="stylesheet" href="/assets/brand.css"/>
   <title>Community — ADHDclearfocus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
@@ -131,7 +132,7 @@
   </div>
 </div>
 
-<div class="main">
+<div id="main-content" class="main">
 
   <div class="crisis-bar">
     <strong style="color:#FF5252">In crisis?</strong> This forum is not monitored in real time. Contact Samaritans free on <strong style="color:#fff">116 123</strong> (24/7) or <a href="/crisis.html" style="color:var(--teal);font-weight:700">open Crisis Mode →</a>
@@ -160,10 +161,9 @@
     <button onclick="signOut()">Sign out</button>
   </div>
 
-  <!-- CLOUD INFO (shown only in local mode) -->
+  <!-- CLOUD INFO (shown only when server sync is not configured) -->
   <div id="cloudInfo" class="cloud-info" style="display:none">
-    <strong style="color:#fff">📱 Local mode:</strong> Your posts are saved on this device. To enable cross-device syncing for all community members, configure JSONBin.io (free) in community.html. 
-    <a href="https://jsonbin.io" target="_blank" rel="noopener" style="color:var(--teal)">Sign up free at jsonbin.io →</a>
+    <strong style="color:#fff">📱 Local mode:</strong> Posts are saved on this device because community cloud sync is not configured. Add COMMUNITY_BIN_ID and COMMUNITY_BIN_KEY in Vercel to enable cross-device syncing without exposing secrets.
   </div>
 
   <!-- NEW POST BOX -->
@@ -215,41 +215,13 @@
 <script>
 if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
 
-// ── JSONBIN CONFIG ────────────────────────────────────────────────
-// FREE cross-device storage. Steps:
-// 1. Go to jsonbin.io → create free account
-// 2. Click 'New Bin' → paste {} → Save
-// 3. Copy the BIN ID from the URL
-// 4. Go to API Keys → copy Master Key
-// 5. Paste both below — redeploy — community is now cross-device
-const BIN_ID  = '6a38525eda38895dfee84b8a';  // paste your bin ID here e.g. '6656abc...'
-const BIN_KEY = '$2a$10$NQ43uuryp/VqzrqLmQqn9OcgZT4W.KLmma5lrizDj8JnQbwDi6bm6';  // paste your master key here e.g. '$2b$10$...'
-const CLOUD   = !!(BIN_ID && BIN_KEY);
+// ── COMMUNITY STORAGE CONFIG ─────────────────────────────────────
+// Cloud sync now goes through /api/community so JSONBin keys are never exposed
+// in the browser. If env vars are missing, the page falls back to local mode.
+const CLOUD = true;
 
 const LS_KEY = 'acf_community_v3';
-let currentUser = null, selTagVal = '', curFilter = 'all', posts = [];
-
-// ── Real accounts (acfAuth) ──────────────────────────────────────
-function applyAuthState(){
-  if(window.acfAuth&&acfAuth.isLoggedIn){
-    localStorage.setItem('acf_email',acfAuth.email);
-    login(acfAuth.email,true);
-    var nd=document.getElementById('userNameDisplay');
-    if(nd)nd.textContent=acfAuth.name||acfAuth.email.split('@')[0];
-  }
-}
-if(window.acfAuth){
-  acfAuth.onChange(function(){ if(acfAuth.isLoggedIn)applyAuthState(); else signOutLocal(); });
-  document.addEventListener('DOMContentLoaded',applyAuthState);
-  setTimeout(applyAuthState,0);
-}
-function signOutLocal(){
-  localStorage.removeItem('acf_email');
-  currentUser=null;
-  var w=document.getElementById('signinWall'); if(w)w.style.display='block';
-  var u=document.getElementById('userBar'); if(u)u.style.display='none';
-  var n=document.getElementById('newPostBox'); if(n)n.style.display='none';
-}
+let currentUser = null, selTagVal = '', curFilter = 'all', posts = [], cloudAvailable = false;
 
 // ── SEED POSTS ────────────────────────────────────────────────────
 const SEEDS = [
@@ -292,7 +264,6 @@ function init(){
   const email = localStorage.getItem('acf_email')||'';
   if(email) login(email, false);
   else document.getElementById('signinWall').style.display = 'block';
-  if(!CLOUD) document.getElementById('cloudInfo').style.display = 'block';
   loadPosts();
 }
 
@@ -333,17 +304,26 @@ function signOut(){
 async function loadPosts(){
   document.getElementById('loadingEl').style.display='block';
   try{
-    if(CLOUD){
-      const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
-        {headers:{'X-Master-Key':BIN_KEY,'X-Bin-Meta':false}});
-      if(r.ok){
-        const d=await r.json();
-        const cloud=Array.isArray(d)?d:(d.posts||[]);
-        posts=[...SEEDS,...cloud];
-        setSyncBadge(true);
-      } else { posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
-    } else { posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
-  }catch(e){ posts=[...SEEDS,...localPosts()]; setSyncBadge(false); }
+    const r = await fetch('/api/community?action=get_posts', {headers:{'Accept':'application/json'}});
+    if(r.ok){
+      const d = await r.json();
+      const cloud = Array.isArray(d.posts) ? d.posts : [];
+      posts=[...SEEDS,...cloud];
+      cloudAvailable = true;
+      document.getElementById('cloudInfo').style.display = 'none';
+      setSyncBadge(true);
+    } else {
+      posts=[...SEEDS,...localPosts()];
+      cloudAvailable = false;
+      document.getElementById('cloudInfo').style.display = 'block';
+      setSyncBadge(false);
+    }
+  }catch(e){
+    posts=[...SEEDS,...localPosts()];
+    cloudAvailable = false;
+    document.getElementById('cloudInfo').style.display = 'block';
+    setSyncBadge(false);
+  }
   document.getElementById('loadingEl').style.display='none';
   renderPosts();
 }
@@ -354,26 +334,29 @@ function localPosts(){
 
 function saveLocal(post){
   try{
-    const ex=localPosts(); ex.unshift(post);
+    const ex=localPosts();
+    const idx = ex.findIndex(p=>p.id===post.id);
+    if(idx>=0) ex[idx]=post; else ex.unshift(post);
     localStorage.setItem(LS_KEY,JSON.stringify(ex.slice(0,150)));
   }catch(e){}
 }
 
-async function saveCloud(post){
-  if(!CLOUD)return false;
+async function saveCloud(post, action){
   try{
-    const r=await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`,
-      {headers:{'X-Master-Key':BIN_KEY,'X-Bin-Meta':false}});
-    const d=await r.json();
-    const ex=Array.isArray(d)?d:(d.posts||[]);
-    ex.unshift(post);
-    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`,{
-      method:'PUT',
-      headers:{'Content-Type':'application/json','X-Master-Key':BIN_KEY},
-      body:JSON.stringify(ex.slice(0,200))
+    const r = await fetch('/api/community',{
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({action:action||'add_post',post})
     });
-    return true;
-  }catch(e){return false;}
+    cloudAvailable = r.ok;
+    setSyncBadge(r.ok);
+    if(!r.ok) document.getElementById('cloudInfo').style.display = 'block';
+    return r.ok;
+  }catch(e){
+    cloudAvailable = false;
+    setSyncBadge(false);
+    document.getElementById('cloudInfo').style.display = 'block';
+    return false;
+  }
 }
 
 function setSyncBadge(online){
@@ -431,6 +414,8 @@ function submitReply(postId){
   post.replies.push(reply);
   const lp=localPosts();const lpost=lp.find(p=>p.id===postId);
   if(lpost){lpost.replies.push(reply);localStorage.setItem(LS_KEY,JSON.stringify(lp));}
+  saveLocal(post);
+  saveCloud(post,'update_post');
   renderPosts();
   setTimeout(()=>{const el=document.getElementById('rep_'+postId);if(el)el.classList.add('open');},50);
 }
@@ -440,6 +425,8 @@ function toggleLike(postId){
   const post=posts.find(p=>p.id===postId);if(!post)return;
   if(liked){post.likes=Math.max(0,post.likes-1);localStorage.removeItem(k);}
   else{post.likes++;localStorage.setItem(k,'1');}
+  saveLocal(post);
+  saveCloud(post,'update_post');
   renderPosts();
 }
 
@@ -509,5 +496,6 @@ function showToast(msg){
 
 init();
 </script>
+  <script defer src="/assets/ux.js"></script>
 </body>
 </html>
