@@ -1,6 +1,6 @@
-// ADHDclearfocus Service Worker v101 — safe mode
+// ADHDclearfocus Service Worker v102 — safe mode
 // This version intentionally does NOT cache index.html after the previous blank-screen issue.
-const CACHE_NAME = 'adhdclearfocus-safe-v101';
+const CACHE_NAME = 'adhdclearfocus-safe-v102';
 const OFFLINE_PAGES = ['/crisis.html','/offline.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
 
 self.addEventListener('install', event => {
