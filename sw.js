@@ -1,6 +1,6 @@
 // ADHDclearfocus Service Worker v3
-const CACHE_NAME = 'adhdclearfocus-v3';
-const OFFLINE_PAGES = ['/crisis.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
+const CACHE_NAME = 'adhdclearfocus-v4-blankfix';
+const OFFLINE_PAGES = ['/','/index.html','/crisis.html','/strategies.html','/resources.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(OFFLINE_PAGES)).catch((err) => console.log('Cache install error:', err)));
