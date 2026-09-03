@@ -1,0 +1,2 @@
+ADHDclearfocus SEO/growth release v2
+Includes PWA cleanup, 45 canonical URLs, content clusters, dynamic OG cards, email funnel, internal linking, FCP authority links, and CI hardening.
