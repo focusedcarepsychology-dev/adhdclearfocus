@@ -165,6 +165,10 @@
     {
       "source": "/api/health",
       "destination": "/api/health.py"
+    },
+    {
+      "source": "/api/og",
+      "destination": "/api/og.py"
     }
   ],
   "redirects": [
