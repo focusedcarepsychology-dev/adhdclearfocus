@@ -38,7 +38,17 @@ for url in locs:
         errors.append(f"legacy .html internal link: {url}")
     if "application/ld+json" not in c:
         errors.append(f"missing structured data: {url}")
+    og=re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)',c,re.I)
+    if not og:
+        og=re.search(r'<meta[^>]+content=["\']([^"\']+)["\'][^>]+property=["\']og:image["\']',c,re.I)
+    if not og or not og.group(1).startswith("https://www.adhdclearfocus.com/"):
+        errors.append(f"missing/non-canonical og:image: {url}")
+    if "fonts.googleapis.com" in c or "fonts.gstatic.com" in c:
+        errors.append(f"external Google font dependency on indexable page: {url}")
     if '"@type":"Article"' in c or '"@type": "Article"' in c:
+        dp=re.findall(r'"datePublished"\s*:\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})"',c)
+        if not dp:
+            errors.append(f"Article missing datePublished: {url}")
         dm=re.findall(r'"dateModified"\s*:\s*"([0-9]{4}-[0-9]{2}-[0-9]{2})"',c)
         if not dm:
             errors.append(f"Article missing dateModified: {url}")
@@ -49,6 +59,12 @@ for url in locs:
                     errors.append(f"Article review older than 330 days ({age}): {url}")
             except ValueError:
                 errors.append(f"Invalid dateModified: {url}")
+
+# PWA routes should use canonical extensionless URLs and must not preserve stale HTML copies.
+for p in ("manifest.json","sw.js"):
+    pc=(ROOT/p).read_text(encoding="utf-8",errors="replace")
+    if ".html" in pc:
+        errors.append(f"legacy .html route remains in {p}")
 
 # Utility routes should not enter the sitemap.
 for p in ("focus","app","thank-you","offline","welcome"):
