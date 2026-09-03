@@ -1,15 +1,22 @@
-// ADHDclearfocus Service Worker v106 — safe mode
-// This version intentionally does NOT cache index.html after the previous blank-screen issue.
-const CACHE_NAME = 'adhdclearfocus-safe-v106';
-const OFFLINE_PAGES = ['/crisis.html','/offline.html','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
+// ADHDclearfocus Service Worker v107 — SEO-safe navigation mode
+// HTML navigations are always network-first and are never written to Cache Storage.
+// Only a tiny set of static/offline assets are cached for resilience.
+const CACHE_NAME = 'adhdclearfocus-safe-v107';
+const STATIC_ASSETS = ['/offline','/crisis','/manifest.json','/favicon.png','/logo.png','/logo_sm.png'];
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(OFFLINE_PAGES)).catch(() => {}));
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(STATIC_ASSETS))
+      .catch(() => {})
+  );
   self.skipWaiting();
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))));
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))))
+  );
   self.clients.claim();
 });
 
@@ -18,22 +25,35 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Never cache the home page or assessment page; always take fresh files from Vercel.
-  if (url.pathname === '/' || url.pathname === '/index.html' || url.pathname === '/assessment.html') {
-    event.respondWith(fetch(event.request, { cache: 'no-store' }).catch(() => caches.match('/offline.html').then(r => r || caches.match('/crisis.html'))));
-    return;
-  }
-
   if (url.pathname.startsWith('/api/')) {
-    event.respondWith(fetch(event.request).catch(() => new Response(JSON.stringify({ error: 'offline', message: 'You appear to be offline. Crisis tools are still available.' }), { headers: { 'Content-Type': 'application/json' } })));
+    event.respondWith(
+      fetch(event.request).catch(() =>
+        new Response(JSON.stringify({error:'offline',message:'You appear to be offline.'}), {
+          status: 503,
+          headers: {'Content-Type':'application/json','Cache-Control':'no-store'}
+        })
+      )
+    );
     return;
   }
 
-  event.respondWith(fetch(event.request, { cache: 'no-store' }).then(response => {
-    if (response && response.status === 200) {
-      const clone = response.clone();
-      caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone)).catch(() => {});
-    }
-    return response;
-  }).catch(() => caches.match(event.request).then(cached => cached || caches.match('/offline.html') || caches.match('/crisis.html'))));
+  // Never serve cached HTML to normal page navigations.
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request, {cache:'no-store'})
+        .catch(() => caches.match('/offline').then(r => r || caches.match('/crisis')))
+    );
+    return;
+  }
+
+  // Static assets: network first, with a cache fallback.
+  event.respondWith(
+    fetch(event.request).then(response => {
+      if (response && response.ok && ['style','script','image','font','manifest'].includes(event.request.destination)) {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone)).catch(() => {});
+      }
+      return response;
+    }).catch(() => caches.match(event.request))
+  );
 });
