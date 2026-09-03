@@ -109,6 +109,24 @@
           "value": "public, max-age=3600"
         }
       ]
+    },
+    {
+      "source": "/offline",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/welcome",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
     }
   ],
   "rewrites": [
