@@ -7,12 +7,20 @@ on:
       - 'sitemap.xml'
       - 'robots.txt'
       - 'vercel.json'
+      - 'manifest.json'
+      - 'sw.js'
+      - 'llms.txt'
+      - 'assets/**'
+      - 'api/**'
       - 'scripts/seo_quality_gate.py'
   workflow_dispatch:
   schedule:
     - cron: '17 8 1 * *'
 permissions:
   contents: read
+concurrency:
+  group: seo-quality-main
+  cancel-in-progress: true
 jobs:
   audit:
     runs-on: ubuntu-latest
