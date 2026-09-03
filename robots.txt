@@ -17,3 +17,5 @@ User-agent: ChatGPT-User
 Allow: /
 
 Sitemap: https://www.adhdclearfocus.com/sitemap.xml
+
+# SEO release 2026-09-03
