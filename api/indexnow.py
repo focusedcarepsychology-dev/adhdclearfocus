@@ -39,6 +39,8 @@ URLS = [
   "https://www.adhdclearfocus.com/adhd-body-doubling",
   "https://www.adhdclearfocus.com/adhd-focus-timer",
   "https://www.adhdclearfocus.com/adhd-workplace-adjustments",
+  "https://www.adhdclearfocus.com/adhd-assessment-ireland",
+  "https://www.adhdclearfocus.com/adhd-assessment-uk",
   "https://www.adhdclearfocus.com/employers/adhd-awareness-training",
   "https://www.adhdclearfocus.com/employers/adhd-manager-training",
   "https://www.adhdclearfocus.com/employers/adhd-workplace-adjustments",
