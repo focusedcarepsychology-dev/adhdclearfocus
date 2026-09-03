@@ -55,6 +55,42 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/focus",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/app",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/thank-you",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        }
+      ]
+    },
+    {
+      "source": "/(robots.txt|sitemap.xml|llms.txt)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600"
+        }
+      ]
     }
   ],
   "rewrites": [
@@ -93,6 +129,33 @@
     {
       "source": "/api/health",
       "destination": "/api/health.py"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/adhd-test",
+      "destination": "/assessment",
+      "permanent": true
+    },
+    {
+      "source": "/adhd-screener",
+      "destination": "/assessment",
+      "permanent": true
+    },
+    {
+      "source": "/focus-timer",
+      "destination": "/adhd-focus-timer",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/research",
+      "destination": "/resources",
+      "permanent": true
     }
   ]
 }
