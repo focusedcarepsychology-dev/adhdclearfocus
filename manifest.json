@@ -1,22 +1,58 @@
 {
   "name": "ADHDclearfocus",
   "short_name": "Clearfocus",
-  "description": "Educational ADHD self-awareness and productivity tools.",
-  "start_url": "/app.html",
+  "description": "Free educational ADHD self-assessment, evidence-led guides and ADHD-friendly focus tools.",
+  "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0A1628",
   "theme_color": "#0A1628",
-  "categories": ["health", "productivity", "education"],
+  "categories": [
+    "health",
+    "productivity",
+    "education"
+  ],
   "icons": [
-    {"src": "/favicon.png", "sizes": "32x32", "type": "image/png"},
-    {"src": "/logo_sm.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-    {"src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo_sm.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ],
   "shortcuts": [
-    {"name": "Focus Room", "url": "/focus.html", "description": "Start a body-doubling focus session"},
-    {"name": "Crisis Mode", "url": "/crisis.html", "description": "Open grounding and support tools"},
-    {"name": "Strategies", "url": "/strategies.html", "description": "Browse ADHD-friendly strategies"}
-  ]
+    {
+      "name": "Free ADHD self-assessment",
+      "url": "/assessment",
+      "description": "Start the 39-question educational ADHD profile"
+    },
+    {
+      "name": "ADHD Focus Timer",
+      "url": "/adhd-focus-timer",
+      "description": "Open the free ADHD-friendly focus timer"
+    },
+    {
+      "name": "Crisis Mode",
+      "url": "/crisis",
+      "description": "Open grounding and support signposting"
+    },
+    {
+      "name": "ADHD Strategies",
+      "url": "/strategies",
+      "description": "Browse evidence-informed ADHD strategies"
+    }
+  ],
+  "id": "/"
 }
