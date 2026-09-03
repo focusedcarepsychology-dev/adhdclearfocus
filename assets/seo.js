@@ -4,14 +4,17 @@
   async function subscribe(form){
     const email=(form.querySelector('input[type="email"]')?.value||'').trim();
     const msg=form.querySelector('[data-newsletter-msg]');
+    const consent=!!form.querySelector('input[name="consent"]:checked');
     if(!email || !email.includes('@')){if(msg)msg.textContent='Enter a valid email address.';return;}
+    if(!consent){if(msg)msg.textContent='Please confirm you want to receive ADHDclearfocus emails.';return;}
     const button=form.querySelector('button');
     if(button)button.disabled=true;
     if(msg)msg.textContent='Saving…';
     try{
       const page=location.pathname.replace(/^\//,'')||'home';
-      const res=await fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,tags:['seo-organic','adhd-toolkit',page.slice(0,70)]})});
-      if(!res.ok && res.status!==202)throw new Error('subscribe');
+      const res=await fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,consent:true,tags:['seo-organic','adhd-toolkit',page.slice(0,70)]})});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok || !data.success)throw new Error(data.error||'subscribe');
       if(msg)msg.textContent='You’re in. We’ll send practical ADHDclearfocus resources, not daily noise.';
       form.reset();
       track('seo_email_signup',{page:location.pathname});
