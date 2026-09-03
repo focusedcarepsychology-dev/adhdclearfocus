@@ -52,6 +52,7 @@ TITLES = {
     "about": ("ABOUT ADHDCLEARFOCUS", "EDUCATIONAL ADHD TOOLS WITH CLEAR CLINICAL BOUNDARIES"),
     "methodology": ("HOW THE SELF-ASSESSMENT WORKS", "WHAT IT CAN AND CANNOT TELL YOU"),
     "editorial-policy": ("EDITORIAL POLICY", "EVIDENCE, REVIEW, CORRECTIONS AND TRANSPARENCY"),
+    "legal": ("PRIVACY, LEGAL & EDUCATIONAL SCOPE", "HOW ADHDCLEARFOCUS HANDLES DATA AND CLINICAL BOUNDARIES"),
     "pricing": ("ADHDCLEARFOCUS PRICING", "FREE TOOLS WITH OPTIONAL REPORTS AND SUPPORT"),
     "community": ("ADHD COMMUNITY", "QUESTIONS, EXPERIENCES AND PEER SUPPORT"),
     "crisis": ("ADHD CRISIS MODE", "GROUNDING TOOLS AND SUPPORT SIGNPOSTING"),
@@ -138,8 +139,11 @@ def png_bytes(slug):
     rect(buf,1010,330,1199,600,(43,37,94))
     text(buf,"ADHDCLEARFOCUS",70,105,6,TEAL)
     y=210
-    for line in wrap_words(title,26):
-        text(buf,line,70,y,10,WHITE); y+=92
+    for line in wrap_words(title,28):
+        n=len(line)
+        scale=10 if n<=17 else 8 if n<=20 else 7 if n<=24 else 6
+        text(buf,line,70,y,scale,WHITE)
+        y += 7*scale + 24
     for line in wrap_words(subtitle,44):
         text(buf,line,72,500,4,MUTED); break
     text(buf,"ADHDCLEARFOCUS.COM",72,565,4,(6,16,31))
