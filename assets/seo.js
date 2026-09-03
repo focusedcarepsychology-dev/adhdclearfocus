@@ -1,6 +1,16 @@
 (function(){
   'use strict';
   function track(name,params){try{if(typeof window.gtag==='function')window.gtag('event',name,params||{});}catch(e){}}
+  function ensureConsent(){
+    document.querySelectorAll('[data-seo-newsletter]').forEach(function(form){
+      if(form.querySelector('input[name="consent"]')) return;
+      const small=form.querySelector('[data-newsletter-msg]');
+      const label=document.createElement('label');
+      label.className='newsletter-consent';
+      label.innerHTML='<input type="checkbox" name="consent" required/> <span>I agree to receive ADHDclearfocus educational emails. I can unsubscribe at any time. <a href="/legal">Privacy information</a>.</span>';
+      if(small) form.insertBefore(label,small); else form.appendChild(label);
+    });
+  }
   async function subscribe(form){
     const email=(form.querySelector('input[type="email"]')?.value||'').trim();
     const msg=form.querySelector('[data-newsletter-msg]');
@@ -31,4 +41,5 @@
     const a=e.target.closest&&e.target.closest('[data-share]');
     if(a)track('seo_share_click',{network:a.getAttribute('data-share'),page:location.pathname});
   },{passive:true});
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ensureConsent); else ensureConsent();
 })();
