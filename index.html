@@ -21,10 +21,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  
-  <title>Free ADHD Self-Assessment & Evidence-Based Tools | ADHDclearfocus</title>
+<title>Free ADHD Self-Assessment & Evidence-Based Tools | ADHDclearfocus</title>
   <style>
     :root{--navy:#0A1628;--mid:#112240;--card:#1A2E4A;--border:#1E3A5F;--teal:#00D4DD;--blue:#4FC3F7;--amber:#FFB347;--green:#00E676;--purple:#A855F7;--muted:#8EA7C6;--text:#fff;--soft:#A8C4D8}
     *{box-sizing:border-box;margin:0;padding:0}
@@ -54,16 +51,28 @@
     @media(max-width:850px){.hero-inner,.split{grid-template-columns:1fr}.hero-inner{padding:42px 0 34px}.hero-card{order:-1}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.links a:not(.cta){display:none}.nav{height:58px}h1{letter-spacing:-1.6px}.bar-row{grid-template-columns:110px 1fr 42px}.section{padding:34px 0}.emergency{left:14px;right:14px;text-align:center}.logo-big{width:86px;height:86px;border-radius:22px}}
   </style>
   <script>
-    // Emergency cache repair: the previous React homepage could blank after loading.
-    // This static homepage does not rely on React. It also clears old service-worker caches once.
+    // One-time cleanup for legacy caches from the previous homepage, then keep the
+    // current SEO-safe service worker registered for offline crisis/static assets.
     (function(){
       try{
-        var key='acf_static_home_cache_repair_v2';
-        if(!localStorage.getItem(key)){
+        var key='acf_static_home_cache_repair_v3';
+        var cleanup = !localStorage.getItem(key);
+        if(cleanup){
           localStorage.setItem(key,'1');
-          if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});});}
-          if(window.caches){caches.keys().then(function(keys){keys.forEach(function(k){caches.delete(k);});});}
-          document.addEventListener('DOMContentLoaded',function(){var n=document.getElementById('cache-note'); if(n)n.classList.add('show');});
+          if(window.caches){
+            caches.keys().then(function(keys){
+              return Promise.all(keys.filter(function(k){return k!=='adhdclearfocus-safe-v107';}).map(function(k){return caches.delete(k);}));
+            }).catch(function(){});
+          }
+          document.addEventListener('DOMContentLoaded',function(){
+            var n=document.getElementById('cache-note');
+            if(n)n.classList.add('show');
+          });
+        }
+        if('serviceWorker' in navigator){
+          window.addEventListener('load',function(){
+            navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(){});
+          });
         }
       }catch(e){}
     })();
