@@ -169,6 +169,28 @@
   ],
   "redirects": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "adhdclearfocus.ie"
+        }
+      ],
+      "destination": "https://www.adhdclearfocus.com/ie",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "adhdclearfocus.ie"
+        }
+      ],
+      "destination": "https://www.adhdclearfocus.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/adhd-test",
       "destination": "/assessment",
       "permanent": true
