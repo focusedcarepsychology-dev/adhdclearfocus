@@ -9,10 +9,30 @@ jobs:
   discover:
     runs-on: ubuntu-latest
     steps:
-      - name: Check canonical sitemap
+      - name: Fetch canonical sitemap
         run: |
           curl --fail --retry 3 --silent --show-error https://www.adhdclearfocus.com/sitemap.xml -o sitemap.xml
           grep -q "https://www.adhdclearfocus.com/" sitemap.xml
+      - name: Check every canonical URL is live
+        run: |
+          python - <<'PY'
+          import re, urllib.request, sys
+          xml=open("sitemap.xml",encoding="utf-8").read()
+          urls=re.findall(r"<loc>(https://www\.adhdclearfocus\.com[^<]+)</loc>",xml)
+          errors=[]
+          for url in urls:
+              req=urllib.request.Request(url,headers={"User-Agent":"ADHDclearfocus-SEO-monitor/1.0"})
+              try:
+                  with urllib.request.urlopen(req,timeout=20) as r:
+                      if r.status != 200:
+                          errors.append(f"{url}: HTTP {r.status}")
+              except Exception as exc:
+                  errors.append(f"{url}: {exc}")
+          if errors:
+              print("\n".join(errors))
+              sys.exit(1)
+          print(f"Live crawl passed: {len(urls)} canonical URLs.")
+          PY
       - name: Submit canonical URLs to IndexNow
         run: |
           curl --fail --retry 2 --silent --show-error https://www.adhdclearfocus.com/api/indexnow
