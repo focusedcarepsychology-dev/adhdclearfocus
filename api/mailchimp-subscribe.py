@@ -22,8 +22,9 @@ def env(*names, default=""):
 
 
 MAILCHIMP_API_KEY = env("MAILCHIMP_API_KEY")
-MAILCHIMP_LIST_ID = env("MAILCHIMP_LIST_ID", default="3f6c1e163c")
+MAILCHIMP_LIST_ID = env("MAILCHIMP_LIST_ID", default="")
 MAILCHIMP_SERVER = env("MAILCHIMP_SERVER", default=(MAILCHIMP_API_KEY.split("-")[-1] if "-" in MAILCHIMP_API_KEY else "us13"))
+SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 
 
 class handler(BaseHTTPRequestHandler):
@@ -57,30 +58,51 @@ class handler(BaseHTTPRequestHandler):
             if not email or "@" not in email or "." not in email:
                 self._respond(400, {"error": "invalid_email"})
                 return
-            if not MAILCHIMP_API_KEY or not MAILCHIMP_LIST_ID:
-                self._respond(202, {"success": True, "configured": False})
+            consent = bool(data.get("consent"))
+            if not consent:
+                self._respond(400, {"success": False, "error": "consent_required"})
                 return
             tags = [str(t)[:80] for t in tags[:12]] if isinstance(tags, list) else []
             if not isinstance(merge_fields, dict):
                 merge_fields = {}
-            payload = json.dumps({
-                "email_address": email,
-                "status_if_new": "subscribed",
-                "status": "subscribed",
-                "tags": tags,
-                "merge_fields": {str(k)[:10]: str(v)[:255] for k, v in merge_fields.items()},
-            })
-            subscriber_hash = hashlib.md5(email.encode()).hexdigest()
-            auth = base64.b64encode(f"anystring:{MAILCHIMP_API_KEY}".encode()).decode()
-            conn = http.client.HTTPSConnection(f"{MAILCHIMP_SERVER}.api.mailchimp.com", timeout=20)
-            conn.request("PUT", f"/3.0/lists/{MAILCHIMP_LIST_ID}/members/{subscriber_hash}", payload,
-                         {"Content-Type": "application/json", "Authorization": f"Basic {auth}"})
-            resp = conn.getresponse()
-            raw = resp.read().decode("utf-8")
-            conn.close()
-            if resp.status in (200, 201):
-                self._respond(200, {"success": True, "configured": True})
-            else:
-                self._respond(202, {"success": True, "warning": f"mailchimp_{resp.status}", "detail": raw[:160]})
-        except Exception:
-            self._respond(202, {"success": True, "warning": "subscribe_deferred"})
+            if MAILCHIMP_API_KEY and MAILCHIMP_LIST_ID:
+                payload = json.dumps({
+                    "email_address": email,
+                    "status_if_new": "subscribed",
+                    "status": "subscribed",
+                    "tags": tags,
+                    "merge_fields": {str(k)[:10]: str(v)[:255] for k, v in merge_fields.items()},
+                })
+                subscriber_hash = hashlib.md5(email.encode()).hexdigest()
+                auth = base64.b64encode(f"anystring:{MAILCHIMP_API_KEY}".encode()).decode()
+                conn = http.client.HTTPSConnection(f"{MAILCHIMP_SERVER}.api.mailchimp.com", timeout=20)
+                conn.request("PUT", f"/3.0/lists/{MAILCHIMP_LIST_ID}/members/{subscriber_hash}", payload,
+                             {"Content-Type": "application/json", "Authorization": f"Basic {auth}"})
+                resp = conn.getresponse()
+                raw = resp.read().decode("utf-8", errors="replace")
+                conn.close()
+                if resp.status in (200, 201):
+                    self._respond(200, {"success": True, "provider": "mailchimp"})
+                    return
+
+            # Fallback: the site already uses SendGrid. Store the address as a Marketing Contact.
+            # Twilio SendGrid documents PUT /v3/marketing/contacts as an asynchronous contact upsert.
+            if SENDGRID_API_KEY:
+                sg_payload = json.dumps({"contacts": [{"email": email}]})
+                conn = http.client.HTTPSConnection("api.sendgrid.com", timeout=20)
+                conn.request("PUT", "/v3/marketing/contacts", sg_payload, {
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {SENDGRID_API_KEY}",
+                })
+                resp = conn.getresponse()
+                raw = resp.read().decode("utf-8", errors="replace")
+                conn.close()
+                if resp.status in (200, 201, 202):
+                    self._respond(200, {"success": True, "provider": "sendgrid_marketing"})
+                    return
+                self._respond(503, {"success": False, "error": f"sendgrid_{resp.status}", "detail": raw[:160]})
+                return
+
+            self._respond(503, {"success": False, "error": "email_list_not_configured"})
+        except Exception as exc:
+            self._respond(503, {"success": False, "error": "subscribe_failed", "detail": str(exc)[:120]})
