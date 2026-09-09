@@ -1,0 +1,47 @@
+name: ADHD Clear Focus security maintenance
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '49 4 * * 4'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy filesystem scan
+        id: trivy
+        continue-on-error: true
+        uses: aquasecurity/trivy-action@0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: table
+          output: trivy-report.txt
+          scanners: vuln,secret,misconfig
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: 1
+      - name: Save report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: adhdclearfocus-trivy-${{ github.run_number }}
+          path: trivy-report.txt
+          retention-days: 30
+          if-no-files-found: ignore
+      - name: Report findings
+        if: steps.trivy.outcome != 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TITLE="[Security] ADHD Clear Focus findings"
+          BODY="Trivy found a HIGH/CRITICAL vulnerability, possible exposed secret, or misconfiguration. Review: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          EXISTING="$(gh issue list --state open --search "$TITLE in:title" --json number,title --jq '.[] | select(.title == "'"$TITLE"'") | .number' | head -n1)"
+          if [ -z "$EXISTING" ]; then gh issue create --title "$TITLE" --body "$BODY"; else gh issue comment "$EXISTING" --body "$BODY"; fi
