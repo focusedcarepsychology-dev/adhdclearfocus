@@ -4,11 +4,12 @@ POST /api/create-checkout
 Creates a Stripe Checkout Session with screener metadata attached so the webhook
 can generate and send the personalised PDF report.
 
-Stdlib only. Required env vars before payment is enabled:
+Stdlib only. Required before payment is enabled:
   STRIPE_SECRET_KEY
   STRIPE_WEBHOOK_SECRET
-  SENDGRID_API_KEY
-  SENDGRID_FROM_EMAIL (or FROM_EMAIL; sender must already be verified in SendGrid)
+  and one verified delivery path:
+    RESEND_API_KEY
+    or SENDGRID_API_KEY + SENDGRID_FROM_EMAIL/FROM_EMAIL
 
 Optional:
   DOMAIN=https://www.adhdclearfocus.com
@@ -32,6 +33,7 @@ def env(*names, default=""):
 
 STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY")
 STRIPE_WEBHOOK_SECRET = env("STRIPE_WEBHOOK_SECRET")
+RESEND_API_KEY = env("RESEND_API_KEY")
 SENDGRID_API_KEY = env("SENDGRID_API_KEY")
 SENDGRID_FROM_EMAIL = env("SENDGRID_FROM_EMAIL", "FROM_EMAIL")
 DOMAIN = env("DOMAIN", default="https://www.adhdclearfocus.com").rstrip("/")
@@ -53,15 +55,18 @@ def clamp_pct(value):
         return 0
 
 
+def email_delivery_ready():
+    return bool(RESEND_API_KEY or (SENDGRID_API_KEY and SENDGRID_FROM_EMAIL))
+
+
 def payment_stack_ready():
-    # Do not take money unless the Stripe webhook and explicit verified-email
-    # configuration needed for automatic report fulfilment are present too.
-    return all((
-        STRIPE_SECRET_KEY,
-        STRIPE_WEBHOOK_SECRET,
-        SENDGRID_API_KEY,
-        SENDGRID_FROM_EMAIL,
-    ))
+    # Fail closed: never take money unless the webhook and at least one
+    # configured transactional-email provider can fulfil the paid report.
+    return bool(
+        STRIPE_SECRET_KEY
+        and STRIPE_WEBHOOK_SECRET
+        and email_delivery_ready()
+    )
 
 
 def create_stripe_session(email, metadata):
@@ -73,9 +78,6 @@ def create_stripe_session(email, metadata):
         "customer_email": email,
         "success_url": f"{DOMAIN}/thank-you.html?session_id={{CHECKOUT_SESSION_ID}}",
         "cancel_url": f"{DOMAIN}/assessment.html#results",
-        # Use inline one-time pricing so deployment does not depend on a separate
-        # STRIPE_PRICE_ID. Checkout still creates the charge in the configured
-        # Stripe account and preserves the Session metadata used by the webhook.
         "line_items[0][price_data][currency]": "eur",
         "line_items[0][price_data][unit_amount]": str(REPORT_PRICE_EUR_CENTS),
         "line_items[0][price_data][product_data][name]": REPORT_PRODUCT_NAME,
@@ -148,6 +150,4 @@ class handler(BaseHTTPRequestHandler):
                 raise RuntimeError("stripe_checkout_url_missing")
             self.send_json(200, {"url": url})
         except Exception:
-            # Do not provide a generic Payment Link fallback; it would not contain
-            # the assessment metadata needed to generate the personalised PDF.
             self.send_json(503, {"error": "checkout_unavailable"})
