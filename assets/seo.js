@@ -1,6 +1,96 @@
 (function(){
   'use strict';
-  function track(name,params){try{if(typeof window.gtag==='function')window.gtag('event',name,params||{});}catch(e){}}
+
+  const FIRST_KEY='acf_first_touch_v1';
+  const LAST_KEY='acf_last_touch_v1';
+
+  function clean(v,max){return String(v||'').trim().toLowerCase().replace(/[^a-z0-9._-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,max||70);}
+  function read(key){try{return JSON.parse(localStorage.getItem(key)||'null');}catch(e){return null;}}
+  function write(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(e){}}
+  function referrerSource(){
+    try{
+      if(!document.referrer)return 'direct';
+      const host=new URL(document.referrer).hostname.toLowerCase();
+      if(host===location.hostname||host.endsWith('.'+location.hostname))return 'internal';
+      if(/google\./.test(host))return 'google';
+      if(/bing\./.test(host))return 'bing';
+      if(/facebook|instagram|threads/.test(host))return 'meta';
+      if(/linkedin/.test(host))return 'linkedin';
+      if(/reddit/.test(host))return 'reddit';
+      if(/tiktok/.test(host))return 'tiktok';
+      return 'referral';
+    }catch(e){return 'referral';}
+  }
+  function currentTouch(){
+    const qs=new URLSearchParams(location.search);
+    const source=clean(qs.get('utm_source')||referrerSource(),40)||'direct';
+    return {
+      source:source,
+      medium:clean(qs.get('utm_medium'),40)||'unknown',
+      campaign:clean(qs.get('utm_campaign'),70)||'none',
+      content:clean(qs.get('utm_content'),70)||'none',
+      landing:clean(location.pathname.replace(/^\//,'')||'home',70),
+      captured_at:new Date().toISOString()
+    };
+  }
+  const touch=currentTouch();
+  const first=read(FIRST_KEY)||touch;
+  if(!read(FIRST_KEY))write(FIRST_KEY,first);
+  write(LAST_KEY,touch);
+
+  function snapshot(){return {first:first,last:read(LAST_KEY)||touch};}
+  function tags(){
+    const s=snapshot();
+    return [
+      'source-'+clean(s.first.source,35),
+      'landing-'+clean(s.first.landing,50),
+      'campaign-'+clean(s.last.campaign,50)
+    ].filter(Boolean);
+  }
+  function safeCheckoutAttribution(){
+    const s=snapshot();
+    return {
+      first_source:clean(s.first.source,40)||'direct',
+      first_medium:clean(s.first.medium,40)||'unknown',
+      first_landing:clean(s.first.landing,70)||'home',
+      last_source:clean(s.last.source,40)||'direct',
+      last_campaign:clean(s.last.campaign,70)||'none',
+      last_content:clean(s.last.content,70)||'none',
+      attribution_version:'clearfocus_v1'
+    };
+  }
+  function params(extra){
+    const a=safeCheckoutAttribution();
+    return Object.assign({
+      first_source:a.first_source,
+      first_landing:a.first_landing,
+      last_source:a.last_source,
+      last_campaign:a.last_campaign
+    },extra||{});
+  }
+  function track(name,extra){try{if(typeof window.gtag==='function')window.gtag('event',name,params(extra));}catch(e){}}
+
+  window.ACFAttribution={snapshot:snapshot,tags:tags,eventParams:params,checkout:safeCheckoutAttribution};
+
+  // Preserve the existing app architecture: enrich only the existing checkout
+  // request in-flight rather than coupling the screener component to analytics.
+  const originalFetch=window.fetch&&window.fetch.bind(window);
+  if(originalFetch){
+    window.fetch=function(input,init){
+      try{
+        const url=typeof input==='string'?input:(input&&input.url)||'';
+        if(/\/api\/create-checkout(?:\?|$)/.test(url)&&init&&typeof init.body==='string'){
+          const body=JSON.parse(init.body);
+          if(body&&typeof body==='object'&&!Array.isArray(body)){
+            body.attribution=safeCheckoutAttribution();
+            init=Object.assign({},init,{body:JSON.stringify(body)});
+          }
+        }
+      }catch(e){}
+      return originalFetch(input,init);
+    };
+  }
+
   function ensureConsent(){
     document.querySelectorAll('[data-seo-newsletter]').forEach(function(form){
       if(form.querySelector('input[name="consent"]')) return;
@@ -22,7 +112,8 @@
     if(msg)msg.textContent='Saving…';
     try{
       const page=location.pathname.replace(/^\//,'')||'home';
-      const res=await fetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,consent:true,tags:['seo-organic','adhd-toolkit',page.slice(0,70)]})});
+      const attributionTags=tags();
+      const res=await originalFetch('/api/mailchimp-subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,consent:true,tags:['seo-organic','adhd-toolkit',page.slice(0,70)].concat(attributionTags)})});
       const data=await res.json().catch(()=>({}));
       if(!res.ok || !data.success)throw new Error(data.error||'subscribe');
       if(msg)msg.textContent='You’re in. We’ll send practical ADHDclearfocus resources, not daily noise.';

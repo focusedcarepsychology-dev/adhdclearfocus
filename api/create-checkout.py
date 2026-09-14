@@ -13,6 +13,7 @@ import json
 import os
 import base64
 import http.client
+import re
 from http.server import BaseHTTPRequestHandler
 from urllib.parse import urlencode
 
@@ -35,12 +36,23 @@ DOMAIN_KEYS = [
     "time", "hyperfocus", "rsd", "developmental", "impact"
 ]
 
+ATTRIBUTION_KEYS = [
+    "first_source", "first_medium", "first_landing", "last_source",
+    "last_campaign", "last_content", "attribution_version"
+]
+
 
 def clamp_pct(value):
     try:
         return max(0, min(100, int(round(float(value)))))
     except Exception:
         return 0
+
+
+def clean_attribution(value, max_len=80):
+    value = str(value or "").strip().lower()
+    value = re.sub(r"[^a-z0-9._-]+", "-", value).strip("-")
+    return value[:max_len]
 
 
 def create_stripe_session(email, metadata):
@@ -113,6 +125,16 @@ class handler(BaseHTTPRequestHandler):
             }
             for key in DOMAIN_KEYS:
                 metadata[f"pct_{key}"] = clamp_pct(pcts.get(key, 0))
+
+            # Only categorical, non-identifying attribution may enter Stripe
+            # metadata. Never copy raw referrers, query strings or free text.
+            attribution = data.get("attribution") or {}
+            if isinstance(attribution, dict):
+                for key in ATTRIBUTION_KEYS:
+                    value = clean_attribution(attribution.get(key), 80)
+                    if value:
+                        metadata[key] = value
+
             url = create_stripe_session(email, metadata)
             self.send_json(200, {"url": url})
         except Exception:
