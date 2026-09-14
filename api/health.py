@@ -8,7 +8,9 @@ import os
 from http.server import BaseHTTPRequestHandler
 
 CHECKS = {
-    "paid_report_checkout": ["STRIPE_SECRET_KEY", "STRIPE_PRICE_ID", "DOMAIN"],
+    # Report pricing is now inline in the Checkout Session, so no STRIPE_PRICE_ID
+    # or DOMAIN environment variable is required for checkout readiness.
+    "paid_report_checkout": ["STRIPE_SECRET_KEY"],
     "paid_report_fulfilment": ["STRIPE_WEBHOOK_SECRET", "SENDGRID_API_KEY", "SENDGRID_FROM_EMAIL"],
     "ai_personalisation_optional": ["ANTHROPIC_API_KEY"],
     "employer_leads": ["SENDGRID_API_KEY", "EMPLOYER_LEADS_EMAIL"],
@@ -32,7 +34,12 @@ def has(name):
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         payload = {group: {name: ("present" if has(name) else "missing") for name in names} for group, names in CHECKS.items()}
-        payload["ok_for_paid_report"] = all(v == "present" for section in ("paid_report_checkout", "paid_report_fulfilment") for v in payload[section].values())
+        payload["pricing_mode"] = "inline_eur_49"
+        payload["ok_for_paid_report"] = all(
+            v == "present"
+            for section in ("paid_report_checkout", "paid_report_fulfilment")
+            for v in payload[section].values()
+        )
         body = json.dumps(payload, indent=2).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "application/json")
