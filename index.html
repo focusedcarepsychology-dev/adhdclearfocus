@@ -49,7 +49,7 @@
     .spark.s2{animation-delay:.45s}.spark.s3{animation-delay:.9s}.spark.s4{animation-delay:1.35s}
     .brain-caption{text-align:center;font-size:12px;line-height:1.55;color:var(--muted);margin:-4px auto 14px;max-width:260px}
     .logo-big{width:112px;height:112px;border-radius:28px;display:block;margin:0 auto 18px;box-shadow:0 0 48px rgba(0,212,221,.18)}.profile-preview{display:grid;gap:11px}.bar-row{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font-size:12px;color:var(--soft)}.track{height:8px;border-radius:999px;background:#0A1628;overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--teal),var(--blue));width:var(--w)}.fill.amber{background:linear-gradient(90deg,var(--amber),#FFD18B)}.fill.purple{background:linear-gradient(90deg,var(--purple),#C084FC)}.pill{display:inline-block;border:1px solid rgba(255,179,71,.4);background:rgba(255,179,71,.12);color:var(--amber);border-radius:999px;font-size:11px;font-weight:800;padding:5px 10px;margin-bottom:14px}.section{padding:44px 0}.section h2{font-size:clamp(24px,4vw,38px);letter-spacing:-1.2px;line-height:1.15;margin-bottom:10px}.section-p{color:var(--muted);font-size:15px;line-height:1.7;max-width:720px;margin-bottom:22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;min-height:148px}.icon{font-size:28px;margin-bottom:10px}.card h3{font-size:16px;margin-bottom:7px}.card p{font-size:13px;line-height:1.65;color:var(--muted)}.wide{grid-column:span 2}.notice{background:#080F1A;border:1px solid var(--border);border-radius:16px;padding:16px;color:var(--muted);font-size:13px;line-height:1.7}.notice strong{color:#fff}.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}.steps{counter-reset:steps;display:grid;gap:11px}.step{counter-increment:steps;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 16px 16px 56px;position:relative}.step:before{content:counter(steps);position:absolute;left:16px;top:16px;width:26px;height:26px;border-radius:50%;background:var(--teal);color:#06101F;display:flex;align-items:center;justify-content:center;font-weight:900}.step h3{font-size:14px;margin-bottom:4px}.step p{color:var(--muted);font-size:13px;line-height:1.6}.newsletter-home{background:linear-gradient(135deg,rgba(0,212,221,.10),rgba(79,195,247,.07));border:1px solid rgba(0,212,221,.28);border-radius:18px;padding:20px}.newsletter-home form{display:flex;gap:10px;flex-wrap:wrap}.newsletter-home input[type=email]{flex:1;min-width:220px;background:#081729;border:1px solid var(--border);color:#fff;border-radius:12px;padding:13px 14px;font:inherit}.newsletter-home button{border:0;cursor:pointer}.newsletter-home small{display:block;color:var(--muted);margin-top:8px;width:100%}.newsletter-consent{display:flex!important;align-items:flex-start;gap:8px;width:100%;font-size:12px;color:var(--muted);margin-top:7px}.newsletter-consent input{width:16px!important;height:16px!important;min-width:auto!important;flex:0 0 auto!important}.footer{border-top:1px solid var(--border);padding:28px 0;color:var(--muted);font-size:12px;line-height:1.7}.footer a{color:var(--teal);text-decoration:none}.emergency{position:fixed;right:14px;bottom:14px;z-index:30;background:#FF5252;color:#fff;text-decoration:none;border-radius:999px;padding:11px 15px;font-weight:900;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.32)}
-    .cache-note{display:none;background:#1A1000;border:1px solid rgba(255,179,71,.45);color:#FFD18B;padding:10px 14px;font-size:12px;text-align:center}.cache-note.show{display:block}
+    
     @media(max-width:850px){.hero-inner,.split{grid-template-columns:1fr}.hero-inner{padding:42px 0 34px}.hero-card{order:-1}.grid{grid-template-columns:1fr}.wide{grid-column:auto}.links a:not(.cta){display:none}.nav{height:58px}h1{letter-spacing:-1.6px}.bar-row{grid-template-columns:110px 1fr 42px}.section{padding:34px 0}.emergency{left:14px;right:14px;text-align:center}.logo-big{width:86px;height:86px;border-radius:22px}}
   </style>
   <script>
@@ -66,10 +66,6 @@
               return Promise.all(keys.filter(function(k){return k!=='adhdclearfocus-safe-v107';}).map(function(k){return caches.delete(k);}));
             }).catch(function(){});
           }
-          document.addEventListener('DOMContentLoaded',function(){
-            var n=document.getElementById('cache-note');
-            if(n)n.classList.add('show');
-          });
         }
         if('serviceWorker' in navigator){
           window.addEventListener('load',function(){
@@ -79,12 +75,11 @@
       }catch(e){}
     })();
   </script>
-  <script id="seo-schema" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.adhdclearfocus.com/#organization","name":"ADHDclearfocus","url":"https://www.adhdclearfocus.com/","parentOrganization":{"@type":"Organization","@id":"https://focusedcarepsychology.org/#organization","name":"Focused Care Psychology","url":"https://focusedcarepsychology.org/"},"email":"admin@focusedcarepsychology.org","sameAs":["https://focusedcarepsychology.org/","https://www.focusedcarepsychology.ie/","https://focusedcarepsychology.uk/"]},{"@type":"WebSite","@id":"https://www.adhdclearfocus.com/#website","url":"https://www.adhdclearfocus.com/","name":"ADHDclearfocus","publisher":{"@id":"https://www.adhdclearfocus.com/#organization"},"inLanguage":"en"},{"@type":"WebApplication","name":"ADHDclearfocus","url":"https://www.adhdclearfocus.com/","applicationCategory":"HealthApplication","operatingSystem":"Web","description":"Educational ADHD self-awareness, evidence-informed strategies and focus tools.","publisher":{"@id":"https://www.adhdclearfocus.com/#organization"}}]}</script>
+  <script id="seo-schema" type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.adhdclearfocus.com/#organization","name":"ADHDclearfocus","url":"https://www.adhdclearfocus.com/","parentOrganization":{"@type":"Organization","@id":"https://focusedcarepsychology.org/#organization","name":"Focused Care Psychology","url":"https://focusedcarepsychology.org/"},"legalName":"ADHDclearfocus","email":"focusedcarepsychology@gmail.com","sameAs":["https://focusedcarepsychology.org/","https://www.focusedcarepsychology.ie/","https://focusedcarepsychology.uk/"]},{"@type":"WebSite","@id":"https://www.adhdclearfocus.com/#website","url":"https://www.adhdclearfocus.com/","name":"ADHDclearfocus","publisher":{"@id":"https://www.adhdclearfocus.com/#organization"},"inLanguage":"en"},{"@type":"WebApplication","name":"ADHDclearfocus","url":"https://www.adhdclearfocus.com/","applicationCategory":"HealthApplication","operatingSystem":"Web","description":"Educational ADHD self-awareness, evidence-informed strategies and focus tools.","publisher":{"@id":"https://www.adhdclearfocus.com/#organization"}}]}</script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R8CLJRBNM0"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-R8CLJRBNM0');</script>
 </head>
 <body>
-  <div id="cache-note" class="cache-note">This version includes a cache repair for the previous blank-screen issue. If anything still looks wrong, refresh once.</div>
   <header class="top">
     <div class="wrap nav">
       <a class="brand" href="/" aria-label="ADHDclearfocus home"><img src="/logo.png" alt=""/><span>ADHD<span>clearfocus</span></span></a>
@@ -104,7 +99,7 @@
       <div class="wrap hero-inner">
         <div>
           <div class="badge">🧠 Educational ADHD self-awareness</div>
-          <h1>Understand your ADHD brain <span class="grad">without the overwhelm.</span></h1>
+          <h1>Understand your ADHD-related patterns <span class="grad">without the overwhelm.</span></h1>
           <p class="lead">ADHDclearfocus offers a <strong>free 39-question ADHD self-assessment</strong> across 10 ADHD-related dimensions, then points you toward practical, evidence-informed strategies. It is designed to be calm, clear and useful — not another confusing health website.</p>
           <div class="actions">
             <a class="btn primary" href="/assessment" onclick="gtag('event','homepage_screener_start')">Start the free 39-question self-assessment →</a>
@@ -153,8 +148,8 @@
       <h2>Built for people who need clarity fast.</h2>
       <p class="section-p">Start with a structured self-assessment, practical strategies or an evidence-led guide. The site is designed to keep the next step simple, with clear boundaries between education, self-awareness and formal clinical assessment.</p>
       <div class="grid">
-        <article class="card"><div class="icon">🧭</div><h3>10 dimensions</h3><p>Attention, executive function, emotional regulation, working memory, time perception, hyperfocus, RSD, developmental history and life impact.</p></article>
-        <article class="card"><div class="icon">📚</div><h3>Evidence-based strategies</h3><p>Structured coping tools, focus timers, body-doubling ideas and practical changes written in plain language.</p></article>
+        <article class="card"><div class="icon">🧭</div><h3>10 dimensions</h3><p>Attention, executive function, emotional regulation, working memory, time perception, hyperfocus, rejection sensitivity, developmental history and life impact.</p></article>
+        <article class="card"><div class="icon">📚</div><h3>Evidence-informed strategies</h3><p>Structured coping tools, focus timers, body-doubling ideas and practical changes written in plain language, with evidence limitations stated where relevant.</p></article>
         <article class="card"><div class="icon">🚨</div><h3>Crisis tools</h3><p>Grounding, breathing and crisis signposting remain available directly from the site navigation.</p></article>
         <article class="card wide"><div class="icon">🏢</div><h3>Workplace and employer pathway</h3><p>Resources for employers and ADHD-aware workplace programmes, framed around education and reasonable support rather than diagnosis.</p></article>
         <article class="card"><div class="icon">🔒</div><h3>Privacy-first framing</h3><p>Educational, non-diagnostic, with clear boundaries and no hidden clinical relationship.</p></article>
@@ -189,7 +184,7 @@
           <div class="actions"><a class="btn primary" href="/assessment">Open assessment</a><a class="btn secondary" href="/crisis">Crisis mode</a></div>
         </div>
         <div class="steps">
-          <div class="step"><h3>Start with the free screener</h3><p>Answer 39 questions across 10 ADHD-related areas.</p></div>
+          <div class="step"><h3>Start with the free self-assessment</h3><p>Answer 39 questions across 10 ADHD-related areas.</p></div>
           <div class="step"><h3>Review your pattern</h3><p>See which areas are most elevated and what they usually mean.</p></div>
           <div class="step"><h3>Use one strategy today</h3><p>Choose a single practical change rather than trying to fix everything at once.</p></div>
         </div>
