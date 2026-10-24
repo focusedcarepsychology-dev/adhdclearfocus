@@ -3,7 +3,10 @@
 > ADHDclearfocus is an educational ADHD self-awareness and productivity platform operated by Focused Care Psychology Limited. It does not diagnose ADHD and does not create a clinical relationship.
 
 Canonical site: https://www.adhdclearfocus.com/
-Last updated: 2026-09-03
+Parent service directory: https://focusedcarepsychology.org/
+Ireland clinical service: https://www.focusedcarepsychology.ie/
+United Kingdom clinical service: https://focusedcarepsychology.uk/
+Last updated: 2026-10-24
 
 ## Primary pages
 - Home: https://www.adhdclearfocus.com/
