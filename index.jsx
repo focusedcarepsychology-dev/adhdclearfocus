@@ -445,7 +445,7 @@ function FeedbackWidget({C}){
     try{const ex=JSON.parse(localStorage.getItem("acf_feedback")||"[]");ex.push(entry);localStorage.setItem("acf_feedback",JSON.stringify(ex.slice(-20)));}catch(e){}
     const sub=encodeURIComponent(`ADHDclearfocus ${type}`);
     const bod=encodeURIComponent(`Type: ${type}\n\nMessage: ${msg}\n\nTime: ${entry.time}`);
-    window.open(`mailto:conalldonegan@outlook.com?subject=${sub}&body=${bod}`);
+    window.open(`mailto:admin@focusedcarepsychology.org?subject=${sub}&body=${bod}`);
     setSent(true);setTimeout(()=>{setSent(false);setOpen(false);setMsg("");},3000);
   }
   if(sent)return React.createElement('div',{style:{background:"#0A2010",border:"1px solid #00E67640",borderRadius:14,padding:"14px 16px",marginBottom:16,textAlign:"center",fontSize:13,color:"#00E676"}},"✓ Thank you — feedback sent. We read everything.");
@@ -1436,13 +1436,13 @@ function App(){
                           psychologist experienced in adult ADHD — a free 15-minute initial
                           consultation is available.
                         </div>
-                        <a href="https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075"
+                        <a href="https://www.focusedcarepsychology.ie/book-consultation/"
                           target="_blank" rel="noopener"
-                          onClick={()=>gtag("event","pt_profile_click",{location:"paywall"})}
+                          onClick={()=>gtag("event","fcp_consultation_click",{location:"paywall"})}
                           style={{display:"inline-block",background:C.navyMid,border:`1px solid ${C.teal}60`,
                           color:C.teal,borderRadius:8,padding:"9px 14px",fontSize:12,fontWeight:700,
                           textDecoration:"none"}}>
-                          Speak to a psychologist (Psychology Today) →
+                          Enquire with Focused Care Psychology →
                         </a>
                       </div>
                     </div>
