@@ -386,7 +386,7 @@ function FeedbackWidget({ C }) {
         catch (e) { }
         const sub = encodeURIComponent(`ADHDclearfocus ${type}`);
         const bod = encodeURIComponent(`Type: ${type}\n\nMessage: ${msg}\n\nTime: ${entry.time}`);
-        window.open(`mailto:conalldonegan@outlook.com?subject=${sub}&body=${bod}`);
+        window.open(`mailto:admin@focusedcarepsychology.org?subject=${sub}&body=${bod}`);
         setSent(true);
         setTimeout(() => { setSent(false); setOpen(false); setMsg(""); }, 3000);
     }
@@ -1046,9 +1046,9 @@ function App() {
                                 React.createElement("div", null,
                                     React.createElement("div", { style: { fontWeight: 800, fontSize: 13, marginBottom: 3 } }, "Concerned about your results?"),
                                     React.createElement("div", { style: { fontSize: 12, color: C.muted, lineHeight: 1.6, marginBottom: 10 } }, "A screener is a starting point, not a diagnosis. If your profile raises questions you want to talk through, you can speak with a chartered psychologist experienced in adult ADHD \u2014 a free 15-minute initial consultation is available."),
-                                    React.createElement("a", { href: "https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075", target: "_blank", rel: "noopener", onClick: () => gtag("event", "pt_profile_click", { location: "paywall" }), style: { display: "inline-block", background: C.navyMid, border: `1px solid ${C.teal}60`,
+                                    React.createElement("a", { href: "https://www.focusedcarepsychology.ie/book-consultation/", target: "_blank", rel: "noopener", onClick: () => gtag("event", "fcp_consultation_click", { location: "paywall" }), style: { display: "inline-block", background: C.navyMid, border: `1px solid ${C.teal}60`,
                                             color: C.teal, borderRadius: 8, padding: "9px 14px", fontSize: 12, fontWeight: 700,
-                                            textDecoration: "none" } }, "Speak to a psychologist (Psychology Today) \u2192")))),
+                                            textDecoration: "none" } }, "Enquire with Focused Care Psychology \u2192")))),
                         React.createElement("div", { style: { background: "linear-gradient(135deg,#1A1206,#0A1628)",
                                 border: "1px solid #FFB34740", borderRadius: 14, padding: "16px", marginTop: 12 } },
                             React.createElement("div", { style: { display: "flex", alignItems: "flex-start", gap: 10 } },
