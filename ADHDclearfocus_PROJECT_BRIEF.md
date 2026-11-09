@@ -11,7 +11,7 @@ An **educational** ADHD self-awareness and productivity platform at **adhdclearf
 
 **Attribution rules (non-negotiable):**
 - **No personal name appears anywhere as the creator/author of the platform.** Reports say "Prepared by the ADHDclearfocus clinical team". Site copy says "developed by the ADHDclearfocus clinical team" / "Built by experts".
-- The **only** permitted personal surfaces are: (a) the Psychology Today profile link (https://www.psychologytoday.com/ie/counselling/conall-donegan-waterford-wd/1437075), framed as *"if your results raise concerns, speak to a chartered psychologist — free 15-minute consultation"*, shown **after** the screener and on support sections — never as "the person who built this site"; and (b) the legal/privacy contact email focusedcarepsychology@gmail.com on legal.html and support copy.
+- The **only** permitted personal surfaces are: (a) the Psychology Today profile link (https://www.focusedcarepsychology.ie/book-consultation/), framed as *"if your results raise concerns, speak to a chartered psychologist — free 15-minute consultation"*, shown **after** the screener and on support sections — never as "the person who built this site"; and (b) the legal/privacy contact email focusedcarepsychology@gmail.com on legal.html and support copy.
 - The book **The Gratitude Prescription** is advertised as "written by a DPsych psychologist with 17 years of clinical experience" — no name, links to Amazon: https://www.amazon.co.uk/Gratitude-Prescription-Doctors-Program-Seconds/dp/B0GPBYKYYL
 
 ## 2. Architecture (DO NOT CHANGE — this has been rebuilt wrongly multiple times)
