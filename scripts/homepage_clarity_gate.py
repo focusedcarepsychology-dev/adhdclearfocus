@@ -50,7 +50,7 @@ for route in ("/assessment","/strategies","/guides","/adhd-focus-timer","/method
 require("https://focusedcarepsychology.org/" in p.links,"clinical / educational separation link missing")
 require("https://www.adhdclearfocus.com/" in html,"homepage canonical missing")
 require("name=\"consent\" required" in html and "data-seo-newsletter" in html,"explicit newsletter opt-in missing")
-require(any(x.get("type")=="email" and x.get("required")=="" for x in p.inputs),"required email input missing")
+require(any(x.get("type")=="email" and "required" in x for x in p.inputs),"required email input missing")
 require(any(x.get("name")=="consent" and x.get("required")=="" for x in p.inputs),"required opt-in missing")
 require("/assets/seo.js" in p.scripts,"newsletter handler missing")
 require("@media(max-width:800px)" in html and "@media(max-width:560px)" in html,"mobile breakpoints missing")
