@@ -1,5 +1,13 @@
 name: SEO quality and freshness
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'assets/seo.js'
+      - 'scripts/homepage_clarity_gate.py'
+      - 'scripts/seo_quality_gate.py'
+      - '.github/workflows/seo-quality.yml'
   push:
     branches: [main]
     paths:
@@ -16,13 +24,14 @@ on:
       - 'assets/**'
       - 'api/**'
       - 'scripts/seo_quality_gate.py'
+      - 'scripts/homepage_clarity_gate.py'
   workflow_dispatch:
   schedule:
     - cron: '17 8 1 * *'
 permissions:
   contents: read
 concurrency:
-  group: seo-quality-main
+  group: seo-quality-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   audit:
@@ -33,3 +42,4 @@ jobs:
         with:
           python-version: '3.13'
       - run: python scripts/seo_quality_gate.py
+      - run: python scripts/homepage_clarity_gate.py
