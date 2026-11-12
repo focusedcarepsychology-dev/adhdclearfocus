@@ -138,7 +138,7 @@
     .newsletter-block p{color:var(--body);font-size:14px;line-height:1.7;margin:0}
     .newsletter-home form{display:grid;grid-template-columns:1fr auto;gap:10px}
     .newsletter-home input[type=email]{min-width:0;width:100%;padding:15px 16px;border:1px solid #bdc9c8;border-radius:11px;font:inherit;color:var(--ink);background:#fff}
-    .newsletter-home button{border:none}
+    .newsletter-home button{border:none}.newsletter-home label[for="newsletter-email"]{grid-column:1/-1;margin:0;font-weight:700;font-size:13px;color:var(--ink)}
     .newsletter-home small{grid-column:1/-1;color:var(--body);font-size:12px}
     .newsletter-consent{display:flex!important;align-items:start;gap:10px;grid-column:1/-1;font-size:13px;line-height:1.55;color:var(--body)}
     .newsletter-consent input{flex:0 0 auto;inline-size:18px;block-size:18px;margin-top:2px;accent-color:var(--teal)}
@@ -303,7 +303,7 @@
   <section class="section wrap" id="homepage_newsletter" aria-labelledby="newsletter-heading">
     <div class="newsletter-block">
       <div><p class="kicker">A little support, occasionally</p><h2 id="newsletter-heading">Practical ADHD ideas in your inbox.</h2><p>Get occasional evidence-informed ideas and useful resources. Subscribe only if you'd like to hear from us; you can unsubscribe at any time.</p></div>
-      <div class="newsletter-home"><form data-seo-newsletter><label for="newsletter-email" class="micro">Email address</label><input id="newsletter-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required/><button class="btn primary" type="submit">Subscribe</button><small data-newsletter-msg role="status" aria-live="polite">Educational updates only; no daily emails.</small></form></div>
+      <div class="newsletter-home"><form data-seo-newsletter><label for="newsletter-email" class="micro">Email address</label><input id="newsletter-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required/><button class="btn primary" type="submit">Subscribe</button><label class="newsletter-consent"><input type="checkbox" name="consent" required/><span>I agree to receive ADHDclearfocus educational emails and can unsubscribe at any time. <a href="/legal">Privacy information</a>.</span></label><small data-newsletter-msg role="status" aria-live="polite">Educational updates only; no daily emails.</small></form></div>
     </div>
   </section>
 
