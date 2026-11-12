@@ -29,7 +29,14 @@ for page in ('assessment.html','crisis.html'):
     if '/assets/seo.css' in body:
         errors.append(page + ': unexpected dependence on the shared educational stylesheet')
 
-# The focus timer has always used the shared educational stylesheet; verify its\n# interactions were preserved alongside the visual update.\ntimer = (ROOT/'adhd-focus-timer.html').read_text(encoding='utf-8')\nif 'id="timer"' not in timer or '<script' not in timer:\n    errors.append('adhd-focus-timer.html: countdown markup or script is missing')\n\nif errors:\n    print('EDITORIAL STYLESHEET QUALITY GATE FAILED')
+# The focus timer already uses the shared educational stylesheet.
+# Verify that its countdown controls remain present.
+timer = (ROOT/'adhd-focus-timer.html').read_text(encoding='utf-8')
+if 'id="timer"' not in timer or '<script' not in timer:
+    errors.append('adhd-focus-timer.html: countdown markup or script is missing')
+
+if errors:
+    print('EDITORIAL STYLESHEET QUALITY GATE FAILED')
     print('\n'.join(' - '+msg for msg in errors))
     sys.exit(1)
 print('EDITORIAL STYLESHEET QUALITY GATE PASSED')
