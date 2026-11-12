@@ -5,6 +5,8 @@ on:
     paths:
       - 'index.html'
       - 'assets/seo.js'
+      - 'assets/seo.css'
+      - 'scripts/editorial_style_gate.py'
       - 'scripts/homepage_clarity_gate.py'
       - 'scripts/seo_quality_gate.py'
       - '.github/workflows/seo-quality.yml'
@@ -25,6 +27,7 @@ on:
       - 'api/**'
       - 'scripts/seo_quality_gate.py'
       - 'scripts/homepage_clarity_gate.py'
+      - 'scripts/editorial_style_gate.py'
   workflow_dispatch:
   schedule:
     - cron: '17 8 1 * *'
@@ -43,3 +46,4 @@ jobs:
           python-version: '3.13'
       - run: python scripts/seo_quality_gate.py
       - run: python scripts/homepage_clarity_gate.py
+      - run: python scripts/editorial_style_gate.py
